@@ -1,0 +1,280 @@
+{
+  "dashboard_booking": {
+    "page_title": "ภาพรวมโครงการวิจัย",
+    "reservations": "สถิติเอกสารโครงการวิจัย",
+    "weekly_stat": "สถิติการอนุมัติโครงการวิจัย",
+    "social_score": "Social score",
+    "occupancy": "สถิติเอกสารข้อเสนอโครงการ"
+  },
+  "layout": {
+    "page_title": "Layout",
+    "light_theme": "Light Theme",
+    "dark_theme": "Dark Theme"
+  },
+  "ui_elements": {
+    "title": "UI elements",
+    "alerts": {
+      "title": "Alerts",
+      "basic_alerts": "Basic alerts",
+      "bordered_alerts_with_icons": "Bordered alerts with icons",
+      "colored_alerts_with_icons": "Colored alerts with icons",
+      "neutral_alerts_with_icons": "Neutral alerts with icons"
+    },
+    "buttons": {
+      "title": "Buttons",
+      "default_buttons": "Default buttons",
+      "buttons_icons_and_expand": "Buttons icons and expand",
+      "square_buttons": "Square buttons",
+      "rounded_buttons": "Rounded buttons",
+      "status_buttons": "Status buttons",
+      "button_group": "Button group",
+      "button_dropdown": "Button dropdown"
+    },
+    "carousel": {
+      "title": "Carousel",
+      "basic_carousel": "Basic carousel",
+      "basic_carousel_without_caption": "Basic carousel without caption",
+      "basic_carousel_with_caption": "Basic carousel with caption"
+    },
+    "collapse": {
+      "title": "Collapse",
+      "minimal_collapse": "Minimal collapse",
+      "boxed_collapse": "Boxed collapse",
+      "boxed_collapse_full_width": "Boxed collapse full width"
+    },
+    "modals": {
+      "title": "Modals",
+      "default_modals": "Default modals",
+      "colored_modals": "Colored modals",
+      "header_modals": "Header modals"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "basic_notifications": "Basic notifications",
+      "image_notifications": "Image notifications",
+      "color_notifications": "Color notifications",
+      "color_states_full_width": "Color states full width"
+    },
+    "panels": {
+      "title": "Panels",
+      "default_panel": "Default panel",
+      "default_panel_with_subhead": "Default panel with subhead",
+      "default_panel_divider": "Default panel divider",
+      "label_panel_divider": "Label panel divider",
+      "icon_panel_divider": "Icon panel divider",
+      "tabs_panel_divider": "Tabs panel divider",
+      "success_panel": "Success panel",
+      "warning_panel": "Warning panel",
+      "danger_panel": "Danger panel"
+    },
+    "progress_bars": {
+      "title": "Progress bars",
+      "default_progress_bar": "Default progress bar",
+      "data_progress_bar": "Data progress bar",
+      "animated_progress_bar": "Animated progress bar",
+      "colored_progress_bars": "Colored progress bars",
+      "multisized_progress_bars": "Multisized progress bars",
+      "animated_multisized_progress_bars": "Animated multisized progress bars"
+    },
+    "range_sliders": {
+      "title": "Range sliders",
+      "slider_without_params": "Slider without params",
+      "slider_start_point": "Slider start point",
+      "double_slider_type": "Double slider type",
+      "slider_with_scale": "Slider with scale"
+    },
+    "tabs": {
+      "title": "Tabs",
+      "default_tabs": "Default tabs",
+      "default_tabs_bordered_top": "Default tabs bordered top",
+      "justify_tabs": "Justify tabs",
+      "justify_tabs_bordered_top": "Justify tabs bordered top",
+      "justify_tabs_bordered_bottom": "Justify tabs bordered bottom",
+      "tabs_bordered_bottom": "Tabs bordered bottom",
+      "vertical_tabs": "Vertical tabs"
+    },
+    "timeline": {
+      "title": "Timeline"
+    },
+    "grids": {
+      "title": "Grids"
+    },
+    "tooltips_popovers": {
+      "title": "Tooltips & Popovers",
+      "tooltip_on_top": "Tooltip on top",
+      "tooltip_on_bottom": "Tooltip on bottom",
+      "tooltip_on_right": "Tooltip on right",
+      "tooltip_on_left": "Tooltip on left",
+      "popover_on_top": "Popover on top",
+      "popover_on_bottom": "Popover on bottom",
+      "popover_on_right": "Popover on right",
+      "popover_on_left": "Popover on left"
+    },
+    "typography": {
+      "title": "Typography",
+      "basic_heading": "Basic heading",
+      "heading_with_subheading": "Heading with subheading",
+      "bold_heading": "Bold heading",
+      "sample_text": "Sample text",
+      "sample_text_with_description": "Sample text with description",
+      "default_list": "Default list",
+      "simple_icon_list": "Simple icon list",
+      "numerous_list": "Numerous list",
+      "blockquote": "Blockquote",
+      "highlight": "Highlight"
+    }
+  },
+  "mail_application": {
+    "page_title": "Mail Application",
+    "compose": "Compose",
+    "inbox": "Inbox",
+    "sent_mail": "Sent Mail",
+    "drafts": "Drafts",
+    "tagged": "Tagged",
+    "deleted": "Deleted",
+    "labels": "Labels",
+    "attachment": "Attachment",
+    "search": "Search"
+  },
+  "forms": {
+    "title": "Forms",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "basic_form": {
+      "title": "Basic form",
+      "horizontal_form": "Horizontal form",
+      "vertical_form": "Vertical form"
+    },
+    "check_form_controls": {
+      "title": "Check Form Controls",
+      "default_controls": "Default controls",
+      "colored_controls": "Colored controls",
+      "colored_controls_on_click": "Colored controls on click",
+      "button_type_controls": "Button type controls"
+    },
+    "file_upload": {
+      "title": "File upload",
+      "file_upload_default": "File upload default",
+      "file_upload_custom_height": "File upload custom height"
+    },
+    "floating_labels_form": {
+      "title": "Floating Labels Form",
+      "animated_line_inputs": "Animated line inputs forms with floating labels"
+    },
+    "form_dropzone": {
+      "title": "Form dropzone",
+      "drop_files_to_upload": "Drop files to upload"
+    },
+    "form_layouts": {
+      "title": "Form layouts",
+      "horizontal_form": "Horizontal form",
+      "horizontal_form_with_icons": "Horizontal form with icons",
+      "vertical_form": "Vertical form",
+      "vertical_form_with_icons": "Vertical form with icons"
+    },
+    "from_picker": {
+      "title": "Form-picker",
+      "date_picker": "Date picker",
+      "time_picker": "Time picker",
+      "color_picker": "Color picker"
+    },
+    "from_validation": {
+      "title": "Form Validation",
+      "horizontal_form_validate": "Horizontal form validate",
+      "horizontal_form_validate_two": "Horizontal form validate 2",
+      "vertical_form_validate": "Vertical form validate",
+      "vertical_form_validate_two": "Vertical form validate 2"
+    },
+    "mask_form": {
+      "title": "Mask form",
+      "mask_examples": "Mask examples"
+    },
+    "material_from": {
+      "title": "Material form",
+      "animated_line": "Animated line inputs forms"
+    },
+    "wizard_from": {
+      "title": "Wizard form",
+      "step": "Step",
+      "fill": "Fill your personal data",
+      "address": "What’s your address",
+      "set": "Set the preferences",
+      "back": "Back",
+      "next": "Next"
+    }
+  },
+  "tables": {
+    "title": "Tables",
+    "basic_tables": {
+      "title": "Basic tables",
+      "basic_table": "Basic table",
+      "bordered_table": "Bordered table",
+      "head_accent_table": "Head accent table",
+      "colored_string_table": "Colored string table",
+      "hover_colored_string_table": "Hover colored string table",
+      "inverse_table": "Inverse table",
+      "responsive_table": "Responsive table"
+    },
+    "data_table": {
+      "title": "Data table"
+    },
+    "editable_table": {
+      "title": "Editable table"
+    }
+  },
+  "charts": {
+    "title": "Charts",
+    "react_chartjs": {
+      "title": "ChartJS 2",
+      "point_sizes": "Point sizes",
+      "random_animated_line": "Random animated line",
+      "random_animated_bars": "Random animated bars",
+      "polar_area": "Polar area",
+      "dynamicly_refreshed_doughnut": "Denamicly refreshed doughnut",
+      "legend_handlers": "Legend handlers"
+    },
+    "react_vis": {
+      "title": "React-vis",
+      "plots": "Plots",
+      "line_series_canvas": "Line series canvas",
+      "mark_series_canvas": "Mark series canvas",
+      "line_series": "Line series",
+      "line_series_with_many_colors": "Line series with many colors",
+      "bars": "Bars"
+    },
+    "recharts": {
+      "title": "Recharts",
+      "simple_line_chart": "Simple line chart",
+      "dashed_line_chart": "Dashed  line chart",
+      "simple_area_chart": "Simple area chart",
+      "stacked_area_chart": "Stacked area chart",
+      "multiple_scatter_chart": "Multiple yaxes scatter chart",
+      "simple_radial_bar_chart": "Simple radial bar chart",
+      "simple_radar_chart": "Simple radar chart",
+      "two_level_pie_chart": "Two level pie chart"
+    }
+  },
+  "account": {
+    "title": "Account",
+    "email_confirmation": {
+      "title": "Email Confirmation",
+      "verified": "Your e-mail address has been successfully verified",
+      "thank_you": "Thank you for choosing the EasyDev",
+      "go_to_dashboard": "Go to dashboard",
+      "got_to_profile": "Go to profile"
+    },
+    "profile": {
+      "title": "Profile",
+      "current_tasks": "Current tasks",
+      "activity": "Activity",
+      "timeline": "Timeline",
+      "settings": "Settings"
+    }
+  },
+  "topbar": {
+    "profile": "ข้อมูลส่วนตัว",
+    "account_settings": "ตั้งค่าบัญชีผู้ใช้",
+    "lock_screen": "ล๊อคหน้าจอ",
+    "log_out": "ออกจากระบบ"
+  }
+}
