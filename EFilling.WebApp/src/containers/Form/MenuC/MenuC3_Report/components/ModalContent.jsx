@@ -76,6 +76,13 @@ class ModalComponent extends PureComponent {
             a.download = resp.data.filename13;
             a.click();
           }
+          if (resp.data !== null) {
+            const url = resp.data.filebase1464;
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = resp.data.filename14;
+            a.click();
+          }
         }
       });
   }
