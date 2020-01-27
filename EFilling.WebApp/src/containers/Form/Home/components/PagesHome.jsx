@@ -275,6 +275,7 @@ class PagesForm extends PureComponent {
             projectNameThai: tbRows[i].project_name_thai,
             projectNameEng: tbRows[i].project_name_eng,
             projectNumber: tbRows[i].project_number,
+            projectHeadName: tbRows[i].project_head_name,
             acronyms: tbRows[i].acronyms,
             risk_type: tbRows[i].risk_type,
             deliveryOnlineDate: tbRows[i].delivery_online_date,
@@ -337,6 +338,7 @@ class PagesForm extends PureComponent {
             projectNameThai: tbRows[i].project_name_thai,
             projectNameEng: tbRows[i].project_name_eng,
             projectNumber: tbRows[i].project_number,
+            projectHeadName: tbRows[i].project_head_name,
             acronyms: tbRows[i].acronyms,
             risk_type: tbRows[i].risk_type,
             deliveryOnlineDate: tbRows[i].delivery_online_date,
@@ -545,6 +547,7 @@ class PagesForm extends PureComponent {
                             {d.id}
                           </TableCell>
                           <TableCell className="material-table__cell material-table__cell-left">{d.projectNumber}</TableCell>
+                          <TableCell className="material-table__cell material-table__cell-left">{d.projectHeadName}</TableCell>
                           <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditCol2(d.projectNameThai, d.projectNumber)}>
                             <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.projectNameThai}</span>
                           </TableCell>
@@ -555,21 +558,19 @@ class PagesForm extends PureComponent {
                           <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditCol7(d.projectNumber, d.deliveryOnlineDate)}>
                             <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.reviewRequestDate}</span>
                           </TableCell>
+                          <TableCell className="material-table__cell material-table__cell-left">{d.resultDocReview}</TableCell>
+                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditCol17(d.projectNumber, d.committeeCommentDate)}>
+                            <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.committeeAssignDate}</span>
+                          </TableCell>
                           <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickResultNote(d.projectNumber)}>
                             <ModalLink
                               isOpen={modalIsOpen}
                               header="success"
                               color="success"
                               title="ผลการตรวจเอกสาร"
-                              btn={d.resultDocReview}
+                              btn={<textarea rows="5" cols="35" style={{ border: 'none', backgroundColor: 'transparent', whiteSpace: 'pre-wrap' }} placeholder={d.committeeNameArray} disabled />}
                               message={messageNotes}
                             />
-                          </TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditCol17(d.projectNumber, d.committeeCommentDate)}>
-                            <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.committeeAssignDate}</span>
-                          </TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left">
-                            <textarea rows="5" cols="35" style={{ border: 'none', backgroundColor: 'transparent', whiteSpace: 'pre-wrap' }} placeholder={d.committeeNameArray} disabled />
                           </TableCell>
                           <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditCol18(d.projectNumber, d.meetingApprovalDate)}>
                             <textarea rows="5" cols="20" style={{ border: 'none', backgroundColor: 'transparent' }} placeholder={d.committeeCommentDate} disabled />

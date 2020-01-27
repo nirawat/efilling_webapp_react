@@ -139,7 +139,7 @@ class PagesForm extends PureComponent {
       .catch((error) => {
         if (error.response) {
           if (error.response.status === 400) {
-            this.show('danger', 'ข้อผิดผลาด!', 'กรุณาตรวจสอบข้อมูลของท่าน');
+            this.show('danger', 'ข้อผิดผลาด!', error.response.data.message);
           } else {
             this.show('danger', 'Error', error.message);
           }
@@ -163,9 +163,9 @@ class PagesForm extends PureComponent {
     reset();
   }
 
-  // handleChangeMeetingDate = (e) => {
-  // this.setState({ meetingDate: e.toLocaleString('en-GB', { timeZone: 'Asia/Bangkok' }) });
-  // }
+  handleChangeMeetingDate = (e) => {
+    this.setState({ meetingDate: e.toLocaleString('en-GB', { timeZone: 'Asia/Bangkok' }) });
+  }
 
   handleChangeMeetingRecordId = (e) => {
     this.setState({ meetingRecordId: e.value });

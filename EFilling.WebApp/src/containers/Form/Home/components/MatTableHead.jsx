@@ -16,6 +16,9 @@ const rows = [
     id: 'projectNumber', disablePadding: false, label: 'เลขสำคัญโครงการ',
   },
   {
+    id: 'projectNumber', disablePadding: false, label: 'หัวหน้าโครงการ',
+  },
+  {
     id: 'projectNameThai', disablePadding: false, label: 'ชื่อโครงการ (ไทย)',
   },
   {
