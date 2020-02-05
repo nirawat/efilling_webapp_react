@@ -26,6 +26,7 @@ class PagesForm extends PureComponent {
   constructor() {
     super();
     this.state = {
+      createBy: eFillingSys.registerId,
       listMeetingId: [],
       meetingId: '',
       meetingName: '',
@@ -60,6 +61,8 @@ class PagesForm extends PureComponent {
       tab5Group1Seq10Input2: '',
       tab5Group1Seq10Input3: '',
       permissionInsert: false,
+      buttonSaveEnable: false,
+      buttonSaveStatus: 'บันทึก',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -91,6 +94,7 @@ class PagesForm extends PureComponent {
           meetingId: resp.data.meetingId,
           meetingName: resp.data.meetingName,
           permissionInsert: resp.data.userPermission.insert,
+          buttonSaveEnable: resp.data.userPermission.insert,
         });
       });
   }
@@ -105,19 +109,26 @@ class PagesForm extends PureComponent {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    // eslint-disable-next-line
-    console.log(this.state);
+    this.show('warning', 'แจ้งให้ทราบ', 'กรุณารอสักครู่ระบบกำลังบันทึกข้อมูล...');
+    this.setState({
+      buttonSaveStatus: 'กำลังบันทึก...',
+      buttonSaveEnable: false,
+    });
     Axios
       .post('/PublicDocMenuC/AddDocMenuC35', this.state)
       .then(() => {
         this.show('success', 'บันทึก', `
         ระเบียบวาระที่ 5 เสร็จสิ้น!`);
-        // this.handleReset();
         setTimeout(() => {
           window.location.reload();
         }, 3000);
       })
       .catch((error) => {
+        const { permissionInsert } = this.state;
+        this.setState({
+          buttonSaveStatus: 'บันทึก',
+          buttonSaveEnable: permissionInsert,
+        });
         if (error.response) {
           if (error.response.status === 400) {
             this.show('danger', 'ข้อผิดผลาด!', 'กรุณาตรวจสอบข้อมูลของท่าน');
@@ -382,7 +393,7 @@ class PagesForm extends PureComponent {
 
   render() {
     const {
-      listMeetingId, meetingName, permissionInsert,
+      listMeetingId, meetingName, buttonSaveEnable, buttonSaveStatus,
     } = this.state;
 
     const renderTab5 = ({ fields }) => (
@@ -459,8 +470,8 @@ class PagesForm extends PureComponent {
               </div>
               <div className="form__form-group">
                 <ButtonToolbar>
-                  <Button color="success" type="submit" disabled={!permissionInsert}>บันทึก</Button>
-                  <Button>ล้าง</Button>
+                  <Button color="success" type="submit" disabled={!buttonSaveEnable}>{buttonSaveStatus}</Button>
+                  <Button onClick={() => window.location.reload()}>ล้าง</Button>
                 </ButtonToolbar>
               </div>
             </form>

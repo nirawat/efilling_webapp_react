@@ -26,6 +26,7 @@ class PagesForm extends PureComponent {
   constructor() {
     super();
     this.state = {
+      createBy: eFillingSys.registerId,
       listAssigner: [],
       listProjectNumber: [],
       listSafetyType: [],
@@ -44,6 +45,8 @@ class PagesForm extends PureComponent {
       commentConsider: '',
       acceptType: '1',
       permissionInsert: false,
+      buttonSaveEnable: false,
+      buttonSaveStatus: 'บันทึก',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -104,6 +107,7 @@ class PagesForm extends PureComponent {
           assignerName: resp.data.default_assigner_name,
           assignerSeq: resp.data.default_assigner_seq,
           permissionInsert: resp.data.userPermission.insert,
+          buttonSaveEnable: resp.data.userPermission.insert,
         });
       });
   }
@@ -118,8 +122,11 @@ class PagesForm extends PureComponent {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    // eslint-disable-next-line
-    console.log(this.state);
+    this.show('warning', 'แจ้งให้ทราบ', 'กรุณารอสักครู่ระบบกำลังบันทึกข้อมูล...');
+    this.setState({
+      buttonSaveStatus: 'กำลังบันทึก...',
+      buttonSaveEnable: false,
+    });
     Axios
       .post('/PublicDocMenuC/AddDocMenuC2', this.state)
       .then((resp) => {
@@ -137,6 +144,11 @@ class PagesForm extends PureComponent {
         }, 1000);
       })
       .catch((error) => {
+        const { permissionInsert } = this.state;
+        this.setState({
+          buttonSaveStatus: 'บันทึก',
+          buttonSaveEnable: permissionInsert,
+        });
         if (error.response) {
           if (error.response.status === 400) {
             this.show('danger', 'ข้อผิดผลาด!', 'กรุณาตรวจสอบข้อมูลของท่าน');
@@ -240,7 +252,7 @@ class PagesForm extends PureComponent {
         title={title}
         message={message}
       />,
-      duration: 5,
+      duration: 15,
       closable: true,
       style: { top: 0, left: 'calc(100vw - 100%)' },
       className: 'right-up ltr-support',
@@ -254,7 +266,7 @@ class PagesForm extends PureComponent {
       projectNumber, projectHeadName, facultyName,
       projectNameThai, projectNameEng, safetyType,
       approvalType, commentConsider, acceptType,
-      permissionInsert,
+      buttonSaveEnable, buttonSaveStatus,
     } = this.state;
 
     const defaultAcceptType = 'คำขอรับรองโครงการ';
@@ -431,7 +443,7 @@ class PagesForm extends PureComponent {
               </div>
               <div className="form__form-group">
                 <ButtonToolbar>
-                  <Button color="success" type="submit" disabled={!permissionInsert}>บันทึก</Button>
+                  <Button color="success" type="submit" disabled={!buttonSaveEnable}>{buttonSaveStatus}</Button>
                   <Button onClick={this.handleReset}>ล้าง</Button>
                 </ButtonToolbar>
               </div>

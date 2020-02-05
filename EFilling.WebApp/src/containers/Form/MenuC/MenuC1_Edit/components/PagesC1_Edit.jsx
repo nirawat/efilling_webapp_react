@@ -30,6 +30,7 @@ class PagesForm extends PureComponent {
   constructor() {
     super();
     this.state = {
+      createBy: eFillingSys.registerId,
       listAssigner: [],
       listProjectNumber: [],
       listYearOfProject: [],
@@ -50,7 +51,8 @@ class PagesForm extends PureComponent {
       boardCodeArray: '',
       specialListCodeArray: '',
       acceptType: '1',
-      permissionEdit: false,
+      buttonSaveEnable: false,
+      buttonSaveStatus: 'บันทึก',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -137,10 +139,8 @@ class PagesForm extends PureComponent {
           acceptType: resp.data.editdata.acceptType,
           boardCodeArray: initialBoardCodeArray,
           specialListCodeArray: initialSpecialListCodeArray,
-          permissionEdit: resp.data.userPermission.edit,
+          buttonSaveEnable: resp.data.editdata.editenable,
         });
-        // eslint-disable-next-line
-        console.log(this.state);
       });
   }
 
@@ -154,19 +154,31 @@ class PagesForm extends PureComponent {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    // eslint-disable-next-line
-    console.log(this.state);
+    this.show('warning', 'แจ้งให้ทราบ', 'กรุณารอสักครู่ระบบกำลังบันทึกข้อมูล...');
+    this.setState({
+      buttonSaveStatus: 'กำลังบันทึก...',
+      buttonSaveEnable: false,
+    });
     Axios
       .post('/PublicDocMenuC/UpdateDocMenuC1Edit', this.state)
-      .then(() => {
+      .then((resp) => {
         this.show('success', 'บันทึก', `
         การมอบหมายผู้พิจารณาโครงการเสร็จสิ้น!`);
-        // this.handleReset();
+        if (resp.data !== null) {
+          const url = resp.data.filebase64;
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = resp.data.filename;
+          a.click();
+        }
         setTimeout(() => {
           window.location.reload();
-        }, 2000);
+        }, 1000);
       })
       .catch((error) => {
+        this.setState({
+          buttonSaveStatus: 'บันทึก',
+        });
         if (error.response) {
           if (error.response.status === 400) {
             this.show('danger', 'ข้อผิดผลาด!', 'กรุณาตรวจสอบข้อมูลของท่าน');
@@ -274,12 +286,27 @@ class PagesForm extends PureComponent {
         title={title}
         message={message}
       />,
-      duration: 5,
+      duration: 15,
       closable: true,
       style: { top: 0, left: 'calc(100vw - 100%)' },
       className: 'right-up ltr-support',
     });
   };
+
+  handlePrintReport = () => {
+    const { docId } = this.state;
+    Axios
+      .get(`PublicDocMenuReport/GetReportR11/${docId}`)
+      .then((resp) => {
+        if (resp.data !== null) {
+          const url = resp.data.filebase64;
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = resp.data.filename;
+          a.click();
+        }
+      });
+  }
 
   render() {
     const {
@@ -287,8 +314,8 @@ class PagesForm extends PureComponent {
       assignerCode, assignerName, positionName, acceptType, meetingDate,
       projectNumber, projectHeadName, facultyName,
       projectNameThai, projectNameEng, boardCodeArray,
-      roundOfMeeting, defaultYear, yearOfMeeting,
-      specialListCodeArray, permissionEdit,
+      roundOfMeeting, defaultYear, yearOfMeeting, specialListCodeArray,
+      buttonSaveEnable, buttonSaveStatus,
     } = this.state;
 
     const defaultAcceptType = 'คำขอรับรองโครงการ';
@@ -474,6 +501,7 @@ class PagesForm extends PureComponent {
                     removeSelected={false}
                     className="react-select"
                     classNamePrefix="react-select"
+                    isDisabled={!buttonSaveEnable}
                   />
                 </div>
               </div>
@@ -493,13 +521,14 @@ class PagesForm extends PureComponent {
                     removeSelected={false}
                     className="react-select"
                     classNamePrefix="react-select"
+                    isDisabled={!buttonSaveEnable}
                   />
                 </div>
               </div>
               <div className="form__form-group">
                 <ButtonToolbar>
-                  <Button color="success" type="submit" disabled={!permissionEdit}>บันทึก</Button>
-                  <Button onClick={this.handleReset}>ล้าง</Button>
+                  <Button color="success" type="submit" disabled={!buttonSaveEnable}>{buttonSaveStatus}</Button>
+                  <Button color="success" onClick={() => this.handlePrintReport()}>พิมพ์</Button>
                 </ButtonToolbar>
               </div>
             </form>

@@ -20,7 +20,6 @@ class ModalComponent extends PureComponent {
     meetingOfRound: PropTypes.string,
     meetingOfYear: PropTypes.string,
     title: PropTypes.string,
-    message: PropTypes.string,
     color: PropTypes.string.isRequired,
     colored: PropTypes.bool,
     header: PropTypes.bool,
@@ -34,7 +33,6 @@ class ModalComponent extends PureComponent {
     meetingOfYear: '',
     title: '',
     docId: '',
-    message: '',
     colored: false,
     header: false,
   };
@@ -48,41 +46,21 @@ class ModalComponent extends PureComponent {
     this.toggle = this.toggle.bind(this);
   }
 
-  downloadAllReport = (e) => {
+  downloadAllReport = () => {
+    const {
+      docId, meetingOfRound, meetingOfYear,
+    } = this.props;
     Axios
-      .get(`PublicDocMenuReport/GetAllReportMeeting/${e}`)
+      .get(`PublicDocMenuReport/GetAllReportMeeting/${docId}/${meetingOfRound}/${meetingOfYear}`)
       .then((resp) => {
         if (resp.data === null) {
           this.show('warning', 'แจ้งให้ทราบ', 'ไม่พบไฟล์รายงาน!');
         } else {
-          if (resp.data !== null) {
-            const url = resp.data.filebase964;
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = resp.data.filename9;
-            a.click();
-          }
-          if (resp.data !== null) {
-            const url = resp.data.filebase1264;
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = resp.data.filename12;
-            a.click();
-          }
-          if (resp.data !== null) {
-            const url = resp.data.filebase1364;
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = resp.data.filename13;
-            a.click();
-          }
-          if (resp.data !== null) {
-            const url = resp.data.filebase1464;
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = resp.data.filename14;
-            a.click();
-          }
+          const url = resp.data.filebase1464;
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = resp.data.filename14;
+          a.click();
         }
       });
   }
@@ -108,7 +86,7 @@ class ModalComponent extends PureComponent {
 
   render() {
     const {
-      color, btn, isClosed, docId, meetingOfRound, meetingOfYear, title, message, colored, header, rtl,
+      color, btn, isClosed, docId, meetingOfRound, meetingOfYear, title, colored, header, rtl,
     } = this.props;
     const { modal } = this.state;
     let Icon;
@@ -153,7 +131,7 @@ class ModalComponent extends PureComponent {
           </div>
           <ButtonToolbar className="modal__footer">
             <Button color="success" disabled={isClosed} onClick={() => this.downloadCloseMeeting()}>พิมพ์ร่าง</Button>{' '}
-            <Button color="success" onClick={() => this.downloadAllReport(message)}>พิมพ์จริง</Button>{' '}
+            <Button color="success" onClick={() => this.downloadAllReport()}>พิมพ์จริง</Button>{' '}
             <Button className="modal_cancel" onClick={this.toggle}>Cancel</Button>{' '}
           </ButtonToolbar>
         </Modal>

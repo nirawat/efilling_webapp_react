@@ -27,6 +27,7 @@ class PagesForm extends PureComponent {
   constructor() {
     super();
     this.state = {
+      createBy: eFillingSys.registerId,
       listMeetingId: [],
       meetingId: '',
       meetingName: '',
@@ -47,6 +48,8 @@ class PagesForm extends PureComponent {
       tab2Group1Seq3Input3: '',
       tab2Group1Seq3Input4: '',
       permissionInsert: false,
+      buttonSaveEnable: false,
+      buttonSaveStatus: 'บันทึก',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -79,6 +82,7 @@ class PagesForm extends PureComponent {
           meetingName: resp.data.meetingName,
           isFileAttachment: resp.data.isFileAttachment,
           permissionInsert: resp.data.userPermission.insert,
+          buttonSaveEnable: resp.data.userPermission.insert,
         });
       });
   }
@@ -93,8 +97,11 @@ class PagesForm extends PureComponent {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    // eslint-disable-next-line
-    console.log(this.state);
+    this.show('warning', 'แจ้งให้ทราบ', 'กรุณารอสักครู่ระบบกำลังบันทึกข้อมูล...');
+    this.setState({
+      buttonSaveStatus: 'กำลังบันทึก...',
+      buttonSaveEnable: false,
+    });
     Axios
       .post('/PublicDocMenuC/AddDocMenuC32', this.state)
       .then(() => {
@@ -106,6 +113,11 @@ class PagesForm extends PureComponent {
         }, 3000);
       })
       .catch((error) => {
+        const { permissionInsert } = this.state;
+        this.setState({
+          buttonSaveStatus: 'บันทึก',
+          buttonSaveEnable: permissionInsert,
+        });
         if (error.response) {
           if (error.response.status === 400) {
             this.show('danger', 'ข้อผิดผลาด!', 'กรุณาตรวจสอบข้อมูลของท่าน');
@@ -238,7 +250,7 @@ class PagesForm extends PureComponent {
       tab2Group1Seq1Input1, tab2Group1Seq1FileInput2, tab2Group1Seq1Input3, tab2Group1Seq1Input4,
       tab2Group1Seq2Input1, tab2Group1Seq2FileInput2, tab2Group1Seq2Input3, tab2Group1Seq2Input4,
       tab2Group1Seq3Input1, tab2Group1Seq3FileInput2, tab2Group1Seq3Input3, tab2Group1Seq3Input4,
-      permissionInsert,
+      buttonSaveEnable, buttonSaveStatus,
     } = this.state;
 
     return (
@@ -409,8 +421,8 @@ class PagesForm extends PureComponent {
               </div>
               <div className="form__form-group">
                 <ButtonToolbar>
-                  <Button color="success" type="submit" disabled={!permissionInsert}>บันทึก</Button>
-                  <Button>ล้าง</Button>
+                  <Button color="success" type="submit" disabled={!buttonSaveEnable}>{buttonSaveStatus}</Button>
+                  <Button onClick={() => window.location.reload()}>ล้าง</Button>
                 </ButtonToolbar>
               </div>
             </form>

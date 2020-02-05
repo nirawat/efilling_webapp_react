@@ -9,16 +9,7 @@ import { RTLProps } from '../../../../shared/prop-types/ReducerProps';
 
 const rows = [
   {
-    id: 'col1', disablePadding: false, label: 'ลำดับที่: ',
-  },
-  {
-    id: 'col2', disablePadding: false, label: 'ชื่อกรรมการ: ',
-  },
-  {
-    id: 'col3', disablePadding: false, label: 'ความเห็น: ',
-  },
-  {
-    id: 'col3', disablePadding: false, label: 'ความเห็นประกอบการพิจารณา: ',
+    id: 'col1', disablePadding: false, label: '',
   },
 ];
 

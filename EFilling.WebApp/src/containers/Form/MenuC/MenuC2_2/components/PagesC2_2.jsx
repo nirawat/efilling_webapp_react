@@ -42,6 +42,8 @@ class PagesForm extends PureComponent {
       commentConsider: '',
       acceptType: '2',
       permissionInsert: false,
+      buttonSaveEnable: false,
+      buttonSaveStatus: 'บันทึก',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -102,6 +104,7 @@ class PagesForm extends PureComponent {
           assignerName: resp.data.default_assigner_name,
           assignerSeq: resp.data.default_assigner_seq,
           permissionInsert: resp.data.userPermission.insert,
+          buttonSaveEnable: resp.data.userPermission.insert,
         });
       });
   }
@@ -123,8 +126,11 @@ class PagesForm extends PureComponent {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    // eslint-disable-next-line
-    console.log(this.state);
+    this.show('warning', 'แจ้งให้ทราบ', 'กรุณารอสักครู่ระบบกำลังบันทึกข้อมูล...');
+    this.setState({
+      buttonSaveStatus: 'กำลังบันทึก...',
+      buttonSaveEnable: false,
+    });
     Axios
       .post('/PublicDocMenuC/AddDocMenuC22', this.state)
       .then(() => {
@@ -136,6 +142,11 @@ class PagesForm extends PureComponent {
         }, 2000);
       })
       .catch((error) => {
+        const { permissionInsert } = this.state;
+        this.setState({
+          buttonSaveStatus: 'บันทึก',
+          buttonSaveEnable: permissionInsert,
+        });
         if (error.response) {
           if (error.response.status === 400) {
             this.show('danger', 'ข้อผิดผลาด!', 'กรุณาตรวจสอบข้อมูลของท่าน');
@@ -237,7 +248,7 @@ class PagesForm extends PureComponent {
       assignerCode, assignerName, positionName,
       projectNumber, labTypeName, facultyName,
       approvalType, commentConsider, acceptType,
-      permissionInsert,
+      buttonSaveEnable, buttonSaveStatus,
     } = this.state;
 
     const defaultAcceptType = 'คำขอประเมินห้องปฏิบัติการ';
@@ -367,7 +378,7 @@ class PagesForm extends PureComponent {
               </div>
               <div className="form__form-group">
                 <ButtonToolbar>
-                  <Button color="success" type="submit" disabled={!permissionInsert}>บันทึก</Button>
+                  <Button color="success" type="submit" disabled={!buttonSaveEnable}>{buttonSaveStatus}</Button>
                   <Button onClick={this.handleReset}>ล้าง</Button>
                 </ButtonToolbar>
               </div>

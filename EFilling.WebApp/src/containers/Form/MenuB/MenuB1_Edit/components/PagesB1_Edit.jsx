@@ -4,7 +4,6 @@ import {
 } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form';
 import { withTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 import Config from 'react-global-configuration';
 import Axios from 'axios';
 import NotificationSystem from 'rc-notification';
@@ -21,13 +20,10 @@ const urlParams = new URLSearchParams(window.location.search);
 let notificationRU = null;
 
 class PagesForm extends PureComponent {
-  static propTypes = {
-    reset: PropTypes.func.isRequired,
-  };
-
   constructor(props) {
     super(props);
     this.state = {
+      createBy: eFillingSys.registerId,
       docId: '',
       listProjectHead: [],
       listProjectNameThai: [],
@@ -52,6 +48,8 @@ class PagesForm extends PureComponent {
       defaultMeetingDate: '',
       meetingDate: '',
       permissionEdit: false,
+      buttonSaveEnable: false,
+      buttonSaveStatus: 'บันทึก',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -121,6 +119,13 @@ class PagesForm extends PureComponent {
           meetingDate: resp.data.editdata.meetingdate,
           permissionEdit: resp.data.userPermission.edit,
         });
+        if (resp.data.editdata.editenable === false) {
+          this.setState({ buttonSaveEnable: false });
+        } else if (resp.data.editdata.createby !== `${eFillingSys.registerId}`) {
+          this.setState({ buttonSaveEnable: false });
+        } else {
+          this.setState({ buttonSaveEnable: true });
+        }
       });
   }
 
@@ -209,19 +214,33 @@ class PagesForm extends PureComponent {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    // eslint-disable-next-line
-    console.log(this.state);
+    this.show('warning', 'แจ้งให้ทราบ', 'กรุณารอสักครู่ระบบกำลังบันทึกข้อมูล...');
+    this.setState({
+      buttonSaveStatus: 'กำลังบันทึก...',
+      buttonSaveEnable: false,
+    });
     Axios
       .post('/PublicDocMenuB/UpdateDocMenuB1', this.state)
-      .then(() => {
+      .then((resp) => {
         this.show('success', 'แจ้งให้ทราบ', `
         ตรวจสอบเสนอและแจ้งผลเบื้องต้นเสร็จสิ้น!`);
-        // this.handleReset();
+        if (resp.data !== null) {
+          const url = resp.data.filebase64;
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = resp.data.filename;
+          a.click();
+        }
         setTimeout(() => {
           window.location.reload();
-        }, 2000);
+        }, 1000);
       })
       .catch((error) => {
+        const { permissionEdit } = this.state;
+        this.setState({
+          buttonSaveStatus: 'บันทึก',
+          buttonSaveEnable: permissionEdit,
+        });
         if (error.response) {
           if (error.response.status === 400) {
             this.show('danger', 'ข้อผิดผลาด!', 'กรุณาตรวจสอบข้อมูลของท่าน');
@@ -234,25 +253,6 @@ class PagesForm extends PureComponent {
       });
   }
 
-  handleReset = () => {
-    const { reset } = this.props;
-    this.setState({
-      acceptType: '1',
-      projectHead: '',
-      projectId: '',
-      projectNameEng: '',
-      acronyms: '',
-      initialResult: '',
-      fileDownloadName: '',
-      projectKeyNumber: '',
-      notes: '',
-      roundOfMeeting: '',
-      yearOfMeeting: '',
-      meetingDate: '',
-    });
-    reset();
-  }
-
   show = (color, title, message) => {
     notificationRU.notice({
       content: <BasicNotification
@@ -260,12 +260,27 @@ class PagesForm extends PureComponent {
         title={title}
         message={message}
       />,
-      duration: 5,
+      duration: 15,
       closable: true,
       style: { top: 0, left: 'calc(100vw - 100%)' },
       className: 'right-up ltr-support',
     });
   };
+
+  handlePrintReport = () => {
+    const { docId } = this.state;
+    Axios
+      .get(`PublicDocMenuReport/GetReportR8/${docId}`)
+      .then((resp) => {
+        if (resp.data !== null) {
+          const url = resp.data.filebase64;
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = resp.data.filename;
+          a.click();
+        }
+      });
+  }
 
   render() {
     const {
@@ -273,7 +288,7 @@ class PagesForm extends PureComponent {
       acceptType, projectHead, projectId, projectNameThai, defaultUserName,
       projectNameEng, acronyms, initialResult, initialResultName, fileDownloadName, fileDownloadNameTitle,
       projectKeyNumber, notes, roundOfMeeting, yearOfMeeting, defaultMeetingDate, meetingDate,
-      permissionEdit,
+      buttonSaveEnable, buttonSaveStatus,
     } = this.state;
 
     const defaultAcceptType = 'ขอเสนอโครงการ';
@@ -368,7 +383,6 @@ class PagesForm extends PureComponent {
               </div>
               <div className="form__form-group">
                 <span className="form__form-group-label">ดาวน์โหลดข้อเสนอ </span>
-                <span className="form__form-group-label" style={{ color: '#FF0000' }}> *</span>
                 <div className="form__form-group-field">
                   <Field
                     name="fileDownloadName"
@@ -421,6 +435,7 @@ class PagesForm extends PureComponent {
                     value={roundOfMeeting}
                     placeholder={roundOfMeeting}
                     onChange={this.handleChange}
+                    disabled
                   />
                   <span className="form__form-group-label">/</span>
                   <Field
@@ -438,7 +453,6 @@ class PagesForm extends PureComponent {
                 <span className="form__form-group-label">
                   กำหนดวันที่ประชุม
                 </span>
-                <span className="form__form-group-label" style={{ color: '#FF0000' }}> *</span>
                 <div className="form__form-group-field">
                   <Field
                     name="defaultMeetingDate"
@@ -463,7 +477,8 @@ class PagesForm extends PureComponent {
               </div>
               <div className="form__form-group">
                 <ButtonToolbar>
-                  <Button color="success" type="submit" disabled={!permissionEdit}>บันทึก</Button>
+                  <Button color="success" type="submit" disabled={!buttonSaveEnable}>{buttonSaveStatus}</Button>
+                  <Button color="success" onClick={() => this.handlePrintReport()}>พิมพ์</Button>
                 </ButtonToolbar>
               </div>
             </form>

@@ -1,22 +1,24 @@
 import React, { PureComponent } from 'react';
 import {
-  Card, CardBody, Col, Button, ButtonToolbar,
+  Card, CardBody, Col, Row, Button, ButtonToolbar,
 } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import Config from 'react-global-configuration';
 import { Link } from 'react-router-dom';
-import DownloadIcon from 'mdi-react/DownloadIcon';
+import nl2br from 'react-newline-to-break';
 import Axios from 'axios';
+import Dropdown, { MenuItem } from '@trendmicro/react-dropdown';
+import '@trendmicro/react-dropdown/dist/react-dropdown.css';
 import NotificationSystem from 'rc-notification';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import ModalLink from './ModalLink';
 import MatTableHead from './MatTableHead';
+import ModalLink from './ModalLink';
 import { BasicNotification } from '../../../../shared/components/Notification';
 import renderSelectField from '../../../../shared/components/form/Select';
 
@@ -81,7 +83,7 @@ class PagesForm extends PureComponent {
       orderBy: 'calories',
       data: [],
       page: 0,
-      rowsPerPage: 5,
+      rowsPerPage: 4,
       modalIsOpen: true,
       messageNotes: '',
       permissionPrint: false,
@@ -143,41 +145,21 @@ class PagesForm extends PureComponent {
     this.setState({ risk: e.value });
   }
 
-  handleClickResultNote = (e) => {
-    this.setState({
-      modalIsOpen: true,
-      messageNotes: '',
-    });
-    Axios
-      .get(`PublicDocMenuHome/GetResultNoteHome1/${e}`)
-      .then((resp) => {
-        this.setState({
-          modalIsOpen: true,
-          messageNotes: resp.data.resultNote,
-        });
-        return e;
+  handleClickResultNote = (projectNumber, value) => {
+    if (value !== '' && value !== null) {
+      this.setState({
+        modalIsOpen: true,
+        messageNotes: '',
       });
-  }
-
-  handleClickDownloadFile = (e) => {
-    const { permissionPrint } = this.state;
-    if (permissionPrint) {
       Axios
-        .get(`PublicDocMenuHome/DownloadFileHome1/${e}`)
+        .get(`PublicDocMenuHome/GetResultNoteHome1/${projectNumber}`)
         .then((resp) => {
-          if (resp.data === null) {
-            this.show('warning', 'แจ้งให้ทราบ', 'ไม่พบไฟล์เอกสารแนบ!');
-          } else {
-            const url = resp.data.filebase64;
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = resp.data.filename;
-            a.click();
-          }
+          this.setState({
+            modalIsOpen: true,
+            messageNotes: resp.data.resultNote,
+          });
+          return projectNumber;
         });
-    } else {
-      this.show('success', 'แจ้งให้ทราบ', `สิทธิ์พิมพ์เอกสาร
-      ถูกจำกัด!`);
     }
   }
 
@@ -288,11 +270,13 @@ class PagesForm extends PureComponent {
             meetingApprovalDate: tbRows[i].meeting_approval_date,
             considerResult: tbRows[i].consider_result,
             alertDate: tbRows[i].alert_date,
+            requestEditMeetingDate: tbRows[i].request_edit_meeting_date,
             requestEditDate: tbRows[i].request_edit_date,
             reportStatusDate: tbRows[i].report_status_date,
             certificateExpireDate: tbRows[i].certificate_expire_date,
             requestRenewDate: tbRows[i].request_renew_date,
-            downloadFile: <DownloadIcon />,
+            closeProjectDate: tbRows[i].close_project_date,
+            printCertificateDate: tbRows[i].print_certificate_date,
           });
         }
         this.setState({
@@ -351,54 +335,74 @@ class PagesForm extends PureComponent {
             meetingApprovalDate: tbRows[i].meeting_approval_date,
             considerResult: tbRows[i].consider_result,
             alertDate: tbRows[i].alert_date,
+            requestEditMeetingDate: tbRows[i].request_edit_meeting_date,
             requestEditDate: tbRows[i].request_edit_date,
             reportStatusDate: tbRows[i].report_status_date,
             certificateExpireDate: tbRows[i].certificate_expire_date,
             requestRenewDate: tbRows[i].request_renew_date,
-            downloadFile: <DownloadIcon />,
+            closeProjectDate: tbRows[i].close_project_date,
+            printCertificateDate: tbRows[i].print_certificate_date,
           });
         }
         this.setState({ data: rows });
       });
   }
 
-  handleClickEditCol2 = (e, projectNumber) => {
-    if (projectNumber !== '') {
-      this.show('danger', 'แจ้งให้ทราบ', 'ไม่สามารถแก้ไขโครงการได้!');
-    } else {
-      window.open(`/forms/menuA/menuA1_Edit?id=${e}`, '_blank');
-    }
+  handleClickEditProjectRequest = (docId) => {
+    window.open(`/forms/menuA/menuA1_Edit?docId=${docId}`, '_blank');
   }
 
-  handleClickEditCol7 = (e, date) => {
-    if (date !== '') {
-      this.show('danger', 'แจ้งให้ทราบ', 'ไม่สามารถแก้ไขข้อมูลได้!');
-    } else {
-      window.open(`/forms/menuB/menuB1_Edit?id=${e}`, '_blank');
-    }
-  }
-
-  handleClickEditCol17 = (e, date) => {
-    if (date !== '') {
-      this.show('danger', 'แจ้งให้ทราบ', 'ไม่สามารถแก้ไขข้อมูลได้!');
-    } else {
-      window.open(`/forms/menuC/menuC1_Edit?id=${e}`, '_blank');
-    }
-  }
-
-  handleClickEditCol18 = (e, date) => {
-    if (date !== '') {
-      this.show('danger', 'แจ้งให้ทราบ', 'ไม่สามารถแก้ไขข้อมูลได้!');
-    } else {
-      window.open(`/forms/menuC/menuC2_Edit?id=${e}`, '_blank');
-    }
-  }
-
-  handleClickEditCol19 = (e, date) => {
-    if (date !== '') {
-      this.show('danger', 'แจ้งให้ทราบ', 'ไม่สามารถแก้ไขข้อมูลได้!');
-    } else {
-      window.open(`/forms/menuC/menuC2_Edit?id=${e}`, '_blank');
+  handleClickEditData = (type, projectNumber, value) => {
+    if (value !== '' && value !== null) {
+      switch (type) {
+        case 'a3':
+          window.open(`/forms/menuA/menuA3_Edit?id=${projectNumber}`, '_blank');
+          break;
+        case 'a4':
+          window.open(`/forms/menuA/menuA4_Edit?id=${projectNumber}`, '_blank');
+          break;
+        case 'a5':
+          window.open(`/forms/menuA/menuA5_Edit?id=${projectNumber}`, '_blank');
+          break;
+        case 'a6':
+          window.open(`/forms/menuA/menuA6_Edit?id=${projectNumber}`, '_blank');
+          break;
+        case 'a7':
+          window.open(`/forms/menuA/menuA7_Edit?id=${projectNumber}`, '_blank');
+          break;
+        case 'b1':
+          window.open(`/forms/menuB/menuB1_Edit?id=${projectNumber}`, '_blank');
+          break;
+        case 'c1':
+          window.open(`/forms/menuC/menuC1_Edit?id=${projectNumber}`, '_blank');
+          break;
+        case 'c2':
+          window.open(`/forms/menuC/menuC2_Edit?id=${projectNumber}`, '_blank');
+          break;
+        case 'c3':
+          window.open(`/forms/menuC/menuC3_Edit?id=${projectNumber}`, '_blank');
+          break;
+        case 'c3_1':
+          window.open(`/forms/menuC/menuC3_1_Edit?id=${projectNumber}`, '_blank');
+          break;
+        case 'c3_2':
+          window.open(`/forms/menuC/menuC3_2_Edit?id=${projectNumber}`, '_blank');
+          break;
+        case 'c3_3':
+          window.open(`/forms/menuC/menuC3_3_Edit?id=${projectNumber}`, '_blank');
+          break;
+        case 'c3_4':
+          window.open(`/forms/menuC/menuC3_4_Edit?id=${projectNumber}`, '_blank');
+          break;
+        case 'c3_5':
+          window.open(`/forms/menuC/menuC3_5_Edit?id=${projectNumber}`, '_blank');
+          break;
+        case 'd1':
+          window.open(`/forms/menuD/menuD1_Edit?id=${projectNumber}`, '_blank');
+          break;
+        default:
+          break;
+      }
     }
   }
 
@@ -428,95 +432,97 @@ class PagesForm extends PureComponent {
         <Card>
           <CardBody>
             <form className="form form--horizontal" onSubmit={this.searchReportData}>
-              <div className="form__half">
-                <div className="form__form-group">
-                  <span className="form__form-group-label">ปีงบประมาณ</span>
-                  <div className="form__form-group-field">
-                    <Field
-                      name="year"
-                      component={renderSelectField}
-                      value={year}
-                      onChange={this.handleChangeYear}
-                      placeholder={defaultYear}
-                      options={listYear}
-                    />
+              <Row>
+                <Col xs="6">
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">ปีงบประมาณ</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="year"
+                        component={renderSelectField}
+                        value={year}
+                        onChange={this.handleChangeYear}
+                        placeholder={defaultYear}
+                        options={listYear}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form__form-group">
-                  <span className="form__form-group-label">หัวหน้าโครงการ</span>
-                  <div className="form__form-group-field">
-                    <Field
-                      name="projectHead"
-                      component={renderSelectField}
-                      value={projectHead}
-                      onChange={this.handleChangeProjectHead}
-                      placeholder={defaultProjectHead}
-                      options={listProjectHead}
-                    />
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">หัวหน้าโครงการ</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="projectHead"
+                        component={renderSelectField}
+                        value={projectHead}
+                        onChange={this.handleChangeProjectHead}
+                        placeholder={defaultProjectHead}
+                        options={listProjectHead}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form__form-group">
-                  <span className="form__form-group-label">ประเภทคำขอรับรอง</span>
-                  <div className="form__form-group-field">
-                    <Field
-                      name="acceptType"
-                      component={renderSelectField}
-                      value={acceptType}
-                      onChange={this.handleChangeAcceptType}
-                      placeholder={defaultAcceptType}
-                      options={listAcceptType}
-                    />
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">ประเภทคำขอรับรอง</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="acceptType"
+                        component={renderSelectField}
+                        value={acceptType}
+                        onChange={this.handleChangeAcceptType}
+                        placeholder={defaultAcceptType}
+                        options={listAcceptType}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form__form-group" style={{ paddingLeft: '140px' }}>
-                  <ButtonToolbar>
-                    <Button color="success" type="submit">ค้นหา</Button>
-                    <Link className="btn btn-success" to="/forms/home1">รายการประเมินห้องปฏิบัติการ</Link>
-                    <Button onClick={this.handleReset}>ล้าง</Button>
-                  </ButtonToolbar>
-                </div>
-              </div>
-              <div className="form__half">
-                <div className="form__form-group">
-                  <span className="form__form-group-label">คณะ/หน่วยงาน</span>
-                  <div className="form__form-group-field">
-                    <Field
-                      name="faculty"
-                      component={renderSelectField}
-                      value={faculty}
-                      onChange={this.handleChangeFaculty}
-                      placeholder={defaultFaculty}
-                      options={listFaculty}
-                    />
+                  <div className="form__form-group" style={{ paddingLeft: '140px' }}>
+                    <ButtonToolbar>
+                      <Button color="success" type="submit">ค้นหา</Button>
+                      <Link className="btn btn-success" to="/forms/home1">รายการประเมินห้องปฏิบัติการ</Link>
+                      <Button onClick={this.handleReset}>ล้าง</Button>
+                    </ButtonToolbar>
                   </div>
-                </div>
-                <div className="form__form-group">
-                  <span className="form__form-group-label">คำย่อประเภท</span>
-                  <div className="form__form-group-field">
-                    <Field
-                      name="acronyms"
-                      component={renderSelectField}
-                      value={acronyms}
-                      onChange={this.handleChangeAcronyms}
-                      placeholder={defaultAcronyms}
-                      options={listAcronyms}
-                    />
+                </Col>
+                <Col xs="6">
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">คณะ/หน่วยงาน</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="faculty"
+                        component={renderSelectField}
+                        value={faculty}
+                        onChange={this.handleChangeFaculty}
+                        placeholder={defaultFaculty}
+                        options={listFaculty}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form__form-group">
-                  <span className="form__form-group-label">ประเภทความเสี่ยง</span>
-                  <div className="form__form-group-field">
-                    <Field
-                      name="risk"
-                      component={renderSelectField}
-                      value={risk}
-                      onChange={this.handleChangeRisk}
-                      placeholder={defaultRisk}
-                      options={listRisk}
-                    />
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">คำย่อประเภท</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="acronyms"
+                        component={renderSelectField}
+                        value={acronyms}
+                        onChange={this.handleChangeAcronyms}
+                        placeholder={defaultAcronyms}
+                        options={listAcronyms}
+                      />
+                    </div>
                   </div>
-                </div>
-              </div>
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">ประเภทความเสี่ยง</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="risk"
+                        component={renderSelectField}
+                        value={risk}
+                        onChange={this.handleChangeRisk}
+                        placeholder={defaultRisk}
+                        options={listRisk}
+                      />
+                    </div>
+                  </div>
+                </Col>
+              </Row>
             </form>
             <div className="material-table__wrap">
               <Table className="material-table">
@@ -548,44 +554,95 @@ class PagesForm extends PureComponent {
                           </TableCell>
                           <TableCell className="material-table__cell material-table__cell-left">{d.projectNumber}</TableCell>
                           <TableCell className="material-table__cell material-table__cell-left">{d.projectHeadName}</TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditCol2(d.projectNameThai, d.projectNumber)}>
+                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditProjectRequest(d.projectRequestId, d.projectNumber)}>
                             <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.projectNameThai}</span>
                           </TableCell>
                           <TableCell className="material-table__cell material-table__cell-left">{d.projectNameEng}</TableCell>
                           <TableCell className="material-table__cell material-table__cell-left">{d.acronyms}</TableCell>
                           <TableCell className="material-table__cell material-table__cell-left">{d.risk_type}</TableCell>
                           <TableCell className="material-table__cell material-table__cell-left">{d.deliveryOnlineDate}</TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditCol7(d.projectNumber, d.deliveryOnlineDate)}>
+                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('b1', d.projectNumber, d.reviewRequestDate)}>
                             <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.reviewRequestDate}</span>
                           </TableCell>
                           <TableCell className="material-table__cell material-table__cell-left">{d.resultDocReview}</TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditCol17(d.projectNumber, d.committeeCommentDate)}>
+                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('c1', d.projectNumber, d.committeeAssignDate)}>
                             <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.committeeAssignDate}</span>
                           </TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickResultNote(d.projectNumber)}>
+                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickResultNote(d.projectNumber, d.committeeNameArray)}>
                             <ModalLink
                               isOpen={modalIsOpen}
                               header="success"
                               color="success"
-                              title="ผลการตรวจเอกสาร"
-                              btn={<textarea rows="5" cols="35" style={{ border: 'none', backgroundColor: 'transparent', whiteSpace: 'pre-wrap' }} placeholder={d.committeeNameArray} disabled />}
+                              title="ผลการพิจารณา"
+                              btn={nl2br(d.committeeNameArray)}
                               message={messageNotes}
                             />
                           </TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditCol18(d.projectNumber, d.meetingApprovalDate)}>
-                            <textarea rows="5" cols="20" style={{ border: 'none', backgroundColor: 'transparent' }} placeholder={d.committeeCommentDate} disabled />
+                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('c2', d.projectNumber, d.committeeCommentDate)}>
+                            <span style={{ color: '#34a8eb' }}>{nl2br(d.committeeCommentDate)}</span>
                           </TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left">{d.meetingDate}</TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditCol19(d.projectNumber, d.alertDate)}>
-                            <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.meetingApprovalDate}</span>
+                          <TableCell className="material-table__cell material-table__cell-left">
+                            <Dropdown>
+                              <Dropdown.Toggle title={d.meetingDate} style={{ color: '#34a8eb', border: 0, backgroundColor: 'transparent' }} />
+                              <Dropdown.MenuWrapper>
+                                <Dropdown.Menu>
+                                  <MenuItem
+                                    eventKey={1}
+                                    onSelect={() => { this.handleClickEditData('c3', d.projectNumber, d.meetingDate); }}
+                                  >บันทึกการประชุม
+                                  </MenuItem>
+                                  <MenuItem divider />
+                                  <MenuItem
+                                    eventKey={2}
+                                    onSelect={() => { this.handleClickEditData('c3_1', d.projectNumber, d.meetingDate); }}
+                                  >ระเบียบวาระที่ 1
+                                  </MenuItem>
+                                  <MenuItem
+                                    eventKey={3}
+                                    onSelect={() => { this.handleClickEditData('c3_2', d.projectNumber, d.meetingDate); }}
+                                  >ระเบียบวาระที่ 2
+                                  </MenuItem>
+                                  <MenuItem
+                                    eventKey={4}
+                                    onSelect={() => { this.handleClickEditData('c3_3', d.projectNumber, d.meetingDate); }}
+                                  >ระเบียบวาระที่ 3
+                                  </MenuItem>
+                                  <MenuItem
+                                    eventKey={5}
+                                    onSelect={() => { this.handleClickEditData('c3_4', d.projectNumber, d.meetingDate); }}
+                                  >ระเบียบวาระที่ 4
+                                  </MenuItem>
+                                  <MenuItem
+                                    eventKey={6}
+                                    onSelect={() => { this.handleClickEditData('c3_5', d.projectNumber, d.meetingDate); }}
+                                  >ระเบียบวาระที่ 5
+                                  </MenuItem>
+                                </Dropdown.Menu>
+                              </Dropdown.MenuWrapper>
+                            </Dropdown>
                           </TableCell>
+                          <TableCell className="material-table__cell material-table__cell-left">{d.meetingApprovalDate}</TableCell>
                           <TableCell className="material-table__cell material-table__cell-left">{d.considerResult}</TableCell>
                           <TableCell className="material-table__cell material-table__cell-left">{d.alertDate}</TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left">{d.requestEditDate}</TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left">{d.reportStatusDate}</TableCell>
+                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a4', d.projectNumber, d.requestEditMeetingDate)}>
+                            <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.requestEditMeetingDate}</span>
+                          </TableCell>
+                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a5', d.projectNumber, d.requestEditDate)}>
+                            <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.requestEditDate}</span>
+                          </TableCell>
+                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a3', d.projectNumber, d.reportStatusDate)}>
+                            <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.reportStatusDate}</span>
+                          </TableCell>
                           <TableCell className="material-table__cell material-table__cell-left">{d.certificateExpireDate}</TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left">{d.requestRenewDate}</TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickDownloadFile(d.projectNumber)}>{d.downloadFile}</TableCell>
+                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a6', d.projectNumber, d.requestRenewDate)}>
+                            <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.requestRenewDate}</span>
+                          </TableCell>
+                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a7', d.projectNumber, d.closeProjectDate)}>
+                            <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.closeProjectDate}</span>
+                          </TableCell>
+                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('d1', d.projectNumber, d.printCertificateDate)}>
+                            <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.printCertificateDate}</span>
+                          </TableCell>
                         </TableRow>
                       );
                     })}
@@ -607,7 +664,7 @@ class PagesForm extends PureComponent {
               nextIconButtonProps={{ 'aria-label': 'Next Page' }}
               onChangePage={this.handleChangePage}
               onChangeRowsPerPage={this.handleChangeRowsPerPage}
-              rowsPerPageOptions={[5, 10, 15]}
+              rowsPerPageOptions={[4, 5, 10, 15]}
               dir="ltr"
               SelectProps={{
                 inputProps: { 'aria-label': 'rows per page' },

@@ -27,6 +27,7 @@ class PagesForm extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      createBy: eFillingSys.registerId,
       listLabNumber: [],
       listYearOfProject: [],
       listDownloadFile: [],
@@ -45,6 +46,8 @@ class PagesForm extends PureComponent {
       yearOfMeeting: '',
       meetingDate: '',
       permissionInsert: false,
+      buttonSaveEnable: false,
+      buttonSaveStatus: 'บันทึก',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -87,6 +90,7 @@ class PagesForm extends PureComponent {
           defaultYear: resp.data.defaultyear,
           yearOfMeeting: resp.data.defaultyear,
           permissionInsert: resp.data.userPermission.insert,
+          buttonSaveEnable: resp.data.userPermission.insert,
         });
       });
   }
@@ -130,14 +134,10 @@ class PagesForm extends PureComponent {
           listDownloadFile: initialDownloadFile,
         });
       });
-    // eslint-disable-next-line
-    console.log(this.state);
   }
 
   handleChangeAcronyms = (e) => {
     const { yearOfMeeting } = this.state;
-    // eslint-disable-next-line
-    console.log(this.state);
     const runNumber = `${yearOfMeeting.toString().substring(2)}-${e.value}-XXX`;
     this.setState({
       acronyms: e.value,
@@ -172,8 +172,11 @@ class PagesForm extends PureComponent {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    // eslint-disable-next-line
-    console.log(this.state);
+    this.show('warning', 'แจ้งให้ทราบ', 'กรุณารอสักครู่ระบบกำลังบันทึกข้อมูล...');
+    this.setState({
+      buttonSaveStatus: 'กำลังบันทึก...',
+      buttonSaveEnable: false,
+    });
     Axios
       .post('/PublicDocMenuB/AddDocMenuB2', this.state)
       .then(() => {
@@ -184,6 +187,11 @@ class PagesForm extends PureComponent {
         }, 1000);
       })
       .catch((error) => {
+        const { permissionInsert } = this.state;
+        this.setState({
+          buttonSaveStatus: 'บันทึก',
+          buttonSaveEnable: permissionInsert,
+        });
         if (error.response) {
           if (error.response.status === 400) {
             this.show('danger', 'ข้อผิดผลาด!', 'กรุณาตรวจสอบข้อมูลของท่าน');
@@ -237,7 +245,7 @@ class PagesForm extends PureComponent {
       facultyName, initialResult, fileDownloadName,
       projectKeyNumber, notes, roundOfMeeting,
       yearOfMeeting, defaultYear, meetingDate,
-      acronyms, permissionInsert,
+      acronyms, buttonSaveEnable, buttonSaveStatus,
     } = this.state;
 
     const defaultAcceptType = 'ประเมินห้องปฏิบัติการ';
@@ -421,8 +429,8 @@ class PagesForm extends PureComponent {
               </div>
               <div className="form__form-group">
                 <ButtonToolbar>
-                  <Button color="success" type="submit" disabled={!permissionInsert}>บันทึก</Button>
-                  <Button onClick={this.handleReset}>ล้าง</Button>
+                  <Button color="success" type="submit" disabled={!buttonSaveEnable}>{buttonSaveStatus}</Button>
+                  <Button onClick={() => window.location.reload()}>ล้าง</Button>
                 </ButtonToolbar>
               </div>
             </form>

@@ -128,7 +128,7 @@ class PagesForm extends PureComponent {
         title={title}
         message={message}
       />,
-      duration: 5,
+      duration: 20,
       closable: true,
       style: { top: 0, left: 'calc(100vw - 100%)' },
       className: 'right-up ltr-support',
@@ -310,8 +310,7 @@ class PagesForm extends PureComponent {
                               header="success"
                               color="success"
                               title="ดาวน์โหลดรายงาน"
-                              docid={d.docid}
-                              message={d.docid}
+                              docId={d.docid}
                               isClosed={d.isclosed}
                               meetingOfRound={d.meetinground}
                               meetingOfYear={d.yearofmeeting}

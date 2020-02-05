@@ -210,6 +210,7 @@ class PagesF1Edit extends PureComponent {
                       component="input"
                       type="email"
                       value={email}
+                      onChange={this.handleChange}
                     />
                   </div>
                 </div>

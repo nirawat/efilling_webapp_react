@@ -13,16 +13,18 @@ const rows = [
     id: 'id', disablePadding: false, label: 'ลำดับที่',
   },
   {
-    id: 'projectNumber', disablePadding: false, label: 'เลขสำคัญโครงการ',
+    id: 'projectNumber',
+    disablePadding: false,
+    label: 'เลขสำคัญโครงการ',
   },
   {
-    id: 'projectNumber', disablePadding: false, label: 'หัวหน้าโครงการ',
+    id: 'projectNumber', disablePadding: false, label: '----- หัวหน้าโครงการ -----',
   },
   {
-    id: 'projectNameThai', disablePadding: false, label: 'ชื่อโครงการ (ไทย)',
+    id: 'projectNameThai', disablePadding: false, label: '---------------- ชื่อโครงการ (ไทย) ----------------',
   },
   {
-    id: 'projectNameEng', disablePadding: false, label: 'ชื่อโครงการ (อังกฤษ)',
+    id: 'projectNameEng', disablePadding: false, label: '---------------- ชื่อโครงการ (อังกฤษ) ----------------',
   },
   {
     id: 'acronyms', disablePadding: false, label: 'คำย่อประเภท',
@@ -43,13 +45,13 @@ const rows = [
     id: 'committeeAssignDate', disablePadding: false, label: 'วันมอบหมายกรรมการ',
   },
   {
-    id: 'committeeNameArray', disablePadding: false, label: '----------- ชื่อกรรมการ -----------', width: 550,
+    id: 'committeeNameArray', disablePadding: false, label: '-------------- ชื่อกรรมการ --------------',
   },
   {
     id: 'committeeCommentDate', disablePadding: false, label: 'วันกรรมการส่งความเห็นและผล',
   },
   {
-    id: 'meetingDate', disablePadding: false, label: 'วันที่เข้าที่ประชุม',
+    id: 'meetingDate', disablePadding: false, label: '----- วันที่เข้าที่ประชุม -----',
   },
   {
     id: 'meetingApprovalDate', disablePadding: false, label: 'วันที่มีมติรับรองโครงการ',
@@ -59,6 +61,9 @@ const rows = [
   },
   {
     id: 'alertDate', disablePadding: false, label: 'วันแจ้งเตือน',
+  },
+  {
+    id: 'requestRenewDate', disablePadding: false, label: 'วันขอแก้ไขโครงการตามมติคณะกรรมการ',
   },
   {
     id: 'requestEditDate', disablePadding: false, label: 'วันขอแก้ไขโครงการที่ผ่านการรับรอง',
@@ -73,7 +78,10 @@ const rows = [
     id: 'requestRenewDate', disablePadding: false, label: 'วันขอต่ออายุ',
   },
   {
-    id: 'col20', disablePadding: false, label: 'Download เอกสาร',
+    id: 'requestRenewDate', disablePadding: false, label: 'วันแจ้งปิดโครงการ',
+  },
+  {
+    id: 'requestRenewDate', disablePadding: false, label: 'วันพิมพ์ใบรับรอง',
   },
 ];
 

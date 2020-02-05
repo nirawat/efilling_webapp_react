@@ -27,6 +27,7 @@ class PagesForm extends PureComponent {
   constructor() {
     super();
     this.state = {
+      createBy: eFillingSys.registerId,
       listAssigner: [],
       listProjectNumber: [],
       listSafetyType: [],
@@ -47,7 +48,8 @@ class PagesForm extends PureComponent {
       approvalTypeName: '',
       commentConsider: '',
       acceptType: '1',
-      permissionEdit: false,
+      buttonSaveEnable: false,
+      buttonSaveStatus: 'บันทึก',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -119,7 +121,7 @@ class PagesForm extends PureComponent {
           approvalTypeName: resp.data.editdata.approvaltypename,
           commentConsider: resp.data.editdata.commentconsider,
           acceptType: resp.data.editdata.accepttype,
-          permissionEdit: resp.data.userPermission.edit,
+          buttonSaveEnable: resp.data.editdata.editenable,
         });
       });
   }
@@ -134,19 +136,31 @@ class PagesForm extends PureComponent {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    // eslint-disable-next-line
-    console.log(this.state);
+    this.show('warning', 'แจ้งให้ทราบ', 'กรุณารอสักครู่ระบบกำลังบันทึกข้อมูล...');
+    this.setState({
+      buttonSaveStatus: 'กำลังบันทึก...',
+      buttonSaveEnable: false,
+    });
     Axios
       .post('/PublicDocMenuC/UpdateDocMenuC2Edit', this.state)
-      .then(() => {
+      .then((resp) => {
         this.show('success', 'บันทึก', `
         ความเห็นของกรรมการผู้พิจารณาเสร็จสิ้น!`);
-        // this.handleReset();
+        if (resp.data !== null) {
+          const url = resp.data.filebase64;
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = resp.data.filename;
+          a.click();
+        }
         setTimeout(() => {
           window.location.reload();
-        }, 2000);
+        }, 1000);
       })
       .catch((error) => {
+        this.setState({
+          buttonSaveStatus: 'บันทึก',
+        });
         if (error.response) {
           if (error.response.status === 400) {
             this.show('danger', 'ข้อผิดผลาด!', 'กรุณาตรวจสอบข้อมูลของท่าน');
@@ -250,6 +264,21 @@ class PagesForm extends PureComponent {
     });
   };
 
+  handlePrintReport = () => {
+    const { docId } = this.state;
+    Axios
+      .get(`PublicDocMenuReport/GetReportR10/${docId}`)
+      .then((resp) => {
+        if (resp.data !== null) {
+          const url = resp.data.filebase64;
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = resp.data.filename;
+          a.click();
+        }
+      });
+  }
+
   render() {
     const {
       listAssigner, listProjectNumber,
@@ -257,7 +286,7 @@ class PagesForm extends PureComponent {
       projectNumber, projectHeadName, facultyName,
       projectNameThai, projectNameEng, safetyType, safetyTypeName,
       approvalType, approvalTypeName, commentConsider, acceptType,
-      permissionEdit,
+      buttonSaveEnable, buttonSaveStatus,
     } = this.state;
 
     const defaultAcceptType = 'คำขอรับรองโครงการ';
@@ -435,8 +464,8 @@ class PagesForm extends PureComponent {
               </div>
               <div className="form__form-group">
                 <ButtonToolbar>
-                  <Button color="success" type="submit" disabled={!permissionEdit}>บันทึก</Button>
-                  <Button onClick={this.handleReset}>ล้าง</Button>
+                  <Button color="success" type="submit" disabled={!buttonSaveEnable}>{buttonSaveStatus}</Button>
+                  <Button color="success" onClick={() => this.handlePrintReport()}>พิมพ์</Button>
                 </ButtonToolbar>
               </div>
             </form>

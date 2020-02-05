@@ -10,10 +10,15 @@ import MenuA1 from '../../../Form/MenuA/MenuA1/index';
 import MenuA1Edit from '../../../Form/MenuA/MenuA1_Edit/index';
 import MenuA2 from '../../../Form/MenuA/MenuA2/index';
 import MenuA3 from '../../../Form/MenuA/MenuA3/index';
+import MenuA3Edit from '../../../Form/MenuA/MenuA3_Edit/index';
 import MenuA4 from '../../../Form/MenuA/MenuA4/index';
+import MenuA4Edit from '../../../Form/MenuA/MenuA4_Edit/index';
 import MenuA5 from '../../../Form/MenuA/MenuA5/index';
+import MenuA5Edit from '../../../Form/MenuA/MenuA5_Edit/index';
 import MenuA6 from '../../../Form/MenuA/MenuA6/index';
+import MenuA6Edit from '../../../Form/MenuA/MenuA6_Edit/index';
 import MenuA7 from '../../../Form/MenuA/MenuA7/index';
+import MenuA7Edit from '../../../Form/MenuA/MenuA7_Edit/index';
 import MenuA8 from '../../../Form/MenuA/MenuA8/index';
 
 import MenuB1 from '../../../Form/MenuB/MenuB1/index';
@@ -35,6 +40,7 @@ import MenuC35 from '../../../Form/MenuC/MenuC3_5/index';
 import MenuC3Report from '../../../Form/MenuC/MenuC3_Report/index';
 
 import MenuD1 from '../../../Form/MenuD/MenuD1/index';
+import MenuD1Edit from '../../../Form/MenuD/MenuD1_Edit/index';
 import MenuD2 from '../../../Form/MenuD/MenuD2/index';
 
 import MenuF1 from '../../../Form/MenuF/MenuF1/index';
@@ -55,10 +61,15 @@ export default () => (
       <Route path="/forms/menuA/menuA1_Edit" component={MenuA1Edit} />
       <Route path="/forms/menuA/menuA2" component={MenuA2} />
       <Route path="/forms/menuA/menuA3" component={MenuA3} />
+      <Route path="/forms/menuA/menuA3_Edit" component={MenuA3Edit} />
       <Route path="/forms/menuA/menuA4" component={MenuA4} />
+      <Route path="/forms/menuA/menuA4_Edit" component={MenuA4Edit} />
       <Route path="/forms/menuA/menuA5" component={MenuA5} />
+      <Route path="/forms/menuA/menuA5_Edit" component={MenuA5Edit} />
       <Route path="/forms/menuA/menuA6" component={MenuA6} />
+      <Route path="/forms/menuA/menuA6_Edit" component={MenuA6Edit} />
       <Route path="/forms/menuA/menuA7" component={MenuA7} />
+      <Route path="/forms/menuA/menuA7_Edit" component={MenuA7Edit} />
       <Route path="/forms/menuA/menuA8" component={MenuA8} />
       <Route path="/forms/menuB/menuB1" component={MenuB1} />
       <Route path="/forms/menuB/menuB1_Edit" component={MenuB1Edit} />
@@ -77,6 +88,7 @@ export default () => (
       <Route path="/forms/menuC/menuC3_5" component={MenuC35} />
       <Route path="/forms/menuC/menuC3_Report" component={MenuC3Report} />
       <Route path="/forms/menuD/menuD1" component={MenuD1} />
+      <Route path="/forms/menuD/menuD1_Edit" component={MenuD1Edit} />
       <Route path="/forms/menuD/menuD2" component={MenuD2} />
       <Route path="/forms/menuF/menuF1" component={MenuF1} />
       <Route path="/forms/menuF/menuF1_Edit" component={MenuF1Edit} />

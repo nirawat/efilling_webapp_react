@@ -43,6 +43,7 @@ class PagesForm extends PureComponent {
   constructor() {
     super();
     this.state = {
+      createBy: eFillingSys.registerId,
       listMeetingId: [],
       listApprovalTypeTab4: [],
       meetingId: '',
@@ -74,6 +75,8 @@ class PagesForm extends PureComponent {
       file1name: '',
       file1base64: '',
       permissionInsert: false,
+      buttonSaveEnable: false,
+      buttonSaveStatus: 'บันทึก',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -105,6 +108,7 @@ class PagesForm extends PureComponent {
           meetingId: resp.data.meetingId,
           meetingName: resp.data.meetingName,
           permissionInsert: resp.data.userPermission.insert,
+          buttonSaveEnable: resp.data.userPermission.insert,
         });
       });
   }
@@ -119,22 +123,29 @@ class PagesForm extends PureComponent {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    // eslint-disable-next-line
-    console.log(this.state);
+    this.show('warning', 'แจ้งให้ทราบ', 'กรุณารอสักครู่ระบบกำลังบันทึกข้อมูล...');
+    this.setState({
+      buttonSaveStatus: 'กำลังบันทึก...',
+      buttonSaveEnable: false,
+    });
     Axios
       .post('/PublicDocMenuC/AddDocMenuC34', this.state)
       .then(() => {
         this.show('success', 'บันทึก', `
         การประชุมระเบียบวาระที่ 4 เสร็จสิ้น!`);
-        // this.handleReset();
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       })
       .catch((error) => {
+        const { permissionInsert } = this.state;
+        this.setState({
+          buttonSaveStatus: 'บันทึก',
+          buttonSaveEnable: permissionInsert,
+        });
         if (error.response) {
           if (error.response.status === 400) {
-            this.show('danger', 'ข้อผิดผลาด!', 'กรุณาตรวจสอบข้อมูลของท่าน');
+            this.show('danger', 'ข้อผิดผลาด!', error.response.data.message);
           } else {
             this.show('danger', 'Error', error.message);
           }
@@ -208,7 +219,7 @@ class PagesForm extends PureComponent {
         title={title}
         message={message}
       />,
-      duration: 5,
+      duration: 60,
       closable: true,
       style: { top: 0, left: 'calc(100vw - 100%)' },
       className: 'right-up ltr-support',
@@ -274,8 +285,6 @@ class PagesForm extends PureComponent {
   }
 
   handleChangeProjectNumber4 = (e) => {
-    // eslint-disable-next-line
-    console.log(this.state);
     this.setState({
       agenda4ProjectNumber: e.value,
       agenda4ProjectName1: '',
@@ -369,7 +378,7 @@ class PagesForm extends PureComponent {
       agenda4ProjectName1, agenda4ProjectName2,
       agenda4Suggestion, agenda4Conclusion,
       project1Label, project2Label, file1name,
-      permissionInsert,
+      buttonSaveEnable, buttonSaveStatus,
       tab4Group1Seq1Input1, tab4Group1Seq1Input2, tab4Group1Seq1Input3,
       tab4Group1Seq2Input1, tab4Group1Seq2Input2, tab4Group1Seq2Input3,
       tab4Group1Seq3Input1, tab4Group1Seq3Input2, tab4Group1Seq3Input3,
@@ -612,8 +621,8 @@ class PagesForm extends PureComponent {
               </div>
               <div className="form__form-group">
                 <ButtonToolbar>
-                  <Button color="success" type="submit" disabled={!permissionInsert}>บันทึก</Button>
-                  <Button>ล้าง</Button>
+                  <Button color="success" type="submit" disabled={!buttonSaveEnable}>{buttonSaveStatus}</Button>
+                  <Button onClick={() => window.location.reload()}>ล้าง</Button>
                 </ButtonToolbar>
               </div>
             </form>

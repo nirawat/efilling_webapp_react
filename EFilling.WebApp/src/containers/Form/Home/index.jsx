@@ -1,24 +1,14 @@
 import React from 'react';
-import { Col, Container, Row } from 'reactstrap';
+import { Container, Row } from 'reactstrap';
 import { withTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 import Pages from './components/PagesHome';
 
-const PageForms = ({ t }) => (
+const PageForms = () => (
   <Container>
-    <Row>
-      <Col md={12}>
-        <h3 className="page-title">{t()}สถานะโครงการ</h3>
-      </Col>
-    </Row>
     <Row>
       <Pages />
     </Row>
   </Container>
 );
-
-PageForms.propTypes = {
-  t: PropTypes.func.isRequired,
-};
 
 export default withTranslation('common')(PageForms);

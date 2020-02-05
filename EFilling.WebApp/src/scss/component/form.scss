@@ -2,8 +2,8 @@
 @import '~rc-time-picker/assets/index.css';
 
 .form {
-  display: flex;
-  flex-wrap: wrap;
+  /* display: flex; */
+  /* flex-wrap: wrap; */
   @include directify($directions) {
     text-align: directed('left');
     direction: directed('direction');
