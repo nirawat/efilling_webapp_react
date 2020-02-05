@@ -2,9 +2,8 @@ import React, { PureComponent } from 'react';
 import {
   Card, CardBody, Col, Button, ButtonToolbar,
 } from 'reactstrap';
-import { Field, FieldArray, reduxForm } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import { withTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 import Config from 'react-global-configuration';
 import Axios from 'axios';
 import NotificationSystem from 'rc-notification';
@@ -21,10 +20,6 @@ let notificationRU = null;
 let counter = 0;
 
 class PagesForm extends PureComponent {
-  static propTypes = {
-    reset: PropTypes.func.isRequired,
-  };
-
   constructor() {
     super();
     this.state = {
@@ -58,12 +53,6 @@ class PagesForm extends PureComponent {
       tab3Group1Seq3Input1: '',
       tab3Group1Seq3Input2: '',
       tab3Group1Seq3Input3: '',
-      tab3Group1Seq4Input1: '',
-      tab3Group1Seq4Input2: '',
-      tab3Group1Seq4Input3: '',
-      tab3Group1Seq5Input1: '',
-      tab3Group1Seq5Input2: '',
-      tab3Group1Seq5Input3: '',
       tab3Group2Seq1Input1: '',
       tab3Group2Seq1Input2: '',
       tab3Group2Seq1Input3: '',
@@ -73,12 +62,6 @@ class PagesForm extends PureComponent {
       tab3Group2Seq3Input1: '',
       tab3Group2Seq3Input2: '',
       tab3Group2Seq3Input3: '',
-      tab3Group2Seq4Input1: '',
-      tab3Group2Seq4Input2: '',
-      tab3Group2Seq4Input3: '',
-      tab3Group2Seq5Input1: '',
-      tab3Group2Seq5Input2: '',
-      tab3Group2Seq5Input3: '',
       permissionInsert: false,
       buttonSaveEnable: false,
       buttonSaveStatus: 'บันทึก',
@@ -152,7 +135,7 @@ class PagesForm extends PureComponent {
         การประชุมระเบียบวาระที่ 3 เสร็จสิ้น!`);
         setTimeout(() => {
           window.location.reload();
-        }, 3000);
+        }, 1000);
       })
       .catch((error) => {
         const { permissionInsert } = this.state;
@@ -174,55 +157,6 @@ class PagesForm extends PureComponent {
 
   handleChangeMeetingId = (e) => {
     this.setState({ meetingId: e.value });
-  }
-
-  handleReset = () => {
-    const { reset } = this.props;
-    this.setState({
-      project1Label: 'ชื่อโครงการภาษาไทย',
-      project2Label: 'ชื่อโครงการภาษาอังกฤษ',
-      meetingId: '',
-      meetingName: '',
-      agenda3ProjectCount: '0',
-      agenda3ProjectNumber: '',
-      agenda3ProjectNameThai: '',
-      agenda3ProjectNameEng: '',
-      agenda3AdvisorsName: '',
-      agenda3Conclusion: '',
-      agenda3ConclusionName: '',
-      agenda3Suggestion: '',
-      tab3Group1Seq1Input1: '',
-      tab3Group1Seq1Input2: '',
-      tab3Group1Seq1Input3: '',
-      tab3Group1Seq2Input1: '',
-      tab3Group1Seq2Input2: '',
-      tab3Group1Seq2Input3: '',
-      tab3Group1Seq3Input1: '',
-      tab3Group1Seq3Input2: '',
-      tab3Group1Seq3Input3: '',
-      tab3Group1Seq4Input1: '',
-      tab3Group1Seq4Input2: '',
-      tab3Group1Seq4Input3: '',
-      tab3Group1Seq5Input1: '',
-      tab3Group1Seq5Input2: '',
-      tab3Group1Seq5Input3: '',
-      tab3Group2Seq1Input1: '',
-      tab3Group2Seq1Input2: '',
-      tab3Group2Seq1Input3: '',
-      tab3Group2Seq2Input1: '',
-      tab3Group2Seq2Input2: '',
-      tab3Group2Seq2Input3: '',
-      tab3Group2Seq3Input1: '',
-      tab3Group2Seq3Input2: '',
-      tab3Group2Seq3Input3: '',
-      tab3Group2Seq4Input1: '',
-      tab3Group2Seq4Input2: '',
-      tab3Group2Seq4Input3: '',
-      tab3Group2Seq5Input1: '',
-      tab3Group2Seq5Input2: '',
-      tab3Group2Seq5Input3: '',
-    });
-    reset();
   }
 
   show = (color, title, message) => {
@@ -254,12 +188,6 @@ class PagesForm extends PureComponent {
       tab3Group1Seq3Input1: '',
       tab3Group1Seq3Input2: '',
       tab3Group1Seq3Input3: '',
-      tab3Group1Seq4Input1: '',
-      tab3Group1Seq4Input2: '',
-      tab3Group1Seq4Input3: '',
-      tab3Group1Seq5Input1: '',
-      tab3Group1Seq5Input2: '',
-      tab3Group1Seq5Input3: '',
     });
     let initialApprovalTypeTab3 = [];
     Axios
@@ -295,12 +223,6 @@ class PagesForm extends PureComponent {
           tab3Group1Seq3Input1: resp.data.tab3Group1Seq3Input1,
           tab3Group1Seq3Input2: resp.data.tab3Group1Seq3Input2,
           tab3Group1Seq3Input3: resp.data.tab3Group1Seq3Input3,
-          tab3Group1Seq4Input1: resp.data.tab3Group1Seq4Input1,
-          tab3Group1Seq4Input2: resp.data.tab3Group1Seq4Input2,
-          tab3Group1Seq4Input3: resp.data.tab3Group1Seq4Input3,
-          tab3Group1Seq5Input1: resp.data.tab3Group1Seq5Input1,
-          tab3Group1Seq5Input2: resp.data.tab3Group1Seq5Input2,
-          tab3Group1Seq5Input3: resp.data.tab3Group1Seq5Input3,
         });
         return '';
       });
@@ -311,118 +233,6 @@ class PagesForm extends PureComponent {
       agenda3Conclusion: e.value,
       agenda3ConclusionName: e.label,
     });
-  }
-
-  getTab3Group2Input1 = (index, data) => {
-    switch (index) {
-      case 1:
-        this.setState({ tab3Group2Seq1Input1: data });
-        break;
-      case 2:
-        this.setState({ tab3Group2Seq2Input1: data });
-        break;
-      case 3:
-        this.setState({ tab3Group2Seq3Input1: data });
-        break;
-      case 4:
-        this.setState({ tab3Group2Seq4Input1: data });
-        break;
-      case 5:
-        this.setState({ tab3Group2Seq5Input1: data });
-        break;
-      default:
-        return null;
-    }
-    return null;
-  }
-
-  getTab3Group2Input2 = (index, data) => {
-    switch (index) {
-      case 1:
-        this.setState({ tab3Group2Seq1Input2: data });
-        break;
-      case 2:
-        this.setState({ tab3Group2Seq2Input2: data });
-        break;
-      case 3:
-        this.setState({ tab3Group2Seq3Input2: data });
-        break;
-      case 4:
-        this.setState({ tab3Group2Seq4Input2: data });
-        break;
-      case 5:
-        this.setState({ tab3Group2Seq5Input2: data });
-        break;
-      default:
-        return null;
-    }
-    return null;
-  }
-
-  getTab3Group2Input3 = (index, data) => {
-    switch (index) {
-      case 1:
-        this.setState({ tab3Group2Seq1Input3: data });
-        break;
-      case 2:
-        this.setState({ tab3Group2Seq2Input3: data });
-        break;
-      case 3:
-        this.setState({ tab3Group2Seq3Input3: data });
-        break;
-      case 4:
-        this.setState({ tab3Group2Seq4Input3: data });
-        break;
-      case 5:
-        this.setState({ tab3Group2Seq5Input3: data });
-        break;
-      default:
-        return null;
-    }
-    return null;
-  }
-
-  handleRemoveTab3Group2 = (index) => {
-    switch (index) {
-      case 1:
-        this.setState({
-          tab3Group2Seq1Input1: '',
-          tab3Group2Seq1Input2: '',
-          tab3Group2Seq1Input3: '',
-        });
-        break;
-      case 2:
-        this.setState({
-          tab3Group2Seq2Input1: '',
-          tab3Group2Seq2Input2: '',
-          tab3Group2Seq2Input3: '',
-        });
-        break;
-      case 3:
-        this.setState({
-          tab3Group2Seq3Input1: '',
-          tab3Group2Seq3Input2: '',
-          tab3Group2Seq3Input3: '',
-        });
-        break;
-      case 4:
-        this.setState({
-          tab3Group2Seq4Input1: '',
-          tab3Group2Seq4Input2: '',
-          tab3Group2Seq4Input3: '',
-        });
-        break;
-      case 5:
-        this.setState({
-          tab3Group2Seq5Input1: '',
-          tab3Group2Seq5Input2: '',
-          tab3Group2Seq5Input3: '',
-        });
-        break;
-      default:
-        return null;
-    }
-    return '';
   }
 
   historyReport() {
@@ -474,53 +284,11 @@ class PagesForm extends PureComponent {
       tab3Group1Seq1Input1, tab3Group1Seq1Input2, tab3Group1Seq1Input3,
       tab3Group1Seq2Input1, tab3Group1Seq2Input2, tab3Group1Seq2Input3,
       tab3Group1Seq3Input1, tab3Group1Seq3Input2, tab3Group1Seq3Input3,
+      tab3Group2Seq1Input1, tab3Group2Seq1Input2, tab3Group2Seq1Input3,
+      tab3Group2Seq2Input1, tab3Group2Seq2Input2, tab3Group2Seq2Input3,
+      tab3Group2Seq3Input1, tab3Group2Seq3Input2, tab3Group2Seq3Input3,
     } = this.state;
 
-    const renderTab3Group2 = ({ fields }) => (
-      <ul>
-        <Button color="primary" size="sm" onClick={() => fields.push({})}>
-          + เพิ่มอื่นๆ
-        </Button>
-        {fields.map((member, index) => (
-          <li key={index.toString()} disabled>
-            <div className="form__form-group">
-              <span className="form__form-group-label">เรื่องที่</span>
-              <div className="form__form-group-field">
-                <Field
-                  name={`${member}.input1`}
-                  component="input"
-                  type="text"
-                  onChange={(event, value) => this.getTab3Group2Input1(index + 1, value)}
-                />
-              </div>
-            </div>
-            <div className="form__form-group">
-              <span className="form__form-group-label">สรุปเรื่อง</span>
-              <div className="form__form-group-field">
-                <Field
-                  name={`${member}.input2`}
-                  component="textarea"
-                  onChange={(event, value) => this.getTab3Group2Input2(index + 1, value)}
-                />
-              </div>
-            </div>
-            <div className="form__form-group">
-              <span className="form__form-group-label">มติ</span>
-              <div className="form__form-group-field">
-                <Field
-                  name={`${member}.input3`}
-                  component="textarea"
-                  onChange={(event, value) => this.getTab3Group2Input3(index + 1, value)}
-                />
-              </div>
-            </div>
-            <Button color="danger" size="sm" onClick={() => { fields.remove(index); this.handleRemoveTab3Group2(index + 1); }}>
-              ลบ
-            </Button>
-          </li>
-        ))}
-      </ul>
-    );
 
     return (
       <Col md={12} lg={12}>
@@ -741,7 +509,114 @@ class PagesForm extends PureComponent {
                 <h5 className="bold-text">วาระที่ 3.2 เรื่องสืบเนื่อง</h5>
               </div>
               <div className="form__form-group">
-                <FieldArray name="tab5Group3" component={renderTab3Group2} />
+                <div className="form__form-group">
+                  <h4 className="form__form-group-label">เรื่องที่</h4>
+                  <div className="form__form-group-field">
+                    <Field
+                      name="tab3Group2Seq1Input1"
+                      component="input"
+                      type="text"
+                      value={tab3Group2Seq1Input1}
+                      onChange={this.handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="form__form-group">
+                  <span className="form__form-group-label">สรุปเรื่อง</span>
+                  <div className="form__form-group-field">
+                    <textarea
+                      name="tab3Group2Seq1Input2"
+                      component="input"
+                      type="textarea"
+                      value={tab3Group2Seq1Input2}
+                      onChange={this.handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="form__form-group">
+                  <span className="form__form-group-label">มติ</span>
+                  <div className="form__form-group-field">
+                    <textarea
+                      name="tab3Group2Seq1Input3"
+                      component="input"
+                      type="textarea"
+                      value={tab3Group2Seq1Input3}
+                      onChange={this.handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="form__form-group">
+                  <h4 className="form__form-group-label">เรื่องที่</h4>
+                  <div className="form__form-group-field">
+                    <Field
+                      name="tab3Group2Seq2Input1"
+                      component="input"
+                      type="text"
+                      value={tab3Group2Seq2Input1}
+                      onChange={this.handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="form__form-group">
+                  <span className="form__form-group-label">สรุปเรื่อง</span>
+                  <div className="form__form-group-field">
+                    <textarea
+                      name="tab3Group2Seq2Input2"
+                      component="input"
+                      type="textarea"
+                      value={tab3Group2Seq2Input2}
+                      onChange={this.handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="form__form-group">
+                  <span className="form__form-group-label">มติ</span>
+                  <div className="form__form-group-field">
+                    <textarea
+                      name="tab3Group2Seq2Input3"
+                      component="input"
+                      type="textarea"
+                      value={tab3Group2Seq2Input3}
+                      onChange={this.handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="form__form-group">
+                  <h4 className="form__form-group-label">เรื่องที่</h4>
+                  <div className="form__form-group-field">
+                    <Field
+                      name="tab3Group2Seq3Input1"
+                      component="input"
+                      type="text"
+                      value={tab3Group2Seq3Input1}
+                      onChange={this.handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="form__form-group">
+                  <span className="form__form-group-label">สรุปเรื่อง</span>
+                  <div className="form__form-group-field">
+                    <textarea
+                      name="tab3Group2Seq3Input2"
+                      component="input"
+                      type="textarea"
+                      value={tab3Group2Seq3Input2}
+                      onChange={this.handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="form__form-group">
+                  <span className="form__form-group-label">มติ</span>
+                  <div className="form__form-group-field">
+                    <textarea
+                      name="tab3Group2Seq3Input3"
+                      component="input"
+                      type="textarea"
+                      value={tab3Group2Seq3Input3}
+                      onChange={this.handleChange}
+                    />
+                  </div>
+                </div>
               </div>
               <div className="form__form-group">
                 <ButtonToolbar>

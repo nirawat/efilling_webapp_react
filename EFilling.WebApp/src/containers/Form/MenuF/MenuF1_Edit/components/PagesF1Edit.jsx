@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import {
-  Card, CardBody, Col, Button,
+  Card, CardBody, Col, Row, Button,
 } from 'reactstrap';
 import Config from 'react-global-configuration';
 import Axios from 'axios';
@@ -135,8 +135,6 @@ class PagesF1Edit extends PureComponent {
   }
 
   handleSubmit = (e) => {
-    // eslint-disable-next-line
-    console.log(this.state);
     Axios
       .post('/PublicDocMenuF/UpdateUserRegister', this.state)
       .then(() => {
@@ -144,7 +142,7 @@ class PagesF1Edit extends PureComponent {
         !`);
         setTimeout(() => {
           window.location.reload();
-        }, 2000);
+        }, 1000);
       })
       .catch((error) => {
         if (error.response) {
@@ -185,236 +183,238 @@ class PagesF1Edit extends PureComponent {
       permissionEdit,
     } = this.state;
     return (
-      <Col md={6} lg={12}>
+      <Col sm={12} md={12}>
         <Card>
           <CardBody>
             <form className="form" onSubmit={this.handleSubmit}>
-              <div className="form__half">
-                <div className="form__form-group">
-                  <span className="form__form-group-label">รหัสสมาชิก</span>
-                  <div className="form__form-group-field">
-                    <Field
-                      name="registerId"
-                      component="input"
-                      type="text"
-                      placeholder={registerId}
-                      disabled
-                    />
+              <Row>
+                <Col xs="6">
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">รหัสสมาชิก</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="registerId"
+                        component="input"
+                        type="text"
+                        placeholder={registerId}
+                        disabled
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form__form-group">
-                  <span className="form__form-group-label">อีเมล์</span>
-                  <div className="form__form-group-field">
-                    <input
-                      name="email"
-                      component="input"
-                      type="email"
-                      value={email}
-                      onChange={this.handleChange}
-                    />
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">อีเมล์</span>
+                    <div className="form__form-group-field">
+                      <input
+                        name="email"
+                        component="input"
+                        type="email"
+                        value={email}
+                        onChange={this.handleChange}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form__form-group">
-                  <span className="form__form-group-label">คำนำหน้า</span>
-                  <div className="form__form-group-field">
-                    <input
-                      name="firstName"
-                      component="input"
-                      type="text"
-                      maxLength={20}
-                      value={firstName}
-                      onChange={this.handleChange}
-                    />
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">คำนำหน้า</span>
+                    <div className="form__form-group-field">
+                      <input
+                        name="firstName"
+                        component="input"
+                        type="text"
+                        maxLength={20}
+                        value={firstName}
+                        onChange={this.handleChange}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form__form-group">
-                  <span className="form__form-group-label">ชื่อ-สกุล</span>
-                  <div className="form__form-group-field">
-                    <input
-                      name="fullName"
-                      component="input"
-                      type="text"
-                      maxLength={100}
-                      value={fullName}
-                      onChange={this.handleChange}
-                    />
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">ชื่อ-สกุล</span>
+                    <div className="form__form-group-field">
+                      <input
+                        name="fullName"
+                        component="input"
+                        type="text"
+                        maxLength={100}
+                        value={fullName}
+                        onChange={this.handleChange}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form__form-group">
-                  <span className="form__form-group-label">คณะ/หน่วยงาน</span>
-                  <div className="form__form-group-field">
-                    <Field
-                      name="faculty"
-                      component={renderSelectField}
-                      options={[
-                        { value: '1', label: 'คณะเกษตรศาสตร์ฯ' },
-                        { value: '2', label: 'คณะเภสัชศาสตร์' },
-                        { value: '3', label: 'คณะวิทยาศาสตร์การแพทย์' },
-                      ]}
-                      value={faculty}
-                      placeholder={facultyName}
-                      onChange={this.handleChangeFaculty}
-                    />
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">คณะ/หน่วยงาน</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="faculty"
+                        component={renderSelectField}
+                        options={[
+                          { value: '1', label: 'คณะเกษตรศาสตร์ฯ' },
+                          { value: '2', label: 'คณะเภสัชศาสตร์' },
+                          { value: '3', label: 'คณะวิทยาศาสตร์การแพทย์' },
+                        ]}
+                        value={faculty}
+                        placeholder={facultyName}
+                        onChange={this.handleChangeFaculty}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form__form-group">
-                  <span className="form__form-group-label">ตำแหน่งวิชาการ</span>
-                  <div className="form__form-group-field">
-                    <Field
-                      name="position"
-                      component={renderSelectField}
-                      options={[
-                        { value: '1', label: 'นักวิชาการ' },
-                        { value: '2', label: 'อาจารย์' },
-                        { value: '3', label: 'ที่ปรึกษาโครงการ' },
-                      ]}
-                      value={position}
-                      placeholder={positionName}
-                      onChange={this.handleChangePosition}
-                    />
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">ตำแหน่งวิชาการ</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="position"
+                        component={renderSelectField}
+                        options={[
+                          { value: '1', label: 'นักวิชาการ' },
+                          { value: '2', label: 'อาจารย์' },
+                          { value: '3', label: 'ที่ปรึกษาโครงการ' },
+                        ]}
+                        value={position}
+                        placeholder={positionName}
+                        onChange={this.handleChangePosition}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form__form-group">
-                  <span className="form__form-group-label">เบอร์โทรที่ทำงาน</span>
-                  <div className="form__form-group-field">
-                    <input
-                      name="workPhone"
-                      component="input"
-                      type="text"
-                      maxLength={20}
-                      value={workPhone}
-                      onChange={this.handleChange}
-                    />
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">เบอร์โทรที่ทำงาน</span>
+                    <div className="form__form-group-field">
+                      <input
+                        name="workPhone"
+                        component="input"
+                        type="text"
+                        maxLength={20}
+                        value={workPhone}
+                        onChange={this.handleChange}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form__form-group">
-                  <span className="form__form-group-label">โทรสาร</span>
-                  <div className="form__form-group-field">
-                    <input
-                      name="fax"
-                      component="input"
-                      type="text"
-                      maxLength={20}
-                      value={fax}
-                      onChange={this.handleChange}
-                    />
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">โทรสาร</span>
+                    <div className="form__form-group-field">
+                      <input
+                        name="fax"
+                        component="input"
+                        type="text"
+                        maxLength={20}
+                        value={fax}
+                        onChange={this.handleChange}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form__form-group">
-                  <span className="form__form-group-label">เบอร์มือถือ</span>
-                  <div className="form__form-group-field">
-                    <input
-                      name="mobile"
-                      component="input"
-                      type="text"
-                      maxLength={10}
-                      value={mobile}
-                      onChange={this.handleChange}
-                    />
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">เบอร์มือถือ</span>
+                    <div className="form__form-group-field">
+                      <input
+                        name="mobile"
+                        component="input"
+                        type="text"
+                        maxLength={10}
+                        value={mobile}
+                        onChange={this.handleChange}
+                      />
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div className="form__half">
-                <div className="form__form-group">
-                  <span className="form__form-group-label">ระดับการศึกษา</span>
-                  <div className="form__form-group-field">
-                    <Field
-                      name="education"
-                      component={renderSelectField}
-                      options={[
-                        { value: '1', label: 'ปริญญาเอก' },
-                        { value: '2', label: 'ปริญญาโท' },
-                        { value: '3', label: 'ปริญญาตรี' },
-                        { value: '4', label: 'ต่ำกว่าปริญญาตรี' },
-                      ]}
-                      value={education}
-                      placeholder={educationName}
-                      onChange={this.handleChangeEducation}
-                    />
+                </Col>
+                <Col xs="6">
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">ระดับการศึกษา</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="education"
+                        component={renderSelectField}
+                        options={[
+                          { value: '1', label: 'ปริญญาเอก' },
+                          { value: '2', label: 'ปริญญาโท' },
+                          { value: '3', label: 'ปริญญาตรี' },
+                          { value: '4', label: 'ต่ำกว่าปริญญาตรี' },
+                        ]}
+                        value={education}
+                        placeholder={educationName}
+                        onChange={this.handleChangeEducation}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form__form-group">
-                  <span className="form__form-group-label">ฐานและบทบาท</span>
-                  <div className="form__form-group-field">
-                    <Field
-                      name="character"
-                      component={renderSelectField}
-                      options={[
-                        { value: '1', label: 'นักวิจัย/นิสิต' },
-                        { value: '2', label: 'กรรมการผู้พิจารณา' },
-                        { value: '3', label: 'เจ้าหน้าที่บริหาร' },
-                        { value: '4', label: 'ประธานกรรมการผู้พิจารณา' },
-                        { value: '5', label: 'รองประธานกรรมการผู้พิจารณา' },
-                        { value: '6', label: 'เลขานุการกรรมการผู้พิจารณา' },
-                        { value: '7', label: 'ผู้ช่วยเลขานุการกรรมการผู้พิจารณา' },
-                      ]}
-                      value={character}
-                      placeholder={characterName}
-                      onChange={this.handleChangeCharacter}
-                    />
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">ฐานและบทบาท</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="character"
+                        component={renderSelectField}
+                        options={[
+                          { value: '1', label: 'นักวิจัย/นิสิต' },
+                          { value: '2', label: 'กรรมการผู้พิจารณา' },
+                          { value: '3', label: 'เจ้าหน้าที่บริหาร' },
+                          { value: '4', label: 'ประธานกรรมการผู้พิจารณา' },
+                          { value: '5', label: 'รองประธานกรรมการผู้พิจารณา' },
+                          { value: '6', label: 'เลขานุการกรรมการผู้พิจารณา' },
+                          { value: '7', label: 'ผู้ช่วยเลขานุการกรรมการผู้พิจารณา' },
+                        ]}
+                        value={character}
+                        placeholder={characterName}
+                        onChange={this.handleChangeCharacter}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form__form-group">
-                  <span className="form__form-group-label">ประวัติและประสบการณ์ที่เกี่ยวข้องกับความปลอดภัยทางชีวภาพ</span>
-                  <div className="form__form-group-field">
-                    <textarea
-                      name="note1"
-                      component="input"
-                      placeholder="Note 1"
-                      value={note1}
-                      onChange={this.handleChange}
-                      textarea="true"
-                    />
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">ประวัติและประสบการณ์ที่เกี่ยวข้องกับความปลอดภัยทางชีวภาพ</span>
+                    <div className="form__form-group-field">
+                      <textarea
+                        name="note1"
+                        component="input"
+                        placeholder="Note 1"
+                        value={note1}
+                        onChange={this.handleChange}
+                        textarea="true"
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form__form-group">
-                  <span className="form__form-group-label">ประวัติการฝึกอบรมที่เกี่ยวข้องกับความปลอดภัยทางชีวภาพ</span>
-                  <div className="form__form-group-field">
-                    <textarea
-                      name="note2"
-                      component="input"
-                      type="text"
-                      placeholder="Note 2"
-                      value={note2}
-                      onChange={this.handleChange}
-                      textarea="true"
-                    />
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">ประวัติการฝึกอบรมที่เกี่ยวข้องกับความปลอดภัยทางชีวภาพ</span>
+                    <div className="form__form-group-field">
+                      <textarea
+                        name="note2"
+                        component="input"
+                        type="text"
+                        placeholder="Note 2"
+                        value={note2}
+                        onChange={this.handleChange}
+                        textarea="true"
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form__form-group">
-                  <span className="form__form-group-label">ผลงานวิชาการที่เกี่ยวข้องกับความปลอดภัยทางชีวภาพ</span>
-                  <div className="form__form-group-field">
-                    <textarea
-                      name="note3"
-                      component="input"
-                      type="text"
-                      placeholder="Note 3"
-                      value={note3}
-                      onChange={this.handleChange}
-                      textarea="true"
-                    />
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">ผลงานวิชาการที่เกี่ยวข้องกับความปลอดภัยทางชีวภาพ</span>
+                    <div className="form__form-group-field">
+                      <textarea
+                        name="note3"
+                        component="input"
+                        type="text"
+                        placeholder="Note 3"
+                        value={note3}
+                        onChange={this.handleChange}
+                        textarea="true"
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form__form-group">
-                  <span className="form__form-group-label">สถานะ</span>
-                  <div className="form__form-group-field">
-                    <input
-                      name="isActive"
-                      component="input"
-                      type="checkbox"
-                      checked={isActive}
-                      onChange={(event, value) => this.setState({ isActive: value })}
-                      style={{ width: '20px' }}
-                    />
-                    <span className="checkbox-btn__label form__form-group-label" style={{ color: '#FF0000' }}>
-                      ยินยอมให้สามารถเข้าใช้งานในระบบ
-                    </span>
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">สถานะ</span>
+                    <div className="form__form-group-field">
+                      <input
+                        name="isActive"
+                        component="input"
+                        type="checkbox"
+                        checked={isActive}
+                        onChange={(event, value) => this.setState({ isActive: value })}
+                        style={{ width: '20px' }}
+                      />
+                      <span className="checkbox-btn__label form__form-group-label" style={{ color: '#FF0000' }}>
+                        ยินยอมให้สามารถเข้าใช้งานในระบบ
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div className="form__form-group">
-                  <Button color="success" type="submit" disabled={!permissionEdit}>บันทึก</Button>
-                </div>
-              </div>
+                  <div className="form__form-group">
+                    <Button color="success" type="submit" disabled={!permissionEdit}>บันทึก</Button>
+                  </div>
+                </Col>
+              </Row>
             </form>
           </CardBody>
         </Card>

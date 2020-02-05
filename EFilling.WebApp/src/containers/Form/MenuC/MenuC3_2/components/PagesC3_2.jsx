@@ -4,7 +4,6 @@ import {
 } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form';
 import { withTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 import Config from 'react-global-configuration';
 import Axios from 'axios';
 import NotificationSystem from 'rc-notification';
@@ -20,10 +19,6 @@ const eFillingSys = JSON.parse(localStorage.getItem('efilling_system'));
 let notificationRU = null;
 
 class PagesForm extends PureComponent {
-  static propTypes = {
-    reset: PropTypes.func.isRequired,
-  };
-
   constructor() {
     super();
     this.state = {
@@ -163,34 +158,6 @@ class PagesForm extends PureComponent {
       });
   }
 
-  handleReset = () => {
-    const { reset } = this.props;
-    this.setState({
-      meetingId: '',
-      meetingName: '',
-      isFileAttachment: false,
-      tab2Group1Seq1Input1: '',
-      tab2Group1Seq1FileInput2: '',
-      tab2Group1Seq1FileInput2Base64: '',
-      tab2Group1Seq1Input3: '',
-      tab2Group1Seq1Input4: '',
-      tab2Group1Seq2Input1: '',
-      tab2Group1Seq2FileInput2: '',
-      tab2Group1Seq2FileInput2Base64: '',
-      tab2Group1Seq2Input3: '',
-      tab2Group1Seq2Input4: '',
-      tab2Group1Seq3Input1: '',
-      tab2Group1Seq3FileInput2: '',
-      tab2Group1Seq3FileInput2Base64: '',
-      tab2Group1Seq3Input3: '',
-      tab2Group1Seq3Input4: '',
-    });
-    reset();
-    document.getElementById('tab2Group1Seq1FileInput2').value = null;
-    document.getElementById('tab2Group1Seq2FileInput2').value = null;
-    document.getElementById('tab2Group1Seq3FileInput2').value = null;
-  }
-
   show = (color, title, message) => {
     notificationRU.notice({
       content: <BasicNotification
@@ -198,7 +165,7 @@ class PagesForm extends PureComponent {
         title={title}
         message={message}
       />,
-      duration: 5,
+      duration: 15,
       closable: true,
       style: { top: 0, left: 'calc(100vw - 100%)' },
       className: 'right-up ltr-support',
