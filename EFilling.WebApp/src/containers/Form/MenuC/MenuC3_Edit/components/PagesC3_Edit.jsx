@@ -4,12 +4,12 @@ import {
 } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form';
 import { withTranslation } from 'react-i18next';
+import Select from 'react-select';
 import Config from 'react-global-configuration';
 import Axios from 'axios';
 import NotificationSystem from 'rc-notification';
 import { BasicNotification } from '../../../../../shared/components/Notification';
 import renderSelectField from '../../../../../shared/components/form/Select';
-import renderMultiSelectField from '../../../../../shared/components/form/MultiSelect';
 import renderDatePickerField from '../../../../../shared/components/form/DatePicker';
 
 Axios.defaults.baseURL = Config.get('axiosBaseUrl');
@@ -17,6 +17,7 @@ Axios.defaults.headers.common.Authorization = Config.get('axiosToken');
 Axios.defaults.headers.common['Content-Type'] = Config.get('axiosContentType');
 
 const eFillingSys = JSON.parse(localStorage.getItem('efilling_system'));
+const urlParams = new URLSearchParams(window.location.search);
 let notificationRU = null;
 
 class PagesForm extends PureComponent {
@@ -24,6 +25,7 @@ class PagesForm extends PureComponent {
     super();
     this.state = {
       createBy: eFillingSys.registerId,
+      docId: '',
       listCommittees: [],
       listAttendees: [],
       listYearOfProject: [],
@@ -37,7 +39,6 @@ class PagesForm extends PureComponent {
       meetingClose: '',
       committeesArray: '',
       attendeesArray: '',
-      permissionInsert: false,
       buttonSaveEnable: false,
       buttonSaveStatus: 'บันทึก',
     };
@@ -52,15 +53,12 @@ class PagesForm extends PureComponent {
       listCommittees: [],
       listAttendees: [],
       listYearOfProject: [],
-      defaultYear: '',
-      roundOfMeeting: '',
-      yearOfMeeting: '',
     });
     let initialCommittees = [];
     let initialAttendees = [];
     let initialYear = [];
     Axios
-      .get(`PublicDocMenuC/MenuC3InterfaceData/${eFillingSys.registerId}`)
+      .get(`PublicDocMenuC/MenuC3EditInterfaceData/${eFillingSys.registerId}/${urlParams.get('id')}`)
       .then((resp) => {
         if (resp.data.userPermission !== null && !resp.data.userPermission.view) {
           window.location = '/efilling/forms/errors/permission';
@@ -85,12 +83,18 @@ class PagesForm extends PureComponent {
           listCommittees: initialCommittees,
           listAttendees: initialAttendees,
           listYearOfProject: initialYear,
-          defaultYear: resp.data.defaultyear,
-          meetingRound: resp.data.defaultround,
-          yearOfMeeting: resp.data.defaultyear,
-          meetingDate: resp.data.defaultmeetingdate,
-          permissionInsert: resp.data.userPermission.insert,
-          buttonSaveEnable: resp.data.userPermission.insert,
+          docId: resp.data.editdata.docid,
+          defaultYear: resp.data.editdata.yearofmeeting,
+          meetingRound: resp.data.editdata.meetinground,
+          yearOfMeeting: resp.data.editdata.yearofmeeting,
+          meetingDate: resp.data.editdata.meetingdate,
+          meetingRecordId: resp.data.editdata.meetingrecordid,
+          meetingLocation: resp.data.editdata.meetinglocation,
+          meetingStart: resp.data.editdata.meetingstart,
+          meetingClose: resp.data.editdata.meetingclose,
+          committeesArray: resp.data.editdata.committeesarray,
+          attendeesArray: resp.data.editdata.attendeesarray,
+          buttonSaveEnable: resp.data.editdata.editenable,
         });
       });
   }
@@ -115,7 +119,7 @@ class PagesForm extends PureComponent {
       buttonSaveEnable: false,
     });
     Axios
-      .post('/PublicDocMenuC/AddDocMenuC3', this.state)
+      .post('/PublicDocMenuC/UpdateDocMenuC3Edit', this.state)
       .then((resp) => {
         this.show('success', 'บันทึก', `
         กำหนดวาระการประชุมเสร็จสิ้น!`);
@@ -221,6 +225,7 @@ class PagesForm extends PureComponent {
                     component={renderSelectField}
                     value={meetingRecordId}
                     onChange={this.handleChangeMeetingRecordId}
+                    placeholder={meetingRecordId === 1 ? 'รายงานการประชุมคณะกรรมการพิจารณาฯความปลอดภัยทางชีวภาพ' : 'ระเบียบวาระการประชุมคณะกรรมการพิจารณาฯความปลอดภัยทางชีวภาพ'}
                     options={[
                       { value: '1', label: 'รายงานการประชุมคณะกรรมการพิจารณาฯความปลอดภัยทางชีวภาพ' },
                       { value: '2', label: 'ระเบียบวาระการประชุมคณะกรรมการพิจารณาฯความปลอดภัยทางชีวภาพ' },
@@ -273,7 +278,7 @@ class PagesForm extends PureComponent {
               <div className="form__form-group">
                 <span className="form__form-group-label">เริ่มประชุมเวลา</span>
                 <div className="form__form-group-field">
-                  <Field
+                  <input
                     name="meetingStart"
                     component="input"
                     type="text"
@@ -285,7 +290,7 @@ class PagesForm extends PureComponent {
               <div className="form__form-group">
                 <span className="form__form-group-label">ปิดประชุมเวลา</span>
                 <div className="form__form-group-field">
-                  <Field
+                  <input
                     name="meetingClose"
                     component="input"
                     type="text"
@@ -309,24 +314,36 @@ class PagesForm extends PureComponent {
               <div className="form__form-group">
                 <span className="form__form-group-label">รายชื่อกรรมการผู้เข้าร่วมประชุม</span>
                 <div className="form__form-group-field">
-                  <Field
+                  <Select
+                    isMulti
                     name="committeesArray"
-                    component={renderMultiSelectField}
                     value={committeesArray}
                     onChange={this.handleChangeCommitteesArray}
                     options={listCommittees}
+                    clearable={false}
+                    closeOnSelect={false}
+                    removeSelected={false}
+                    className="react-select"
+                    classNamePrefix="react-select"
+                    isDisabled={!buttonSaveEnable}
                   />
                 </div>
               </div>
               <div className="form__form-group">
                 <span className="form__form-group-label">รายนามผู้ติดราชการ</span>
                 <div className="form__form-group-field">
-                  <Field
+                  <Select
+                    isMulti
                     name="attendeesArray"
-                    component={renderMultiSelectField}
                     value={attendeesArray}
                     onChange={this.handleChangeAttendees}
                     options={listAttendees}
+                    clearable={false}
+                    closeOnSelect={false}
+                    removeSelected={false}
+                    className="react-select"
+                    classNamePrefix="react-select"
+                    isDisabled={!buttonSaveEnable}
                   />
                 </div>
               </div>

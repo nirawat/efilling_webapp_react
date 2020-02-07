@@ -364,7 +364,7 @@ class PagesForm extends PureComponent {
               </div>
               <div className="form__form-group">
                 <span className="form__form-group-label">
-                  แนบเอกสารรายงานโครงการ
+                  แนบเอกสารรายงานขอต่ออายุโครงการ
                 </span>
                 <div className="form__form-group-field">
                   <Field

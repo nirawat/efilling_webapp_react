@@ -75,7 +75,8 @@ class PagesForm extends PureComponent {
       data: [],
       page: 0,
       rowsPerPage: 5,
-      permissionEdit: false,
+      buttonSaveEnable: false,
+      buttonSaveStatus: 'บันทึก',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -128,7 +129,7 @@ class PagesForm extends PureComponent {
           defaultAcceptDate: resp.data.editdata.acceptdate,
           acceptDate: resp.data.editdata.acceptdate,
           data: rows,
-          permissionEdit: resp.data.userPermission.edit,
+          buttonSaveEnable: resp.data.editdata.editenable,
         });
       });
   }
@@ -143,10 +144,13 @@ class PagesForm extends PureComponent {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    // eslint-disable-next-line
-    console.log(this.state);
+    this.show('warning', 'แจ้งให้ทราบ', 'กรุณารอสักครู่ระบบกำลังบันทึกข้อมูล...');
+    this.setState({
+      buttonSaveStatus: 'กำลังบันทึก...',
+      buttonSaveEnable: false,
+    });
     Axios
-      .post('/PublicDocMenuD/AddDocMenuD1', this.state)
+      .post('/PublicDocMenuD/UpdateDocMenuD1Edit', this.state)
       .then((resp) => {
         this.show('success', 'แจ้งให้ทราบ', `บันทึกเอกสาร
         ออกใบรับรองโครงการผ่านการประเมิณเสร็จสิ้น!`);
@@ -162,6 +166,9 @@ class PagesForm extends PureComponent {
         }, 1000);
       })
       .catch((error) => {
+        this.setState({
+          buttonSaveStatus: 'บันทึก',
+        });
         if (error.response) {
           if (error.response.status === 400) {
             this.show('danger', 'ข้อผิดผลาด!', 'กรุณาตรวจสอบข้อมูลของท่าน');
@@ -185,7 +192,7 @@ class PagesForm extends PureComponent {
         title={title}
         message={message}
       />,
-      duration: 5,
+      duration: 15,
       closable: true,
       style: { top: 0, left: 'calc(100vw - 100%)' },
       className: 'right-up ltr-support',
@@ -198,26 +205,6 @@ class PagesForm extends PureComponent {
 
   handleChangeAcceptCondition = (e) => {
     this.setState({ acceptCondition: e.value });
-  }
-
-  handleChangeTableAcceptDate1 = (e) => {
-    this.setState({ tableAcceptDate1: e.toLocaleString('en-GB', { timeZone: 'Asia/Bangkok' }) });
-  }
-
-  handleChangeTableAcceptDate2 = (e) => {
-    this.setState({ tableAcceptDate2: e.toLocaleString('en-GB', { timeZone: 'Asia/Bangkok' }) });
-  }
-
-  handleChangeTableAcceptDate3 = (e) => {
-    this.setState({ tableAcceptDate3: e.toLocaleString('en-GB', { timeZone: 'Asia/Bangkok' }) });
-  }
-
-  handleChangeTableAcceptDate4 = (e) => {
-    this.setState({ tableAcceptDate4: e.toLocaleString('en-GB', { timeZone: 'Asia/Bangkok' }) });
-  }
-
-  handleChangeTableAcceptDate5 = (e) => {
-    this.setState({ tableAcceptDate5: e.toLocaleString('en-GB', { timeZone: 'Asia/Bangkok' }) });
   }
 
   handlePrintReport = () => {
@@ -242,7 +229,7 @@ class PagesForm extends PureComponent {
       projectNameThai, projectNameEng, acceptTypeNameThai,
       acceptResult, acceptCondition, defaultAcceptDate,
       acceptResultName, acceptConditionName,
-      permissionInsert,
+      buttonSaveEnable, buttonSaveStatus,
     } = this.state;
 
     const {
@@ -275,7 +262,7 @@ class PagesForm extends PureComponent {
                     name="projectNumber"
                     component={renderSelectField}
                     value={projectNumber}
-                    placeholder={projectNameThai}
+                    placeholder={projectNumber.concat(' : ').concat(projectNameThai)}
                     options={projectList}
                   />
                 </div>
@@ -313,12 +300,11 @@ class PagesForm extends PureComponent {
                   เลขที่รับรองโครงการ
                 </span>
                 <div className="form__form-group-field">
-                  <Field
+                  <input
                     name="acceptProjectNo"
                     component="input"
                     type="text"
                     value={acceptProjectNo}
-                    placeholder={acceptProjectNo}
                     onChange={this.handleChange}
                   />
                 </div>
@@ -480,7 +466,7 @@ class PagesForm extends PureComponent {
               </div>
               <div className="form__form-group">
                 <ButtonToolbar>
-                  <Button color="success" type="submit" disabled={!permissionInsert}>บันทึก</Button>
+                  <Button color="success" type="submit" disabled={!buttonSaveEnable}>{buttonSaveStatus}</Button>
                   <Button color="success" onClick={() => this.handlePrintReport()}>พิมพ์</Button>
                 </ButtonToolbar>
               </div>

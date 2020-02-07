@@ -424,7 +424,7 @@ class PagesForm extends PureComponent {
                     component={renderSelectField}
                     value={projectNumber}
                     onChange={this.handleChangeProjectNumber}
-                    placeholder={projectNameThai}
+                    placeholder={projectNumber.concat(' : ').concat(projectNameThai)}
                     options={listProjectNumber}
                   />
                 </div>

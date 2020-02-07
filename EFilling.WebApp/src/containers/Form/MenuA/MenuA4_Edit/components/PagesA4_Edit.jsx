@@ -4,6 +4,7 @@ import {
 } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form';
 import { withTranslation } from 'react-i18next';
+import DownloadIcon from 'mdi-react/DownloadIcon';
 import Config from 'react-global-configuration';
 import Axios from 'axios';
 import NotificationSystem from 'rc-notification';
@@ -36,7 +37,8 @@ class PagesForm extends PureComponent {
       conclusionDate: '',
       file1Name: '',
       file1Base64: '',
-      permissionEdit: false,
+      buttonSaveEnable: false,
+      buttonSaveStatus: 'บันทึก',
     };
 
     this.handleChangeFile1 = this.handleChangeFile1.bind(this);
@@ -64,7 +66,10 @@ class PagesForm extends PureComponent {
           facultyName: resp.data.editdata.facultyname,
           projectNameThai: resp.data.editdata.projectnamethai,
           projectNameEng: resp.data.editdata.projectnameeng,
-          permissionEdit: resp.data.userPermission.edit,
+          conclusionDate: resp.data.editdata.conclusiondate,
+          file1Name: resp.data.editdata.file1name,
+          file1Base64: resp.data.editdata.file1base64,
+          buttonSaveEnable: resp.data.editdata.editenable,
         });
       });
   }
@@ -88,10 +93,13 @@ class PagesForm extends PureComponent {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    // eslint-disable-next-line
-    console.log(this.state);
+    this.show('warning', 'แจ้งให้ทราบ', 'กรุณารอสักครู่ระบบกำลังบันทึกข้อมูล...');
+    this.setState({
+      buttonSaveStatus: 'กำลังบันทึก...',
+      buttonSaveEnable: false,
+    });
     Axios
-      .post('/PublicDocMenuA/AddDocMenuA4', this.state)
+      .post('/PublicDocMenuA/UpdateDocMenuA4Edit', this.state)
       .then((resp) => {
         this.show('success', 'แจ้งให้ทราบ', `บันทึกเอกสาร
         ขอแก้ไขโครงการตามมติคณะกรรมการเสร็จสิ้น!`);
@@ -107,6 +115,9 @@ class PagesForm extends PureComponent {
         }, 1000);
       })
       .catch((error) => {
+        this.setState({
+          buttonSaveStatus: 'บันทึก',
+        });
         if (error.response) {
           if (error.response.status === 400) {
             this.show('danger', 'ข้อผิดผลาด!', 'กรุณาตรวจสอบข้อมูลของท่าน');
@@ -126,7 +137,7 @@ class PagesForm extends PureComponent {
         title={title}
         message={message}
       />,
-      duration: 5,
+      duration: 15,
       closable: true,
       style: { top: 0, left: 'calc(100vw - 100%)' },
       className: 'right-up ltr-support',
@@ -148,12 +159,26 @@ class PagesForm extends PureComponent {
       });
   }
 
+  handleFileDownloadId = (e) => {
+    const { docId } = this.state;
+    Axios
+      .get(`PublicDocMenuA/GetA4DownloadFileById/${docId}/${e}`)
+      .then((resp) => {
+        const url = window.atob(resp.data.filebase64);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = resp.data.filename;
+        a.click();
+      });
+  }
+
   render() {
     const {
       projectList, project1Label, project2Label,
       projectNumber, projectHeadName, facultyName,
       projectNameThai, projectNameEng,
-      conclusionDate, file1Name, permissionEdit,
+      conclusionDate, file1Name,
+      buttonSaveEnable, buttonSaveStatus,
     } = this.state;
 
     return (
@@ -170,7 +195,7 @@ class PagesForm extends PureComponent {
                     name="projectNumber"
                     component={renderSelectField}
                     value={projectNumber}
-                    placeholder={projectNameThai}
+                    placeholder={projectNumber.concat(' : ').concat(projectNameThai)}
                     options={projectList}
                   />
                 </div>
@@ -253,19 +278,12 @@ class PagesForm extends PureComponent {
                     value={file1Name}
                     onChange={this.handleChangeFile1}
                   />
-                  <Button
-                    size="sm"
-                    color="primary"
-                    outline
-                    disabled={file1Name !== '' ? 0 : 1}
-                    onClick={() => this.handleClickFileDownloadId(1)}
-                  >ดาวน์โหลดไฟล์
-                  </Button>
+                  <Button size="sm" className="icon" color="success" disabled={file1Name !== '' ? !true : true} onClick={() => this.handleFileDownloadId(1)}><p><DownloadIcon /> ดาวน์โหลด</p></Button>
                 </div>
               </div>
               <div className="form__form-group">
                 <ButtonToolbar>
-                  <Button color="success" type="submit" disabled={!permissionEdit}>บันทึก</Button>
+                  <Button color="success" type="submit" disabled={!buttonSaveEnable}>{buttonSaveStatus}</Button>
                   <Button color="success" onClick={() => this.handlePrintReport()}>พิมพ์</Button>
                 </ButtonToolbar>
               </div>

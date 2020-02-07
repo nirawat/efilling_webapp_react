@@ -15,10 +15,10 @@ const rows = [
     id: 'userid', disablePadding: false, label: 'รหัสผู้ใช้',
   },
   {
-    id: 'fullname', disablePadding: false, label: 'ชื่อ-สกุล',
+    id: 'fullname', disablePadding: false, label: '----------------- ชื่อ-สกุล -----------------',
   },
   {
-    id: 'email', disablePadding: false, label: 'อีเมล์',
+    id: 'email', disablePadding: false, label: '---------------- อีเมล์ ----------------',
   },
   {
     id: 'educationname', disablePadding: false, label: 'ระดับการศึกษา',
@@ -30,7 +30,7 @@ const rows = [
     id: 'positionname', disablePadding: false, label: 'สถานะภาพ',
   },
   {
-    id: 'facultyname', disablePadding: false, label: 'คณะ/หน่วยงาน',
+    id: 'facultyname', disablePadding: false, label: '-------------- คณะ/หน่วยงาน --------------',
   },
   {
     id: 'workphone', disablePadding: false, label: 'เบอร์โทรที่ทำงาน',

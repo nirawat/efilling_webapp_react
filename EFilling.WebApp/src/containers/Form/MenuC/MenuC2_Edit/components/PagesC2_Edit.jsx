@@ -4,7 +4,6 @@ import {
 } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form';
 import { withTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 import Config from 'react-global-configuration';
 import Axios from 'axios';
 import NotificationSystem from 'rc-notification';
@@ -20,10 +19,6 @@ const urlParams = new URLSearchParams(window.location.search);
 let notificationRU = null;
 
 class PagesForm extends PureComponent {
-  static propTypes = {
-    reset: PropTypes.func.isRequired,
-  };
-
   constructor() {
     super();
     this.state = {
@@ -171,23 +166,6 @@ class PagesForm extends PureComponent {
           this.show('danger', 'Error', error.message);
         }
       });
-  }
-
-  handleReset = () => {
-    const { reset } = this.props;
-    this.setState({
-      positionSeq: '',
-      projectNumber: '',
-      projectHeadName: '',
-      facultyName: '',
-      projectNameThai: '',
-      projectNameEng: '',
-      safetyType: '',
-      commentApproval: '',
-      commentConsider: '',
-      acceptType: '',
-    });
-    reset();
   }
 
   handleChangeAssigner = (e) => {
@@ -350,7 +328,7 @@ class PagesForm extends PureComponent {
                     name="projectNumber"
                     component={renderSelectField}
                     value={projectNumber}
-                    placeholder={projectNameThai}
+                    placeholder={projectNumber.concat(' : ').concat(projectNameThai)}
                     onChange={this.handleChangeProjectNumber}
                     options={listProjectNumber}
                   />

@@ -379,6 +379,18 @@ class PagesForm extends PureComponent {
         case 'c2':
           window.open(`/forms/menuC/menuC2_Edit?id=${projectNumber}`, '_blank');
           break;
+        case 'd1':
+          window.open(`/forms/menuD/menuD1_Edit?id=${projectNumber}`, '_blank');
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  handleClickEditDataC3All = (type, projectNumber) => {
+    if (projectNumber !== '' && projectNumber !== null) {
+      switch (type) {
         case 'c3':
           window.open(`/forms/menuC/menuC3_Edit?id=${projectNumber}`, '_blank');
           break;
@@ -396,9 +408,6 @@ class PagesForm extends PureComponent {
           break;
         case 'c3_5':
           window.open(`/forms/menuC/menuC3_5_Edit?id=${projectNumber}`, '_blank');
-          break;
-        case 'd1':
-          window.open(`/forms/menuD/menuD1_Edit?id=${projectNumber}`, '_blank');
           break;
         default:
           break;
@@ -583,38 +592,38 @@ class PagesForm extends PureComponent {
                           </TableCell>
                           <TableCell className="material-table__cell material-table__cell-left">
                             <Dropdown>
-                              <Dropdown.Toggle title={d.meetingDate} style={{ color: '#34a8eb', border: 0, backgroundColor: 'transparent' }} />
+                              <Dropdown.Toggle title={d.meetingDate !== '' ? d.meetingDate : 'การประชุม'} style={{ color: '#34a8eb', border: 0, backgroundColor: 'transparent' }} />
                               <Dropdown.MenuWrapper>
                                 <Dropdown.Menu>
                                   <MenuItem
                                     eventKey={1}
-                                    onSelect={() => { this.handleClickEditData('c3', d.projectNumber, d.meetingDate); }}
+                                    onSelect={() => { this.handleClickEditDataC3All('c3', d.projectNumber); }}
                                   >บันทึกการประชุม
                                   </MenuItem>
                                   <MenuItem divider />
                                   <MenuItem
                                     eventKey={2}
-                                    onSelect={() => { this.handleClickEditData('c3_1', d.projectNumber, d.meetingDate); }}
+                                    onSelect={() => { this.handleClickEditDataC3All('c3_1', d.projectNumber); }}
                                   >ระเบียบวาระที่ 1
                                   </MenuItem>
                                   <MenuItem
                                     eventKey={3}
-                                    onSelect={() => { this.handleClickEditData('c3_2', d.projectNumber, d.meetingDate); }}
+                                    onSelect={() => { this.handleClickEditDataC3All('c3_2', d.projectNumber); }}
                                   >ระเบียบวาระที่ 2
                                   </MenuItem>
                                   <MenuItem
                                     eventKey={4}
-                                    onSelect={() => { this.handleClickEditData('c3_3', d.projectNumber, d.meetingDate); }}
+                                    onSelect={() => { this.handleClickEditDataC3All('c3_3', d.projectNumber); }}
                                   >ระเบียบวาระที่ 3
                                   </MenuItem>
                                   <MenuItem
                                     eventKey={5}
-                                    onSelect={() => { this.handleClickEditData('c3_4', d.projectNumber, d.meetingDate); }}
+                                    onSelect={() => { this.handleClickEditDataC3All('c3_4', d.projectNumber); }}
                                   >ระเบียบวาระที่ 4
                                   </MenuItem>
                                   <MenuItem
                                     eventKey={6}
-                                    onSelect={() => { this.handleClickEditData('c3_5', d.projectNumber, d.meetingDate); }}
+                                    onSelect={() => { this.handleClickEditDataC3All('c3_5', d.projectNumber); }}
                                   >ระเบียบวาระที่ 5
                                   </MenuItem>
                                 </Dropdown.Menu>

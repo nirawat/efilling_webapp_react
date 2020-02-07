@@ -32,6 +32,7 @@ import MenuC2 from '../../../Form/MenuC/MenuC2/index';
 import MenuC2Edit from '../../../Form/MenuC/MenuC2_Edit/index';
 import MenuC22 from '../../../Form/MenuC/MenuC2_2/index';
 import MenuC3 from '../../../Form/MenuC/MenuC3/index';
+import MenuC3Edit from '../../../Form/MenuC/MenuC3_Edit/index';
 import MenuC31 from '../../../Form/MenuC/MenuC3_1/index';
 import MenuC32 from '../../../Form/MenuC/MenuC3_2/index';
 import MenuC33 from '../../../Form/MenuC/MenuC3_3/index';
@@ -81,6 +82,7 @@ export default () => (
       <Route path="/forms/menuC/menuC2_Edit" component={MenuC2Edit} />
       <Route path="/forms/menuC/menuC2_2" component={MenuC22} />
       <Route path="/forms/menuC/menuC3" component={MenuC3} />
+      <Route path="/forms/menuC/menuC3_Edit" component={MenuC3Edit} />
       <Route path="/forms/menuC/menuC3_1" component={MenuC31} />
       <Route path="/forms/menuC/menuC3_2" component={MenuC32} />
       <Route path="/forms/menuC/menuC3_3" component={MenuC33} />
