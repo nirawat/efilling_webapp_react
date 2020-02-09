@@ -91,7 +91,7 @@ class PagesForm extends PureComponent {
     Axios
       .post('/PublicDocMenuC/AddDocMenuC35', this.state)
       .then(() => {
-        this.show('success', 'บันทึก', `
+        this.show('success', 'แจ้งให้ทราบ', `
         ระเบียบวาระที่ 5 เสร็จสิ้น!`);
         setTimeout(() => {
           window.location.reload();
@@ -166,7 +166,9 @@ class PagesForm extends PureComponent {
                 <h5 className="bold-text">เรื่องอื่นๆ</h5>
               </div>
               <div className="form__form-group">
-                <h4 className="form__form-group-label">เรื่องที่</h4>
+                <p style={{ backgroundColor: '#e6fff7' }}> เรื่องที่ 1</p>
+              </div>
+              <div className="form__form-group">
                 <div className="form__form-group-field">
                   <Field
                     name="tab5Group1Seq1Input1"
@@ -202,7 +204,9 @@ class PagesForm extends PureComponent {
                 </div>
               </div>
               <div className="form__form-group">
-                <h4 className="form__form-group-label">เรื่องที่</h4>
+                <p style={{ backgroundColor: '#e6fff7' }}> เรื่องที่ 2</p>
+              </div>
+              <div className="form__form-group">
                 <div className="form__form-group-field">
                   <Field
                     name="tab5Group1Seq2Input1"
@@ -238,7 +242,9 @@ class PagesForm extends PureComponent {
                 </div>
               </div>
               <div className="form__form-group">
-                <h4 className="form__form-group-label">เรื่องที่</h4>
+                <p style={{ backgroundColor: '#e6fff7' }}> เรื่องที่ 3</p>
+              </div>
+              <div className="form__form-group">
                 <div className="form__form-group-field">
                   <Field
                     name="tab5Group1Seq3Input1"

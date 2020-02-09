@@ -4,7 +4,6 @@ import {
 } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form';
 import { withTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 import Config from 'react-global-configuration';
 import Axios from 'axios';
 import NotificationSystem from 'rc-notification';
@@ -19,10 +18,6 @@ const eFillingSys = JSON.parse(localStorage.getItem('efilling_system'));
 let notificationRU = null;
 
 class PagesForm extends PureComponent {
-  static propTypes = {
-    reset: PropTypes.func.isRequired,
-  };
-
   constructor() {
     super();
     this.state = {
@@ -134,9 +129,8 @@ class PagesForm extends PureComponent {
     Axios
       .post('/PublicDocMenuC/AddDocMenuC22', this.state)
       .then(() => {
-        this.show('success', 'บันทึก', `
+        this.show('success', 'แจ้งให้ทราบ', `
         ความเห็นของกรรมการผู้พิจารณาเสร็จสิ้น!`);
-        // this.handleReset();
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -157,21 +151,6 @@ class PagesForm extends PureComponent {
           this.show('danger', 'Error', error.message);
         }
       });
-  }
-
-  handleReset = () => {
-    const { reset } = this.props;
-    this.setState({
-      positionSeq: '',
-      projectNumber: '',
-      labTypeName: '',
-      facultyName: '',
-      safetyType: '',
-      commentApproval: '',
-      commentConsider: '',
-      acceptType: '2',
-    });
-    reset();
   }
 
   handleChangeAssigner = (e) => {

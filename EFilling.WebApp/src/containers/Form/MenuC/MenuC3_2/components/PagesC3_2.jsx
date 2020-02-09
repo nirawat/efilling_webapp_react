@@ -100,12 +100,11 @@ class PagesForm extends PureComponent {
     Axios
       .post('/PublicDocMenuC/AddDocMenuC32', this.state)
       .then(() => {
-        this.show('success', 'บันทึก', `
+        this.show('success', 'แจ้งให้ทราบ', `
         การประชุมระเบียบวาระที่ 2 เสร็จสิ้น!`);
-        // this.handleReset();
         setTimeout(() => {
           window.location.reload();
-        }, 3000);
+        }, 1000);
       })
       .catch((error) => {
         const { permissionInsert } = this.state;
@@ -213,7 +212,7 @@ class PagesForm extends PureComponent {
 
   render() {
     const {
-      listMeetingId, meetingName, isFileAttachment,
+      listMeetingId, meetingName,
       tab2Group1Seq1Input1, tab2Group1Seq1FileInput2, tab2Group1Seq1Input3, tab2Group1Seq1Input4,
       tab2Group1Seq2Input1, tab2Group1Seq2FileInput2, tab2Group1Seq2Input3, tab2Group1Seq2Input4,
       tab2Group1Seq3Input1, tab2Group1Seq3FileInput2, tab2Group1Seq3Input3, tab2Group1Seq3Input4,
@@ -237,16 +236,13 @@ class PagesForm extends PureComponent {
                   />
                 </div>
               </div>
-              <div className="form__form-group">
-                <ButtonToolbar>
-                  <Button color="primary" disabled={!isFileAttachment} onClick={() => this.handleChangeDownloadFileAllZip()}>ดาวน์โหลดเอกสาร</Button>
-                </ButtonToolbar>
-              </div>
               <div className="card__title">
                 <h5 className="bold-text">รับรองรายงานการประชุมครั้งที่ผ่านมา</h5>
               </div>
               <div className="form__form-group">
-                <h4 className="form__form-group-label">เรื่องที่</h4>
+                <p style={{ backgroundColor: '#e6fff7' }}> เรื่องที่ 1</p>
+              </div>
+              <div className="form__form-group">
                 <div className="form__form-group-field">
                   <Field
                     name="tab2Group1Seq1Input1"
@@ -293,7 +289,9 @@ class PagesForm extends PureComponent {
                 </div>
               </div>
               <div className="form__form-group">
-                <h4 className="form__form-group-label">เรื่องที่</h4>
+                <p style={{ backgroundColor: '#e6fff7' }}> เรื่องที่ 2</p>
+              </div>
+              <div className="form__form-group">
                 <div className="form__form-group-field">
                   <Field
                     name="tab2Group1Seq2Input1"
@@ -340,7 +338,9 @@ class PagesForm extends PureComponent {
                 </div>
               </div>
               <div className="form__form-group">
-                <h4 className="form__form-group-label">เรื่องที่</h4>
+                <p style={{ backgroundColor: '#e6fff7' }}> เรื่องที่ 3</p>
+              </div>
+              <div className="form__form-group">
                 <div className="form__form-group-field">
                   <Field
                     name="tab2Group1Seq3Input1"

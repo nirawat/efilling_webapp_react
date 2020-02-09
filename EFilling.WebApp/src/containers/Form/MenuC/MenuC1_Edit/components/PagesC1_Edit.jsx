@@ -162,7 +162,7 @@ class PagesForm extends PureComponent {
     Axios
       .post('/PublicDocMenuC/UpdateDocMenuC1Edit', this.state)
       .then((resp) => {
-        this.show('success', 'บันทึก', `
+        this.show('success', 'แจ้งให้ทราบ', `
         การมอบหมายผู้พิจารณาโครงการเสร็จสิ้น!`);
         if (resp.data !== null) {
           const url = resp.data.filebase64;

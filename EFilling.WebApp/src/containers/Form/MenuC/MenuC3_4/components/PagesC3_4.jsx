@@ -131,7 +131,7 @@ class PagesForm extends PureComponent {
     Axios
       .post('/PublicDocMenuC/AddDocMenuC34', this.state)
       .then(() => {
-        this.show('success', 'บันทึก', `
+        this.show('success', 'แจ้งให้ทราบ', `
         การประชุมระเบียบวาระที่ 4 เสร็จสิ้น!`);
         setTimeout(() => {
           window.location.reload();

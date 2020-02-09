@@ -15,6 +15,7 @@ Axios.defaults.headers.common.Authorization = Config.get('axiosToken');
 Axios.defaults.headers.common['Content-Type'] = Config.get('axiosContentType');
 
 const eFillingSys = JSON.parse(localStorage.getItem('efilling_system'));
+const urlParams = new URLSearchParams(window.location.search);
 let notificationRU = null;
 
 class PagesForm extends PureComponent {
@@ -22,6 +23,7 @@ class PagesForm extends PureComponent {
     super();
     this.state = {
       createBy: eFillingSys.registerId,
+      docId: '',
       listMeetingId: [],
       meetingId: '',
       meetingName: '',
@@ -43,7 +45,6 @@ class PagesForm extends PureComponent {
       tab1Group2Seq3Input1: '',
       tab1Group2Seq3Input2: '',
       tab1Group2Seq3Input3: '',
-      permissionInsert: false,
       buttonSaveEnable: false,
       buttonSaveStatus: 'บันทึก',
     };
@@ -61,7 +62,7 @@ class PagesForm extends PureComponent {
     });
     let initialMeetingId = [];
     Axios
-      .get(`PublicDocMenuC/MenuC31InterfaceData/${eFillingSys.registerId}`)
+      .get(`PublicDocMenuC/MenuC31EditInterfaceData/${eFillingSys.registerId}/${urlParams.get('id')}`)
       .then((resp) => {
         if (resp.data.userPermission !== null && !resp.data.userPermission.view) {
           window.location = '/efilling/forms/errors/permission';
@@ -76,8 +77,25 @@ class PagesForm extends PureComponent {
           listMeetingId: initialMeetingId,
           meetingId: resp.data.meetingId,
           meetingName: resp.data.meetingName,
-          permissionInsert: resp.data.userPermission.insert,
-          buttonSaveEnable: resp.data.userPermission.insert,
+          tab1Group1Seq1Input1: resp.data.editdata.tab1Group1Seq1Input1,
+          tab1Group1Seq1Input2: resp.data.editdata.tab1Group1Seq1Input2,
+          tab1Group1Seq1Input3: resp.data.editdata.tab1Group1Seq1Input3,
+          tab1Group1Seq2Input1: resp.data.editdata.tab1Group1Seq2Input1,
+          tab1Group1Seq2Input2: resp.data.editdata.tab1Group1Seq2Input2,
+          tab1Group1Seq2Input3: resp.data.editdata.tab1Group1Seq2Input3,
+          tab1Group1Seq3Input1: resp.data.editdata.tab1Group1Seq3Input1,
+          tab1Group1Seq3Input2: resp.data.editdata.tab1Group1Seq3Input2,
+          tab1Group1Seq3Input3: resp.data.editdata.tab1Group1Seq3Input3,
+          tab1Group2Seq1Input1: resp.data.editdata.tab1Group2Seq1Input1,
+          tab1Group2Seq1Input2: resp.data.editdata.tab1Group2Seq1Input2,
+          tab1Group2Seq1Input3: resp.data.editdata.tab1Group2Seq1Input3,
+          tab1Group2Seq2Input1: resp.data.editdata.tab1Group2Seq2Input1,
+          tab1Group2Seq2Input2: resp.data.editdata.tab1Group2Seq2Input2,
+          tab1Group2Seq2Input3: resp.data.editdata.tab1Group2Seq2Input3,
+          tab1Group2Seq3Input1: resp.data.editdata.tab1Group2Seq3Input1,
+          tab1Group2Seq3Input2: resp.data.editdata.tab1Group2Seq3Input2,
+          tab1Group2Seq3Input3: resp.data.editdata.tab1Group2Seq3Input3,
+          buttonSaveEnable: resp.data.editdata.editenable,
         });
       });
   }
@@ -98,7 +116,7 @@ class PagesForm extends PureComponent {
       buttonSaveEnable: false,
     });
     Axios
-      .post('/PublicDocMenuC/AddDocMenuC31', this.state)
+      .post('/PublicDocMenuC/UpdateDocMenuC31Edit', this.state)
       .then(() => {
         this.show('success', 'แจ้งให้ทราบ', `
         การประชุมระเบียบวาระที่ 1 เสร็จสิ้น!`);
@@ -107,10 +125,8 @@ class PagesForm extends PureComponent {
         }, 1000);
       })
       .catch((error) => {
-        const { permissionInsert } = this.state;
         this.setState({
           buttonSaveStatus: 'บันทึก',
-          buttonSaveEnable: permissionInsert,
         });
         if (error.response) {
           if (error.response.status === 400) {
@@ -180,7 +196,7 @@ class PagesForm extends PureComponent {
               </div>
               <div className="form__form-group">
                 <div className="form__form-group-field">
-                  <Field
+                  <input
                     name="tab1Group1Seq1Input1"
                     component="input"
                     type="text"
@@ -218,7 +234,7 @@ class PagesForm extends PureComponent {
               </div>
               <div className="form__form-group">
                 <div className="form__form-group-field">
-                  <Field
+                  <input
                     name="tab1Group1Seq2Input1"
                     component="input"
                     type="text"
@@ -256,7 +272,7 @@ class PagesForm extends PureComponent {
               </div>
               <div className="form__form-group">
                 <div className="form__form-group-field">
-                  <Field
+                  <input
                     name="tab1Group1Seq3Input1"
                     component="input"
                     type="text"
@@ -297,7 +313,7 @@ class PagesForm extends PureComponent {
               </div>
               <div className="form__form-group">
                 <div className="form__form-group-field">
-                  <Field
+                  <input
                     name="tab1Group2Seq1Input1"
                     component="input"
                     type="text"
@@ -335,7 +351,7 @@ class PagesForm extends PureComponent {
               </div>
               <div className="form__form-group">
                 <div className="form__form-group-field">
-                  <Field
+                  <input
                     name="tab1Group2Seq2Input1"
                     component="input"
                     type="text"
@@ -373,7 +389,7 @@ class PagesForm extends PureComponent {
               </div>
               <div className="form__form-group">
                 <div className="form__form-group-field">
-                  <Field
+                  <input
                     name="tab1Group2Seq3Input1"
                     component="input"
                     type="text"

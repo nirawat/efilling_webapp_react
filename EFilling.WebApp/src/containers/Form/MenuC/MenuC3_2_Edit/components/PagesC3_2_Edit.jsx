@@ -7,14 +7,17 @@ import { withTranslation } from 'react-i18next';
 import Config from 'react-global-configuration';
 import Axios from 'axios';
 import NotificationSystem from 'rc-notification';
+import DownloadIcon from 'mdi-react/DownloadIcon';
 import { BasicNotification } from '../../../../../shared/components/Notification';
 import renderSelectField from '../../../../../shared/components/form/Select';
+import renderFileInputField from '../../../../../shared/components/form/FileInput';
 
 Axios.defaults.baseURL = Config.get('axiosBaseUrl');
 Axios.defaults.headers.common.Authorization = Config.get('axiosToken');
 Axios.defaults.headers.common['Content-Type'] = Config.get('axiosContentType');
 
 const eFillingSys = JSON.parse(localStorage.getItem('efilling_system'));
+const urlParams = new URLSearchParams(window.location.search);
 let notificationRU = null;
 
 class PagesForm extends PureComponent {
@@ -22,28 +25,26 @@ class PagesForm extends PureComponent {
     super();
     this.state = {
       createBy: eFillingSys.registerId,
+      docId: '',
       listMeetingId: [],
       meetingId: '',
       meetingName: '',
-      tab1Group1Seq1Input1: '',
-      tab1Group1Seq1Input2: '',
-      tab1Group1Seq1Input3: '',
-      tab1Group1Seq2Input1: '',
-      tab1Group1Seq2Input2: '',
-      tab1Group1Seq2Input3: '',
-      tab1Group1Seq3Input1: '',
-      tab1Group1Seq3Input2: '',
-      tab1Group1Seq3Input3: '',
-      tab1Group2Seq1Input1: '',
-      tab1Group2Seq1Input2: '',
-      tab1Group2Seq1Input3: '',
-      tab1Group2Seq2Input1: '',
-      tab1Group2Seq2Input2: '',
-      tab1Group2Seq2Input3: '',
-      tab1Group2Seq3Input1: '',
-      tab1Group2Seq3Input2: '',
-      tab1Group2Seq3Input3: '',
-      permissionInsert: false,
+      isFileAttachment: false,
+      tab2Group1Seq1Input1: '',
+      tab2Group1Seq1FileInput2: '',
+      tab2Group1Seq1FileInput2Base64: '',
+      tab2Group1Seq1Input3: '',
+      tab2Group1Seq1Input4: '',
+      tab2Group1Seq2Input1: '',
+      tab2Group1Seq2FileInput2: '',
+      tab2Group1Seq2FileInput2Base64: '',
+      tab2Group1Seq2Input3: '',
+      tab2Group1Seq2Input4: '',
+      tab2Group1Seq3Input1: '',
+      tab2Group1Seq3FileInput2: '',
+      tab2Group1Seq3FileInput2Base64: '',
+      tab2Group1Seq3Input3: '',
+      tab2Group1Seq3Input4: '',
       buttonSaveEnable: false,
       buttonSaveStatus: 'บันทึก',
     };
@@ -61,7 +62,7 @@ class PagesForm extends PureComponent {
     });
     let initialMeetingId = [];
     Axios
-      .get(`PublicDocMenuC/MenuC31InterfaceData/${eFillingSys.registerId}`)
+      .get(`PublicDocMenuC/MenuC32EditInterfaceData/${eFillingSys.registerId}/${urlParams.get('id')}`)
       .then((resp) => {
         if (resp.data.userPermission !== null && !resp.data.userPermission.view) {
           window.location = '/efilling/forms/errors/permission';
@@ -76,8 +77,20 @@ class PagesForm extends PureComponent {
           listMeetingId: initialMeetingId,
           meetingId: resp.data.meetingId,
           meetingName: resp.data.meetingName,
-          permissionInsert: resp.data.userPermission.insert,
-          buttonSaveEnable: resp.data.userPermission.insert,
+          isFileAttachment: resp.data.isFileAttachment,
+          tab2Group1Seq1Input1: resp.data.editdata.tab2Group1Seq1Input1,
+          tab2Group1Seq1FileInput2: resp.data.editdata.tab2Group1Seq1FileInput2,
+          tab2Group1Seq1Input3: resp.data.editdata.tab2Group1Seq1Input3,
+          tab2Group1Seq1Input4: resp.data.editdata.tab2Group1Seq1Input4,
+          tab2Group1Seq2Input1: resp.data.editdata.tab2Group1Seq2Input1,
+          tab2Group1Seq2FileInput2: resp.data.editdata.tab2Group1Seq2FileInput2,
+          tab2Group1Seq2Input3: resp.data.editdata.tab2Group1Seq2Input3,
+          tab2Group1Seq2Input4: resp.data.editdata.tab2Group1Seq2Input4,
+          tab2Group1Seq3Input1: resp.data.editdata.tab2Group1Seq3Input1,
+          tab2Group1Seq3FileInput2: resp.data.editdata.tab2Group1Seq3FileInput2,
+          tab2Group1Seq3Input3: resp.data.editdata.tab2Group1Seq3Input3,
+          tab2Group1Seq3Input4: resp.data.editdata.tab2Group1Seq3Input4,
+          buttonSaveEnable: resp.data.editdata.editenable,
         });
       });
   }
@@ -98,19 +111,17 @@ class PagesForm extends PureComponent {
       buttonSaveEnable: false,
     });
     Axios
-      .post('/PublicDocMenuC/AddDocMenuC31', this.state)
+      .post('/PublicDocMenuC/UpdateDocMenuC32Edit', this.state)
       .then(() => {
         this.show('success', 'แจ้งให้ทราบ', `
-        การประชุมระเบียบวาระที่ 1 เสร็จสิ้น!`);
+        การประชุมระเบียบวาระที่ 2 เสร็จสิ้น!`);
         setTimeout(() => {
           window.location.reload();
         }, 1000);
       })
       .catch((error) => {
-        const { permissionInsert } = this.state;
         this.setState({
           buttonSaveStatus: 'บันทึก',
-          buttonSaveEnable: permissionInsert,
         });
         if (error.response) {
           if (error.response.status === 400) {
@@ -124,6 +135,38 @@ class PagesForm extends PureComponent {
       });
   }
 
+  handleChangeMeetingId = (e) => {
+    this.setState({
+      meetingId: e.value,
+      isFileAttachment: false,
+    });
+    Axios
+      .get(`PublicDocMenuC/MenuC32CheckAttachment/${e.value}`)
+      .then((resp) => {
+        this.setState({
+          isFileAttachment: resp.data,
+        });
+      });
+  }
+
+  handleChangeDownloadFileAllZip = () => {
+    const {
+      meetingId,
+    } = this.state;
+    Axios
+      .get(`PublicDocMenuC/MenuC32DownloadAttachmentZip/${meetingId}`)
+      .then((resp) => {
+        if (resp.data === null) {
+          this.show('warning', 'แจ้งให้ทราบ', 'ไม่พบไฟล์เอกสารแนบ!');
+        } else {
+          const url = resp.data.filebase64;
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = resp.data.filename;
+          a.click();
+        }
+      });
+  }
 
   show = (color, title, message) => {
     notificationRU.notice({
@@ -139,21 +182,66 @@ class PagesForm extends PureComponent {
     });
   };
 
-  handleChangeMeetingId = (e) => {
-    this.setState({ meetingId: e.value });
+  handleChangeUploadFile1 = (e) => {
+    const files = e.file;
+    const reader = new FileReader();
+    reader.readAsDataURL(files);
+    reader.onloadend = (ee) => {
+      const binaryString = ee.target.result;
+      this.setState({
+        tab2Group1Seq1FileInput2: e.name,
+        tab2Group1Seq1FileInput2Base64: btoa(binaryString),
+      });
+    };
+  }
+
+  handleChangeUploadFile2 = (e) => {
+    const files = e.file;
+    const reader = new FileReader();
+    reader.readAsDataURL(files);
+    reader.onloadend = (ee) => {
+      const binaryString = ee.target.result;
+      this.setState({
+        tab2Group1Seq2FileInput2: e.name,
+        tab2Group1Seq2FileInput2Base64: btoa(binaryString),
+      });
+    };
+  }
+
+  handleChangeUploadFile3 = (e) => {
+    const files = e.file;
+    const reader = new FileReader();
+    reader.readAsDataURL(files);
+    reader.onloadend = (ee) => {
+      const binaryString = ee.target.result;
+      this.setState({
+        tab2Group1Seq3FileInput2: e.name,
+        tab2Group1Seq3FileInput2Base64: btoa(binaryString),
+      });
+    };
+  }
+
+  handleFileDownloadId = (e) => {
+    const { meetingId } = this.state;
+    Axios
+      .get(`PublicDocMenuC/GetC32DownloadFileById/${meetingId}/${e}`)
+      .then((resp) => {
+        const url = window.atob(resp.data.filebase64);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = resp.data.filename;
+        a.click();
+      });
   }
 
   render() {
     const {
-      listMeetingId, meetingName, buttonSaveEnable, buttonSaveStatus,
-      tab1Group1Seq1Input1, tab1Group1Seq1Input2, tab1Group1Seq1Input3,
-      tab1Group1Seq2Input1, tab1Group1Seq2Input2, tab1Group1Seq2Input3,
-      tab1Group1Seq3Input1, tab1Group1Seq3Input2, tab1Group1Seq3Input3,
-      tab1Group2Seq1Input1, tab1Group2Seq1Input2, tab1Group2Seq1Input3,
-      tab1Group2Seq2Input1, tab1Group2Seq2Input2, tab1Group2Seq2Input3,
-      tab1Group2Seq3Input1, tab1Group2Seq3Input2, tab1Group2Seq3Input3,
+      listMeetingId, meetingName,
+      tab2Group1Seq1Input1, tab2Group1Seq1FileInput2, tab2Group1Seq1Input3, tab2Group1Seq1Input4,
+      tab2Group1Seq2Input1, tab2Group1Seq2FileInput2, tab2Group1Seq2Input3, tab2Group1Seq2Input4,
+      tab2Group1Seq3Input1, tab2Group1Seq3FileInput2, tab2Group1Seq3Input3, tab2Group1Seq3Input4,
+      buttonSaveEnable, buttonSaveStatus,
     } = this.state;
-
 
     return (
       <Col md={12} lg={12}>
@@ -173,30 +261,42 @@ class PagesForm extends PureComponent {
                 </div>
               </div>
               <div className="card__title">
-                <h5 className="bold-text">1.1. เรื่องที่ประธานแจ้งให้ที่ประชุมทราบ</h5>
+                <h5 className="bold-text">รับรองรายงานการประชุมครั้งที่ผ่านมา</h5>
               </div>
               <div className="form__form-group">
-                <p style={{ backgroundColor: '#e6fff7' }}> เรื่องที่ 1.1.1</p>
+                <p style={{ backgroundColor: '#e6fff7' }}> เรื่องที่ 1</p>
               </div>
               <div className="form__form-group">
                 <div className="form__form-group-field">
-                  <Field
-                    name="tab1Group1Seq1Input1"
+                  <input
+                    name="tab2Group1Seq1Input1"
                     component="input"
                     type="text"
-                    value={tab1Group1Seq1Input1}
+                    value={tab2Group1Seq1Input1}
                     onChange={this.handleChange}
                   />
+                </div>
+              </div>
+              <div className="form__form-group">
+                <span className="form__form-group-label">อัพโหลดเอกสารที่เกี่ยวข้อง (ถ้ามี)</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="tab2Group1Seq1FileInput2"
+                    component={renderFileInputField}
+                    value={tab2Group1Seq1FileInput2}
+                    onChange={this.handleChangeUploadFile1}
+                  />
+                  <Button size="sm" className="icon" color="success" disabled={tab2Group1Seq1FileInput2 !== '' ? !true : true} onClick={() => this.handleFileDownloadId(1)}><p><DownloadIcon /> ดาวน์โหลด</p></Button>
                 </div>
               </div>
               <div className="form__form-group">
                 <span className="form__form-group-label">สรุปเรื่อง</span>
                 <div className="form__form-group-field">
                   <textarea
-                    name="tab1Group1Seq1Input2"
+                    name="tab2Group1Seq1Input3"
                     component="input"
                     type="textarea"
-                    value={tab1Group1Seq1Input2}
+                    value={tab2Group1Seq1Input3}
                     onChange={this.handleChange}
                   />
                 </div>
@@ -205,36 +305,48 @@ class PagesForm extends PureComponent {
                 <span className="form__form-group-label">มติ</span>
                 <div className="form__form-group-field">
                   <textarea
-                    name="tab1Group1Seq1Input3"
+                    name="tab2Group1Seq1Input4"
                     component="input"
                     type="textarea"
-                    value={tab1Group1Seq1Input3}
+                    value={tab2Group1Seq1Input4}
                     onChange={this.handleChange}
                   />
                 </div>
               </div>
               <div className="form__form-group">
-                <p style={{ backgroundColor: '#e6fff7' }}> เรื่องที่ 1.1.2</p>
+                <p style={{ backgroundColor: '#e6fff7' }}> เรื่องที่ 2</p>
               </div>
               <div className="form__form-group">
                 <div className="form__form-group-field">
-                  <Field
-                    name="tab1Group1Seq2Input1"
+                  <input
+                    name="tab2Group1Seq2Input1"
                     component="input"
                     type="text"
-                    value={tab1Group1Seq2Input1}
+                    value={tab2Group1Seq2Input1}
                     onChange={this.handleChange}
                   />
+                </div>
+              </div>
+              <div className="form__form-group">
+                <span className="form__form-group-label">อัพโหลดเอกสารที่เกี่ยวข้อง (ถ้ามี)</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="tab2Group1Seq2FileInput2"
+                    component={renderFileInputField}
+                    value={tab2Group1Seq2FileInput2}
+                    onChange={this.handleChangeUploadFile2}
+                  />
+                  <Button size="sm" className="icon" color="success" disabled={tab2Group1Seq2FileInput2 !== '' ? !true : true} onClick={() => this.handleFileDownloadId(2)}><p><DownloadIcon /> ดาวน์โหลด</p></Button>
                 </div>
               </div>
               <div className="form__form-group">
                 <span className="form__form-group-label">สรุปเรื่อง</span>
                 <div className="form__form-group-field">
                   <textarea
-                    name="tab1Group1Seq2Input2"
+                    name="tab2Group1Seq2Input3"
                     component="input"
                     type="textarea"
-                    value={tab1Group1Seq2Input2}
+                    value={tab2Group1Seq2Input3}
                     onChange={this.handleChange}
                   />
                 </div>
@@ -243,36 +355,48 @@ class PagesForm extends PureComponent {
                 <span className="form__form-group-label">มติ</span>
                 <div className="form__form-group-field">
                   <textarea
-                    name="tab1Group1Seq2Input3"
+                    name="tab2Group1Seq2Input4"
                     component="input"
                     type="textarea"
-                    value={tab1Group1Seq2Input3}
+                    value={tab2Group1Seq2Input4}
                     onChange={this.handleChange}
                   />
                 </div>
               </div>
               <div className="form__form-group">
-                <p style={{ backgroundColor: '#e6fff7' }}> เรื่องที่ 1.1.3</p>
+                <p style={{ backgroundColor: '#e6fff7' }}> เรื่องที่ 3</p>
               </div>
               <div className="form__form-group">
                 <div className="form__form-group-field">
-                  <Field
-                    name="tab1Group1Seq3Input1"
+                  <input
+                    name="tab2Group1Seq3Input1"
                     component="input"
                     type="text"
-                    value={tab1Group1Seq3Input1}
+                    value={tab2Group1Seq3Input1}
                     onChange={this.handleChange}
                   />
+                </div>
+              </div>
+              <div className="form__form-group">
+                <span className="form__form-group-label">อัพโหลดเอกสารที่เกี่ยวข้อง (ถ้ามี)</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="tab2Group1Seq3FileInput2"
+                    component={renderFileInputField}
+                    value={tab2Group1Seq3FileInput2}
+                    onChange={this.handleChangeUploadFile3}
+                  />
+                  <Button size="sm" className="icon" color="success" disabled={tab2Group1Seq3FileInput2 !== '' ? !true : true} onClick={() => this.handleFileDownloadId(3)}><p><DownloadIcon /> ดาวน์โหลด</p></Button>
                 </div>
               </div>
               <div className="form__form-group">
                 <span className="form__form-group-label">สรุปเรื่อง</span>
                 <div className="form__form-group-field">
                   <textarea
-                    name="tab1Group1Seq3Input2"
+                    name="tab2Group1Seq3Input3"
                     component="input"
                     type="textarea"
-                    value={tab1Group1Seq3Input2}
+                    value={tab2Group1Seq3Input3}
                     onChange={this.handleChange}
                   />
                 </div>
@@ -281,127 +405,10 @@ class PagesForm extends PureComponent {
                 <span className="form__form-group-label">มติ</span>
                 <div className="form__form-group-field">
                   <textarea
-                    name="tab1Group1Seq3Input3"
+                    name="tab2Group1Seq3Input4"
                     component="input"
                     type="textarea"
-                    value={tab1Group1Seq3Input3}
-                    onChange={this.handleChange}
-                  />
-                </div>
-              </div>
-              <div className="card__title">
-                <h5 className="bold-text">1.2. เรื่องที่ฝ่ายเลขานุการแจ้งให้ที่ประชุมทราบ</h5>
-              </div>
-              <div className="form__form-group">
-                <p style={{ backgroundColor: '#e6fff7' }}> เรื่องที่ 1.2.1</p>
-              </div>
-              <div className="form__form-group">
-                <div className="form__form-group-field">
-                  <Field
-                    name="tab1Group2Seq1Input1"
-                    component="input"
-                    type="text"
-                    value={tab1Group2Seq1Input1}
-                    onChange={this.handleChange}
-                  />
-                </div>
-              </div>
-              <div className="form__form-group">
-                <span className="form__form-group-label">สรุปเรื่อง</span>
-                <div className="form__form-group-field">
-                  <textarea
-                    name="tab1Group2Seq1Input2"
-                    component="input"
-                    type="textarea"
-                    value={tab1Group2Seq1Input2}
-                    onChange={this.handleChange}
-                  />
-                </div>
-              </div>
-              <div className="form__form-group">
-                <span className="form__form-group-label">มติ</span>
-                <div className="form__form-group-field">
-                  <textarea
-                    name="tab1Group2Seq1Input3"
-                    component="input"
-                    type="textarea"
-                    value={tab1Group2Seq1Input3}
-                    onChange={this.handleChange}
-                  />
-                </div>
-              </div>
-              <div className="form__form-group">
-                <p style={{ backgroundColor: '#e6fff7' }}> เรื่องที่ 1.2.2</p>
-              </div>
-              <div className="form__form-group">
-                <div className="form__form-group-field">
-                  <Field
-                    name="tab1Group2Seq2Input1"
-                    component="input"
-                    type="text"
-                    value={tab1Group2Seq2Input1}
-                    onChange={this.handleChange}
-                  />
-                </div>
-              </div>
-              <div className="form__form-group">
-                <span className="form__form-group-label">สรุปเรื่อง</span>
-                <div className="form__form-group-field">
-                  <textarea
-                    name="tab1Group2Seq2Input2"
-                    component="input"
-                    type="textarea"
-                    value={tab1Group2Seq2Input2}
-                    onChange={this.handleChange}
-                  />
-                </div>
-              </div>
-              <div className="form__form-group">
-                <span className="form__form-group-label">มติ</span>
-                <div className="form__form-group-field">
-                  <textarea
-                    name="tab1Group2Seq2Input3"
-                    component="input"
-                    type="textarea"
-                    value={tab1Group2Seq2Input3}
-                    onChange={this.handleChange}
-                  />
-                </div>
-              </div>
-              <div className="form__form-group">
-                <p style={{ backgroundColor: '#e6fff7' }}> เรื่องที่ 1.2.3</p>
-              </div>
-              <div className="form__form-group">
-                <div className="form__form-group-field">
-                  <Field
-                    name="tab1Group2Seq3Input1"
-                    component="input"
-                    type="text"
-                    value={tab1Group2Seq3Input1}
-                    onChange={this.handleChange}
-                  />
-                </div>
-              </div>
-              <div className="form__form-group">
-                <span className="form__form-group-label">สรุปเรื่อง</span>
-                <div className="form__form-group-field">
-                  <textarea
-                    name="tab1Group2Seq3Input2"
-                    component="input"
-                    type="textarea"
-                    value={tab1Group2Seq3Input2}
-                    onChange={this.handleChange}
-                  />
-                </div>
-              </div>
-              <div className="form__form-group">
-                <span className="form__form-group-label">มติ</span>
-                <div className="form__form-group-field">
-                  <textarea
-                    name="tab1Group2Seq3Input3"
-                    component="input"
-                    type="textarea"
-                    value={tab1Group2Seq3Input3}
+                    value={tab2Group1Seq3Input4}
                     onChange={this.handleChange}
                   />
                 </div>

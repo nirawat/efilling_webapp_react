@@ -138,9 +138,8 @@ class PagesForm extends PureComponent {
     Axios
       .post('/PublicDocMenuC/AddDocMenuC12', this.state)
       .then(() => {
-        this.show('success', 'บันทึก', `
+        this.show('success', 'แจ้งให้ทราบ', `
         การมอบหมายผู้พิจารณาโครงการเสร็จสิ้น!`);
-        // this.handleReset();
         setTimeout(() => {
           window.location.reload();
         }, 2000);
