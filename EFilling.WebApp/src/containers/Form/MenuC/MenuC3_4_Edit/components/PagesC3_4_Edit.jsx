@@ -4,10 +4,10 @@ import {
 } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form';
 import { withTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 import Config from 'react-global-configuration';
 import Axios from 'axios';
 import NotificationSystem from 'rc-notification';
+import DownloadIcon from 'mdi-react/DownloadIcon';
 import { BasicNotification } from '../../../../../shared/components/Notification';
 import renderSelectField from '../../../../../shared/components/form/Select';
 import renderFileInputField from '../../../../../shared/components/form/FileInput';
@@ -17,6 +17,7 @@ Axios.defaults.headers.common.Authorization = Config.get('axiosToken');
 Axios.defaults.headers.common['Content-Type'] = Config.get('axiosContentType');
 
 const eFillingSys = JSON.parse(localStorage.getItem('efilling_system'));
+const urlParams = new URLSearchParams(window.location.search);
 let notificationRU = null;
 let listApprovalList = null;
 
@@ -36,19 +37,17 @@ const listApproval8 = [
 ];
 
 class PagesForm extends PureComponent {
-  static propTypes = {
-    reset: PropTypes.func.isRequired,
-  };
-
   constructor() {
     super();
     this.state = {
       createBy: eFillingSys.registerId,
+      docId: '',
       listMeetingId: [],
       listApprovalTypeTab4: [],
       meetingId: '',
       meetingName: '',
       agenda4term: '',
+      agenda4termName: '',
       agenda4ProjectNumber: '',
       agenda4ProjectName1: '',
       agenda4ProjectName2: '',
@@ -86,7 +85,7 @@ class PagesForm extends PureComponent {
     });
     let initialMeetingId = [];
     Axios
-      .get(`PublicDocMenuC/MenuC34InterfaceData/${eFillingSys.registerId}`)
+      .get(`PublicDocMenuC/MenuC34EditInterfaceData/${eFillingSys.registerId}/${urlParams.get('id')}`)
       .then((resp) => {
         if (resp.data.userPermission !== null && !resp.data.userPermission.view) {
           window.location = '/efilling/forms/errors/permission';
@@ -97,12 +96,49 @@ class PagesForm extends PureComponent {
             return e;
           });
         }
+        if (resp.data.editdata.agenda4term === '8') {
+          this.setState({
+            project1Label: 'ประเภทห้องปฏิบัติการ',
+            project2Label: 'ห้องปฏิบัติการประจำคณะ',
+          });
+          listApprovalList = listApproval8;
+        } else if (resp.data.editdata.agenda4term === '6') {
+          this.setState({
+            project1Label: 'ชื่อโครงการภาษาไทย',
+            project2Label: 'ชื่อโครงการภาษาอังกฤษ',
+          });
+          listApprovalList = listApproval5;
+        } else {
+          this.setState({
+            project1Label: 'ชื่อโครงการภาษาไทย',
+            project2Label: 'ชื่อโครงการภาษาอังกฤษ',
+          });
+          listApprovalList = listApprovalAll;
+        }
         this.setState({
           listMeetingId: initialMeetingId,
           meetingId: resp.data.meetingId,
           meetingName: resp.data.meetingName,
-          permissionInsert: resp.data.userPermission.insert,
-          buttonSaveEnable: resp.data.userPermission.insert,
+          docId: resp.data.editdata.docid,
+          agenda4term: resp.data.editdata.agenda4term,
+          agenda4termName: resp.data.editdata.agenda4termname,
+          agenda4ProjectNumber: resp.data.editdata.agenda4projectnumber,
+          agenda4ProjectName1: resp.data.editdata.agenda4projectnumber.concat(' : ').concat(resp.data.editdata.agenda4projectname1),
+          agenda4ProjectName2: resp.data.editdata.agenda4projectname2,
+          agenda4Conclusion: resp.data.editdata.agenda4Conclusion,
+          agenda4ConclusionName: resp.data.editdata.agenda4ConclusionName,
+          agenda4Suggestion: resp.data.editdata.agenda4Suggestion,
+          tab4Group1Seq1Input1: resp.data.editdata.tab4Group1Seq1Input1,
+          tab4Group1Seq1Input2: resp.data.editdata.tab4Group1Seq1Input2,
+          tab4Group1Seq1Input3: resp.data.editdata.tab4Group1Seq1Input3,
+          tab4Group1Seq2Input1: resp.data.editdata.tab4Group1Seq2Input1,
+          tab4Group1Seq2Input2: resp.data.editdata.tab4Group1Seq2Input2,
+          tab4Group1Seq2Input3: resp.data.editdata.tab4Group1Seq2Input3,
+          tab4Group1Seq3Input1: resp.data.editdata.tab4Group1Seq3Input1,
+          tab4Group1Seq3Input2: resp.data.editdata.tab4Group1Seq3Input2,
+          tab4Group1Seq3Input3: resp.data.editdata.tab4Group1Seq3Input3,
+          file1name: resp.data.editdata.file1name,
+          buttonSaveEnable: resp.data.editdata.editenable,
         });
       });
   }
@@ -123,7 +159,7 @@ class PagesForm extends PureComponent {
       buttonSaveEnable: false,
     });
     Axios
-      .post('/PublicDocMenuC/AddDocMenuC34', this.state)
+      .post('/PublicDocMenuC/UpdateDocMenuC34Edit', this.state)
       .then((resp) => {
         this.show('success', 'แจ้งให้ทราบ', `
         การประชุมระเบียบวาระที่ 4 เสร็จสิ้น!`);
@@ -139,10 +175,8 @@ class PagesForm extends PureComponent {
         }, 1000);
       })
       .catch((error) => {
-        const { permissionInsert } = this.state;
         this.setState({
           buttonSaveStatus: 'บันทึก',
-          buttonSaveEnable: permissionInsert,
         });
         if (error.response) {
           if (error.response.status === 400) {
@@ -156,57 +190,6 @@ class PagesForm extends PureComponent {
       });
   }
 
-  handleChangeMeetingId = (e) => {
-    this.setState({ meetingId: e.value });
-  }
-
-  handleClickCommitteeComment = (e) => {
-    this.setState({
-      modalIsOpen: true,
-      messageModel: '',
-    });
-    Axios
-      .get(`PublicDocMenuHome/GetResultNoteHome1/${e}`)
-      .then((resp) => {
-        this.setState({
-          modalIsOpen: true,
-          messageModel: resp.data.resultNote,
-        });
-        return e;
-      });
-  }
-
-  handleReset = () => {
-    const { reset } = this.props;
-    this.setState({
-      modalIsOpen: true,
-      messageNotes: '',
-      meetingId: '',
-      meetingName: '',
-      agenda4term: '',
-      agenda4ProjectNumber: '',
-      agenda4ProjectName1: '',
-      agenda4ProjectName2: '',
-      project1Label: 'ชื่อโครงการภาษาไทย',
-      project2Label: 'ชื่อโครงการภาษาอังกฤษ',
-      agenda4Conclusion: '',
-      agenda4ConclusionName: '',
-      agenda4Suggestion: '',
-      tab4Group1Seq1Input1: '',
-      tab4Group1Seq1Input2: '',
-      tab4Group1Seq1Input3: '',
-      tab4Group1Seq2Input1: '',
-      tab4Group1Seq2Input2: '',
-      tab4Group1Seq2Input3: '',
-      tab4Group1Seq3Input1: '',
-      tab4Group1Seq3Input2: '',
-      tab4Group1Seq3Input3: '',
-      file1name: '',
-      file1base64: '',
-    });
-    reset();
-  }
-
   show = (color, title, message) => {
     notificationRU.notice({
       content: <BasicNotification
@@ -214,119 +197,12 @@ class PagesForm extends PureComponent {
         title={title}
         message={message}
       />,
-      duration: 50,
+      duration: 60,
       closable: true,
       style: { top: 0, left: 'calc(100vw - 100%)' },
       className: 'right-up ltr-support',
     });
   };
-
-  handleChangeAgendaTerm4 = (e) => {
-    this.setState({
-      agenda4term: e.value,
-      listProjectNumberTab4: [],
-      agenda4ProjectNumber: '',
-      agenda4ProjectName1: '',
-      agenda4ProjectName2: '',
-      tab4Group1Seq1Input1: '',
-      tab4Group1Seq1Input2: '',
-      tab4Group1Seq1Input3: '',
-      tab4Group1Seq2Input1: '',
-      tab4Group1Seq2Input2: '',
-      tab4Group1Seq2Input3: '',
-      tab4Group1Seq3Input1: '',
-      tab4Group1Seq3Input2: '',
-      tab4Group1Seq3Input3: '',
-    });
-    if (e.value === '8') {
-      this.setState({
-        project1Label: 'ประเภทห้องปฏิบัติการ',
-        project2Label: 'ห้องปฏิบัติการประจำคณะ',
-      });
-      listApprovalList = listApproval8;
-    } else if (e.value === '6') {
-      this.setState({
-        project1Label: 'ชื่อโครงการภาษาไทย',
-        project2Label: 'ชื่อโครงการภาษาอังกฤษ',
-      });
-      listApprovalList = listApproval5;
-    } else {
-      this.setState({
-        project1Label: 'ชื่อโครงการภาษาไทย',
-        project2Label: 'ชื่อโครงการภาษาอังกฤษ',
-      });
-      listApprovalList = listApprovalAll;
-    }
-    let initialProjectNumberTab4 = [];
-    Axios
-      .get(`PublicDocMenuC/GetAllProjectNumberTab4/${e.value}`)
-      .then((resp) => {
-        if (resp.data != null) {
-          initialProjectNumberTab4 = resp.data.map((ee) => {
-            initialProjectNumberTab4 = [];
-            return ee;
-          });
-        }
-        this.setState({
-          listProjectNumberTab4: initialProjectNumberTab4,
-        });
-      });
-  }
-
-  handleChangeProjectNumber4 = (e) => {
-    this.setState({
-      agenda4ProjectNumber: e.value,
-      agenda4ProjectName1: '',
-      agenda4ProjectName2: '',
-      tab4Group1Seq1Input1: '',
-      tab4Group1Seq1Input2: '',
-      tab4Group1Seq1Input3: '',
-      tab4Group1Seq2Input1: '',
-      tab4Group1Seq2Input2: '',
-      tab4Group1Seq2Input3: '',
-      tab4Group1Seq3Input1: '',
-      tab4Group1Seq3Input2: '',
-      tab4Group1Seq3Input3: '',
-    });
-    const { agenda4term } = this.state;
-    let initialApprovalTypeTab4 = [];
-    Axios
-      .get(`PublicDocMenuC/GetProjectNumberWithDataC3Tab4/${agenda4term}/${e.value}`)
-      .then((resp) => {
-        if (resp.data.listApprovalType != null) {
-          initialApprovalTypeTab4 = resp.data.listApprovalType.map((ee) => {
-            initialApprovalTypeTab4 = [];
-            return ee;
-          });
-        }
-        if (resp.data.isprojectgroup === true) {
-          this.setState({
-            project1Label: 'ชื่อโครงการภาษาไทย',
-            project2Label: 'ชื่อโครงการภาษาอังกฤษ',
-          });
-        } else {
-          this.setState({
-            project1Label: 'ประเภทห้องปฏิบัติการ',
-            project2Label: 'ห้องปฏิบัติการประจำคณะ',
-          });
-        }
-        this.setState({
-          listApprovalTypeTab4: initialApprovalTypeTab4,
-          agenda4ProjectName1: resp.data.agenda4ProjectName1,
-          agenda4ProjectName2: resp.data.agenda4ProjectName2,
-          tab4Group1Seq1Input1: resp.data.tab4Group1Seq1Input1,
-          tab4Group1Seq1Input2: resp.data.tab4Group1Seq1Input2,
-          tab4Group1Seq1Input3: resp.data.tab4Group1Seq1Input3,
-          tab4Group1Seq2Input1: resp.data.tab4Group1Seq2Input1,
-          tab4Group1Seq2Input2: resp.data.tab4Group1Seq2Input2,
-          tab4Group1Seq2Input3: resp.data.tab4Group1Seq2Input3,
-          tab4Group1Seq3Input1: resp.data.tab4Group1Seq3Input1,
-          tab4Group1Seq3Input2: resp.data.tab4Group1Seq3Input2,
-          tab4Group1Seq3Input3: resp.data.tab4Group1Seq3Input3,
-        });
-        return '';
-      });
-  }
 
   getTab4Conclusion = (e) => {
     this.setState({
@@ -348,12 +224,42 @@ class PagesForm extends PureComponent {
     };
   }
 
+  handlePrintReport = () => {
+    const {
+      docId,
+    } = this.state;
+    Axios
+      .get(`PublicDocMenuReport/GetReportR12/${docId}/4`)
+      .then((resp) => {
+        if (resp.data !== null) {
+          const url = resp.data.filebase64;
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = resp.data.filename;
+          a.click();
+        }
+      });
+  }
+
+  handleFileDownloadId = () => {
+    const { docId } = this.state;
+    Axios
+      .get(`PublicDocMenuC/GetC34DownloadFileById/${docId}`)
+      .then((resp) => {
+        const url = window.atob(resp.data.filebase64);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = resp.data.filename;
+        a.click();
+      });
+  }
+
   render() {
     const {
       listMeetingId, meetingName,
-      listProjectNumberTab4, agenda4term, agenda4ProjectNumber,
+      agenda4term, agenda4termName, agenda4ProjectNumber,
       agenda4ProjectName1, agenda4ProjectName2,
-      agenda4Suggestion, agenda4Conclusion,
+      agenda4Suggestion, agenda4Conclusion, agenda4ConclusionName,
       project1Label, project2Label, file1name,
       buttonSaveEnable, buttonSaveStatus,
       tab4Group1Seq1Input1, tab4Group1Seq1Input2, tab4Group1Seq1Input3,
@@ -391,17 +297,9 @@ class PagesForm extends PureComponent {
                     name="agenda4term"
                     component={renderSelectField}
                     value={agenda4term}
-                    onChange={this.handleChangeAgendaTerm4}
+                    placeholder={agenda4termName}
                     options={[
-                      { value: '1', label: '1.โครงการใหม่ที่เป็น-ความเสี่ยงประเภท 1' },
-                      { value: '2', label: '2.โครงการใหม่ที่เป็น-ความเสี่ยงประเภท 2' },
-                      { value: '3', label: '3.โครงการใหม่ที่เป็น-ความเสี่ยงประเภท 3' },
-                      { value: '4', label: '4.โครงการใหม่ที่เป็น-ความเสี่ยงประเภท 4' },
-                      { value: '5', label: '5.โครงการที่เป็น-แจ้งขอต่ออายุใบรับรอง' },
-                      { value: '6', label: '6.โครงการที่เป็น-แก้ไขโครงการที่ผ่านการรับรองแล้ว' },
-                      { value: '7', label: '7.โครงการที่เป็น-แจ้งปิดโครงการ' },
-                      { value: '8', label: '8.คำขอประเมินห้องปฏิบัติการ' },
-                      { value: '9', label: '9.ผลการตรวจเยี่ยมติดตามโครงการ' },
+                      { value: { agenda4term }, label: { agenda4termName } },
                     ]}
                   />
                 </div>
@@ -415,9 +313,11 @@ class PagesForm extends PureComponent {
                   <Field
                     name="agenda4ProjectNumber"
                     value={agenda4ProjectNumber}
+                    placeholder={agenda4ProjectName1}
                     component={renderSelectField}
-                    onChange={this.handleChangeProjectNumber4}
-                    options={listProjectNumberTab4}
+                    options={[
+                      { value: { agenda4ProjectNumber }, label: { agenda4ProjectName1 } },
+                    ]}
                   />
                 </div>
               </div>
@@ -568,6 +468,7 @@ class PagesForm extends PureComponent {
                     name="agenda4Conclusion"
                     component={renderSelectField}
                     value={agenda4Conclusion}
+                    placeholder={agenda4ConclusionName}
                     onChange={this.getTab4Conclusion}
                     options={listApprovalList}
                   />
@@ -576,7 +477,7 @@ class PagesForm extends PureComponent {
               <div className="form__form-group">
                 <span className="form__form-group-label">มติที่ประชุมพร้อมความเห็นประกอบการพิจารณาและข้อเสนอแนะ</span>
                 <div className="form__form-group-field">
-                  <Field
+                  <textarea
                     name="agenda4Suggestion"
                     component="textarea"
                     value={agenda4Suggestion}
@@ -594,12 +495,13 @@ class PagesForm extends PureComponent {
                     value={file1name}
                     onChange={this.handleChangeFile1}
                   />
+                  <Button size="sm" className="icon" color="success" disabled={file1name !== '' ? !true : true} onClick={() => this.handleFileDownloadId()}><p><DownloadIcon /> ดาวน์โหลด</p></Button>
                 </div>
               </div>
               <div className="form__form-group">
                 <ButtonToolbar>
                   <Button color="success" type="submit" disabled={!buttonSaveEnable}>{buttonSaveStatus}</Button>
-                  <Button onClick={() => window.location.reload()}>ล้าง</Button>
+                  <Button color="success" onClick={() => this.handlePrintReport()}>พิมพ์</Button>
                 </ButtonToolbar>
               </div>
             </form>

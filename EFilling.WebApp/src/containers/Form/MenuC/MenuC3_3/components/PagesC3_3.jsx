@@ -130,9 +130,16 @@ class PagesForm extends PureComponent {
     });
     Axios
       .post('/PublicDocMenuC/AddDocMenuC33', this.state)
-      .then(() => {
+      .then((resp) => {
         this.show('success', 'แจ้งให้ทราบ', `
         การประชุมระเบียบวาระที่ 3 เสร็จสิ้น!`);
+        if (resp.data !== null) {
+          const url = resp.data.filebase64;
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = resp.data.filename;
+          a.click();
+        }
         setTimeout(() => {
           window.location.reload();
         }, 1000);

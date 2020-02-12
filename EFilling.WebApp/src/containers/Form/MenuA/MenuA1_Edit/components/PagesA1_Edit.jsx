@@ -89,26 +89,65 @@ class PagesForm extends PureComponent {
       riskGroup44: false,
       riskGroup45: false,
       member1ProjectHead: '',
-      member1ProjectHeadName: '',
       member1FacultyName: '',
       member1WorkPhone: '',
       member1Mobile: '',
       member1Fax: '',
       member1Email: '',
       member2ProjectHead: '',
-      member2ProjectHeadName: '',
       member2FacultyName: '',
       member2WorkPhone: '',
       member2Mobile: '',
       member2Fax: '',
       member2Email: '',
       member3ProjectHead: '',
-      member3ProjectHeadName: '',
       member3FacultyName: '',
       member3WorkPhone: '',
       member3Mobile: '',
       member3Fax: '',
       member3Email: '',
+      member4ProjectHead: '',
+      member4FacultyName: '',
+      member4WorkPhone: '',
+      member4Mobile: '',
+      member4Fax: '',
+      member4Email: '',
+      member5ProjectHead: '',
+      member5FacultyName: '',
+      member5WorkPhone: '',
+      member5Mobile: '',
+      member5Fax: '',
+      member5Email: '',
+      member6ProjectHead: '',
+      member6FacultyName: '',
+      member6WorkPhone: '',
+      member6Mobile: '',
+      member6Fax: '',
+      member6Email: '',
+      member7ProjectHead: '',
+      member7FacultyName: '',
+      member7WorkPhone: '',
+      member7Mobile: '',
+      member7Fax: '',
+      member7Email: '',
+      member8ProjectHead: '',
+      member8FacultyName: '',
+      member8WorkPhone: '',
+      member8Mobile: '',
+      member8Fax: '',
+      member8Email: '',
+      member9ProjectHead: '',
+      member9FacultyName: '',
+      member9WorkPhone: '',
+      member9Mobile: '',
+      member9Fax: '',
+      member9Email: '',
+      member10ProjectHead: '',
+      member10FacultyName: '',
+      member10WorkPhone: '',
+      member10Mobile: '',
+      member10Fax: '',
+      member10Email: '',
       labOtherName: '',
       labOtherNameDisable: true,
       permissionEdit: false,
@@ -231,6 +270,55 @@ class PagesForm extends PureComponent {
           member3Mobile: resp.data.editdata.member3mobile,
           member3Fax: resp.data.editdata.member3fax,
           member3Email: resp.data.editdata.member3email,
+          member4ProjectHead: resp.data.editdata.member4projecthead,
+          member4ProjectHeadName: resp.data.editdata.member4projectheadname,
+          member4FacultyName: resp.data.editdata.member4facultyname,
+          member4WorkPhone: resp.data.editdata.member4workphone,
+          member4Mobile: resp.data.editdata.member4mobile,
+          member4Fax: resp.data.editdata.member4fax,
+          member4Email: resp.data.editdata.member4email,
+          member5ProjectHead: resp.data.editdata.member5projecthead,
+          member5ProjectHeadName: resp.data.editdata.member5projectheadname,
+          member5FacultyName: resp.data.editdata.member5facultyname,
+          member5WorkPhone: resp.data.editdata.member5workphone,
+          member5Mobile: resp.data.editdata.member5mobile,
+          member5Fax: resp.data.editdata.member5fax,
+          member5Email: resp.data.editdata.member5email,
+          member6ProjectHead: resp.data.editdata.member6projecthead,
+          member6ProjectHeadName: resp.data.editdata.member6projectheadname,
+          member6FacultyName: resp.data.editdata.member6facultyname,
+          member6WorkPhone: resp.data.editdata.member6workphone,
+          member6Mobile: resp.data.editdata.member6mobile,
+          member6Fax: resp.data.editdata.member6fax,
+          member6Email: resp.data.editdata.member6email,
+          member7ProjectHead: resp.data.editdata.member7projecthead,
+          member7ProjectHeadName: resp.data.editdata.member7projectheadname,
+          member7FacultyName: resp.data.editdata.member7facultyname,
+          member7WorkPhone: resp.data.editdata.member7workphone,
+          member7Mobile: resp.data.editdata.member7mobile,
+          member7Fax: resp.data.editdata.member7fax,
+          member7Email: resp.data.editdata.member7email,
+          member8ProjectHead: resp.data.editdata.member8projecthead,
+          member8ProjectHeadName: resp.data.editdata.member8projectheadname,
+          member8FacultyName: resp.data.editdata.member8facultyname,
+          member8WorkPhone: resp.data.editdata.member8workphone,
+          member8Mobile: resp.data.editdata.member8mobile,
+          member8Fax: resp.data.editdata.member8fax,
+          member8Email: resp.data.editdata.member8email,
+          member9ProjectHead: resp.data.editdata.member9projecthead,
+          member9ProjectHeadName: resp.data.editdata.member9projectheadname,
+          member9FacultyName: resp.data.editdata.member9facultyname,
+          member9WorkPhone: resp.data.editdata.member9workphone,
+          member9Mobile: resp.data.editdata.member9mobile,
+          member9Fax: resp.data.editdata.member9fax,
+          member9Email: resp.data.editdata.member9email,
+          member10ProjectHead: resp.data.editdata.member10projecthead,
+          member10ProjectHeadName: resp.data.editdata.member10projectheadname,
+          member10FacultyName: resp.data.editdata.member10facultyname,
+          member10WorkPhone: resp.data.editdata.member10workphone,
+          member10Mobile: resp.data.editdata.member10mobile,
+          member10Fax: resp.data.editdata.member10fax,
+          member10Email: resp.data.editdata.member10email,
           labOtherName: resp.data.editdata.labothername,
           permissionEdit: resp.data.userPermission.edit,
         });
@@ -488,7 +576,7 @@ class PagesForm extends PureComponent {
         title={title}
         message={message}
       />,
-      duration: 5,
+      duration: 60,
       closable: true,
       style: { top: 0, left: 'calc(100vw - 100%)' },
       className: 'right-up ltr-support',
@@ -528,6 +616,76 @@ class PagesForm extends PureComponent {
               member3Mobile: resp.data.mobile,
               member3Fax: resp.data.fax,
               member3Email: resp.data.email,
+            });
+            break;
+          case 4:
+            this.setState({
+              member4ProjectHead: e.value,
+              member4FacultyName: resp.data.facultyname,
+              member4WorkPhone: resp.data.workphone,
+              member4Mobile: resp.data.mobile,
+              member4Fax: resp.data.fax,
+              member4Email: resp.data.email,
+            });
+            break;
+          case 5:
+            this.setState({
+              member5ProjectHead: e.value,
+              member5FacultyName: resp.data.facultyname,
+              member5WorkPhone: resp.data.workphone,
+              member5Mobile: resp.data.mobile,
+              member5Fax: resp.data.fax,
+              member5Email: resp.data.email,
+            });
+            break;
+          case 6:
+            this.setState({
+              member6ProjectHead: e.value,
+              member6FacultyName: resp.data.facultyname,
+              member6WorkPhone: resp.data.workphone,
+              member6Mobile: resp.data.mobile,
+              member6Fax: resp.data.fax,
+              member6Email: resp.data.email,
+            });
+            break;
+          case 7:
+            this.setState({
+              member7ProjectHead: e.value,
+              member7FacultyName: resp.data.facultyname,
+              member7WorkPhone: resp.data.workphone,
+              member7Mobile: resp.data.mobile,
+              member7Fax: resp.data.fax,
+              member7Email: resp.data.email,
+            });
+            break;
+          case 8:
+            this.setState({
+              member8ProjectHead: e.value,
+              member8FacultyName: resp.data.facultyname,
+              member8WorkPhone: resp.data.workphone,
+              member8Mobile: resp.data.mobile,
+              member8Fax: resp.data.fax,
+              member8Email: resp.data.email,
+            });
+            break;
+          case 9:
+            this.setState({
+              member9ProjectHead: e.value,
+              member9FacultyName: resp.data.facultyname,
+              member9WorkPhone: resp.data.workphone,
+              member9Mobile: resp.data.mobile,
+              member9Fax: resp.data.fax,
+              member9Email: resp.data.email,
+            });
+            break;
+          case 10:
+            this.setState({
+              member10ProjectHead: e.value,
+              member10FacultyName: resp.data.facultyname,
+              member10WorkPhone: resp.data.workphone,
+              member10Mobile: resp.data.mobile,
+              member10Fax: resp.data.fax,
+              member10Email: resp.data.email,
             });
             break;
           default:
@@ -571,6 +729,13 @@ class PagesForm extends PureComponent {
       member1ProjectHeadName, member1FacultyName, member1WorkPhone, member1Mobile, member1Fax, member1Email,
       member2ProjectHeadName, member2FacultyName, member2WorkPhone, member2Mobile, member2Fax, member2Email,
       member3ProjectHeadName, member3FacultyName, member3WorkPhone, member3Mobile, member3Fax, member3Email,
+      member4ProjectHeadName, member4FacultyName, member4WorkPhone, member4Mobile, member4Fax, member4Email,
+      member5ProjectHeadName, member5FacultyName, member5WorkPhone, member5Mobile, member5Fax, member5Email,
+      member6ProjectHeadName, member6FacultyName, member6WorkPhone, member6Mobile, member6Fax, member6Email,
+      member7ProjectHeadName, member7FacultyName, member7WorkPhone, member7Mobile, member7Fax, member7Email,
+      member8ProjectHeadName, member8FacultyName, member8WorkPhone, member8Mobile, member8Fax, member8Email,
+      member9ProjectHeadName, member9FacultyName, member9WorkPhone, member9Mobile, member9Fax, member9Email,
+      member10ProjectHeadName, member10FacultyName, member10WorkPhone, member10Mobile, member10Fax, member10Email,
       riskGroup1, riskGroup11, riskGroup12, riskGroup13, riskGroup14, riskGroup15,
       riskGroup2, riskGroup21, riskGroup22, riskGroup23, riskGroup24, riskGroup25,
       riskGroup3, riskGroup31, riskGroup32, riskGroup33, riskGroup34, riskGroup35,
@@ -604,7 +769,7 @@ class PagesForm extends PureComponent {
                           this.toggle('2');
                         }}
                       >
-                        ประเภทโครงการวิจัย
+                        ผู้ร่วมโครงการวิจัย
                       </NavLink>
                     </NavItem>
                     <NavItem>
@@ -720,6 +885,44 @@ class PagesForm extends PureComponent {
                               />
                             </div>
                           </div>
+                          <div className="form__form-group">
+                            <span className="form__form-group-label">ประเภทตามวิธีการ</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="accordingTypeMethod"
+                                component={renderSelectField}
+                                value={accordingTypeMethod}
+                                placeholder={accordingTypeMethodName}
+                                onChange={this.handleChangeAccordingTypeMethod}
+                                options={[
+                                  { value: '1', label: 'โครงการวิจัยที่ใช้เทคโนโลยีชีวภาพสมัยใหม่หรือพันธวิศวกรรม (GMOs)' },
+                                  { value: '2', label: 'โครงการวิจัยที่ใช้จุลินทรีย์ก่อโรค (infactious agent)' },
+                                  { value: '3', label: 'โครงการวิจัยที่ใช้แมลงและสัตว์ที่เป็นพาหะ (arthropod vector)' },
+                                  { value: '4', label: 'โครงการวิจัยที่ใช้พิษจากสัตว์' },
+                                  { value: '5', label: 'โครงการวิจัยอื่นๆ' },
+                                ]}
+                              />
+                            </div>
+                          </div>
+                          <div className="form__form-group">
+                            <span className="form__form-group-label">ประเภทโครงการวิจัยตามวิธีการ</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="projectAccordingTypeMethod"
+                                component={renderSelectField}
+                                value={projectAccordingTypeMethod}
+                                placeholder={projectAccordingTypeMethodName}
+                                onChange={this.handleChangeProjectAccordingTypeMethod}
+                                options={[
+                                  { value: '1', label: 'ด้านเกษตรและอาหาร' },
+                                  { value: '2', label: 'ด้านทรัพยากรธรรมชาติและสิ่งแวดล้อม' },
+                                  { value: '3', label: 'ด้านการแพทย์และสาธารณสุข' },
+                                  { value: '4', label: 'ด้านการพัฒนาอุตสาหกรรม' },
+                                  { value: '5', label: 'ด้านอื่นๆ (โปรดระบุ)' },
+                                ]}
+                              />
+                            </div>
+                          </div>
                         </Col>
                         <Col xs="6">
                           <div className="form__form-group">
@@ -812,15 +1015,134 @@ class PagesForm extends PureComponent {
                               />
                             </div>
                           </div>
+                          <div className="form__form-group">
+                            <span className="form__form-group-label">โครงการวิธีวิจัยอื่นๆ</span>
+                            <div className="form__form-group-field">
+                              <input
+                                name="projectOther"
+                                component="input"
+                                type="text"
+                                maxLength={200}
+                                value={projectOther}
+                                onChange={this.handleChange}
+                                disabled={accordingTypeMethod !== '5'}
+                              />
+                            </div>
+                          </div>
+                        </Col>
+                      </Row>
+                      <div className="form__form-group">
+                        <span className="form__form-group-label">ด้านอื่นๆ</span>
+                        <div className="form__form-group-field">
+                          <input
+                            name="projectAccordingOther"
+                            type="text"
+                            maxLength={200}
+                            value={projectAccordingOther}
+                            onChange={this.handleChange}
+                            disabled={projectAccordingTypeMethod !== '5'}
+                          />
+                        </div>
+                      </div>
+                      <Row>
+                        <Col xs="12">
+                          <div className="card__title">
+                            <h5 className="bold-text">แนบคำขอ (NUIBC01) และเอกสารประกอบ</h5>
+                          </div>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col xs="4">
+                          <div className="form__form-group">
+                            <span className="form__form-group-label">
+                              1.แบบเสนอเพื่อขอรับการพิจารณารับรองด้านความปลอดภัย
+                            </span>
+                            <div className="form__form-group-field">
+                              <Field
+                                id="file1name"
+                                name="file1name"
+                                component={renderFileInputField}
+                                value={file1name}
+                                onChange={this.handleChangeFile1}
+                              />
+                              <Button size="sm" className="icon" color="success" disabled={file1name !== '' ? !true : true} onClick={() => this.handleFileDownloadId(1)}><p><DownloadIcon /> ดาวน์โหลด</p></Button>
+                            </div>
+                          </div>
+                          <div className="form__form-group">
+                            <span className="form__form-group-label">
+                              4.หนังสือรับรองและอนุมัติให้ใช้สถานะที่
+                            </span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="file4name"
+                                component={renderFileInputField}
+                                value={file4name}
+                                onChange={this.handleChangeFile4}
+                              />
+                              <Button size="sm" className="icon" color="success" disabled={file4name !== '' ? !true : true} onClick={() => this.handleFileDownloadId(4)}><p><DownloadIcon /> ดาวน์โหลด</p></Button>
+                            </div>
+                          </div>
+                        </Col>
+                        <Col xs="4">
+                          <div className="form__form-group">
+                            <span className="form__form-group-label">
+                              2.โครงการวิจัยฉบับสมบูรณ์
+                            </span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="file2name"
+                                component={renderFileInputField}
+                                value={file2name}
+                                onChange={this.handleChangeFile2}
+                              />
+                              <Button size="sm" className="icon" color="success" disabled={file2name !== '' ? !true : true} onClick={() => this.handleFileDownloadId(2)}><p><DownloadIcon /> ดาวน์โหลด</p></Button>
+                            </div>
+                          </div>
+                          <div className="form__form-group">
+                            <span className="form__form-group-label">
+                              5.อื่นๆ หากมี file มากกว่า 1 file โปรดรวมป็น zip file ให้เป็นเพียง 1 ไฟล์
+                            </span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="file5name"
+                                component={renderFileInputField}
+                                value={file5name}
+                                onChange={this.handleChangeFile5}
+                              />
+                              <Button size="sm" className="icon" color="success" disabled={file5name !== '' ? !true : true} onClick={() => this.handleFileDownloadId(5)}><p><DownloadIcon /> ดาวน์โหลด</p></Button>
+                            </div>
+                          </div>
+                        </Col>
+                        <Col xs="4">
+                          <div className="form__form-group">
+                            <span className="form__form-group-label">
+                              3.เอกสารชี้แจงรายละเอียดของเชื้อ/แบบฟอร์มข้อตกลงการใช้ตัวอย่างชีวภาพ
+                            </span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="file3name"
+                                component={renderFileInputField}
+                                value={file3name}
+                                onChange={this.handleChangeFile3}
+                              />
+                              <Button size="sm" className="icon" color="success" disabled={file3name !== '' ? !true : true} onClick={() => this.handleFileDownloadId(3)}><p><DownloadIcon /> ดาวน์โหลด</p></Button>
+                            </div>
+                          </div>
                         </Col>
                       </Row>
                       <Row>
                         <Col xs="12">
-                          <div className="card__title">
-                            <h5 className="bold-text">ข้อมูลผู้ร่วมโครงการ</h5>
+                          <div className="form__form-group">
+                            <ButtonToolbar>
+                              <Button color="success" type="submit" disabled={!buttonSaveEnable}>{buttonSaveStatus}</Button>
+                              <Button color="success" onClick={this.handlePrintReport}>พิมพ์</Button>
+                            </ButtonToolbar>
                           </div>
+                          <div style={{ height: '30px' }}>.</div>
                         </Col>
                       </Row>
+                    </TabPane>
+                    <TabPane tabId="2">
                       <Row>
                         <Col xs="4">
                           <div className="form__form-group">
@@ -1016,170 +1338,459 @@ class PagesForm extends PureComponent {
                         </Col>
                       </Row>
                       <Row>
-                        <Col xs="12">
-                          <div className="card__title">
-                            <h5 className="bold-text">แนบคำขอ (NUIBC01) และเอกสารประกอบ</h5>
+                        <Col xs="4">
+                          <div className="form__form-group">
+                            <span className="form__form-group-label">ลำดับที่ 4 ชื่อผู้ร่วมโครงการวิจัย</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member4ProjectHead"
+                                placeholder={member4ProjectHeadName}
+                                component={renderSelectField}
+                                onChange={(event, value) => this.handleChangeMemberProjectHeader(4, value)}
+                                options={memberCommittees}
+                              />
+                            </div>
+                            <span className="form__form-group-label">คณะ/หน่วยงาน</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member4FacultyName"
+                                component="input"
+                                type="text"
+                                placeholder={member4FacultyName}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรศัพท์ที่ทำงาน</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member4WorkPhone"
+                                component="input"
+                                type="text"
+                                placeholder={member4WorkPhone}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรศัพท์มือถือ</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member4Mobile"
+                                component="input"
+                                type="text"
+                                placeholder={member4Mobile}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรสาร</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member4Fax"
+                                component="input"
+                                type="text"
+                                placeholder={member4Fax}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">อีเมล์</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member4Email"
+                                component="input"
+                                type="email"
+                                placeholder={member4Email}
+                                disabled
+                              />
+                            </div>
+                          </div>
+                        </Col>
+                        <Col xs="4">
+                          <div className="form__form-group">
+                            <span className="form__form-group-label">ลำดับที่ 5 ชื่อผู้ร่วมโครงการวิจัย</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member5ProjectHead"
+                                placeholder={member5ProjectHeadName}
+                                component={renderSelectField}
+                                onChange={(event, value) => this.handleChangeMemberProjectHeader(5, value)}
+                                options={memberCommittees}
+                              />
+                            </div>
+                            <span className="form__form-group-label">คณะ/หน่วยงาน</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member5FacultyName"
+                                component="input"
+                                type="text"
+                                placeholder={member5FacultyName}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรศัพท์ที่ทำงาน</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member5WorkPhone"
+                                component="input"
+                                type="text"
+                                placeholder={member5WorkPhone}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรศัพท์มือถือ</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member5Mobile"
+                                component="input"
+                                type="text"
+                                placeholder={member5Mobile}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรสาร</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member5Fax"
+                                component="input"
+                                type="text"
+                                placeholder={member5Fax}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">อีเมล์</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member5Email"
+                                component="input"
+                                type="email"
+                                placeholder={member5Email}
+                                disabled
+                              />
+                            </div>
+                          </div>
+                        </Col>
+                        <Col xs="4">
+                          <div className="form__form-group">
+                            <span className="form__form-group-label">ลำดับที่ 6 ชื่อผู้ร่วมโครงการวิจัย</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member6ProjectHead"
+                                placeholder={member6ProjectHeadName}
+                                component={renderSelectField}
+                                onChange={(event, value) => this.handleChangeMemberProjectHeader(6, value)}
+                                options={memberCommittees}
+                              />
+                            </div>
+                            <span className="form__form-group-label">คณะ/หน่วยงาน</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member6FacultyName"
+                                component="input"
+                                type="text"
+                                placeholder={member6FacultyName}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรศัพท์ที่ทำงาน</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member6WorkPhone"
+                                component="input"
+                                type="text"
+                                placeholder={member6WorkPhone}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรศัพท์มือถือ</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member6Mobile"
+                                component="input"
+                                type="text"
+                                placeholder={member6Mobile}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรสาร</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member6Fax"
+                                component="input"
+                                type="text"
+                                placeholder={member6Fax}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">อีเมล์</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member6Email"
+                                component="input"
+                                type="email"
+                                placeholder={member6Email}
+                                disabled
+                              />
+                            </div>
                           </div>
                         </Col>
                       </Row>
                       <Row>
                         <Col xs="4">
                           <div className="form__form-group">
-                            <span className="form__form-group-label">
-                              1.แบบเสนอเพื่อขอรับการพิจารณารับรองด้านความปลอดภัย
-                            </span>
+                            <span className="form__form-group-label">ลำดับที่ 7 ชื่อผู้ร่วมโครงการวิจัย</span>
                             <div className="form__form-group-field">
                               <Field
-                                id="file1name"
-                                name="file1name"
-                                component={renderFileInputField}
-                                value={file1name}
-                                onChange={this.handleChangeFile1}
+                                name="member7ProjectHead"
+                                placeholder={member7ProjectHeadName}
+                                component={renderSelectField}
+                                onChange={(event, value) => this.handleChangeMemberProjectHeader(7, value)}
+                                options={memberCommittees}
                               />
-                              <Button size="sm" className="icon" color="success" disabled={file1name !== '' ? !true : true} onClick={() => this.handleFileDownloadId(1)}><p><DownloadIcon /> ดาวน์โหลด</p></Button>
                             </div>
-                          </div>
-                          <div className="form__form-group">
-                            <span className="form__form-group-label">
-                              4.หนังสือรับรองและอนุมัติให้ใช้สถานะที่
-                            </span>
+                            <span className="form__form-group-label">คณะ/หน่วยงาน</span>
                             <div className="form__form-group-field">
                               <Field
-                                name="file4name"
-                                component={renderFileInputField}
-                                value={file4name}
-                                onChange={this.handleChangeFile4}
+                                name="member7FacultyName"
+                                component="input"
+                                type="text"
+                                placeholder={member7FacultyName}
+                                disabled
                               />
-                              <Button size="sm" className="icon" color="success" disabled={file4name !== '' ? !true : true} onClick={() => this.handleFileDownloadId(4)}><p><DownloadIcon /> ดาวน์โหลด</p></Button>
+                            </div>
+                            <span className="form__form-group-label">โทรศัพท์ที่ทำงาน</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member7WorkPhone"
+                                component="input"
+                                type="text"
+                                placeholder={member7WorkPhone}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรศัพท์มือถือ</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member7Mobile"
+                                component="input"
+                                type="text"
+                                placeholder={member7Mobile}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรสาร</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member7Fax"
+                                component="input"
+                                type="text"
+                                placeholder={member7Fax}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">อีเมล์</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member7Email"
+                                component="input"
+                                type="email"
+                                placeholder={member7Email}
+                                disabled
+                              />
                             </div>
                           </div>
                         </Col>
                         <Col xs="4">
                           <div className="form__form-group">
-                            <span className="form__form-group-label">
-                              2.โครงการวิจัยฉบับสมบูรณ์
-                            </span>
+                            <span className="form__form-group-label">ลำดับที่ 8 ชื่อผู้ร่วมโครงการวิจัย</span>
                             <div className="form__form-group-field">
                               <Field
-                                name="file2name"
-                                component={renderFileInputField}
-                                value={file2name}
-                                onChange={this.handleChangeFile2}
+                                name="member8ProjectHead"
+                                placeholder={member8ProjectHeadName}
+                                component={renderSelectField}
+                                onChange={(event, value) => this.handleChangeMemberProjectHeader(8, value)}
+                                options={memberCommittees}
                               />
-                              <Button size="sm" className="icon" color="success" disabled={file2name !== '' ? !true : true} onClick={() => this.handleFileDownloadId(2)}><p><DownloadIcon /> ดาวน์โหลด</p></Button>
                             </div>
-                          </div>
-                          <div className="form__form-group">
-                            <span className="form__form-group-label">
-                              5.อื่นๆ หากมี file มากกว่า 1 file โปรดรวมป็น zip file ให้เป็นเพียง 1 ไฟล์
-                            </span>
+                            <span className="form__form-group-label">คณะ/หน่วยงาน</span>
                             <div className="form__form-group-field">
                               <Field
-                                name="file5name"
-                                component={renderFileInputField}
-                                value={file5name}
-                                onChange={this.handleChangeFile5}
+                                name="member8FacultyName"
+                                component="input"
+                                type="text"
+                                placeholder={member8FacultyName}
+                                disabled
                               />
-                              <Button size="sm" className="icon" color="success" disabled={file5name !== '' ? !true : true} onClick={() => this.handleFileDownloadId(5)}><p><DownloadIcon /> ดาวน์โหลด</p></Button>
+                            </div>
+                            <span className="form__form-group-label">โทรศัพท์ที่ทำงาน</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member8WorkPhone"
+                                component="input"
+                                type="text"
+                                placeholder={member8WorkPhone}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรศัพท์มือถือ</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member8Mobile"
+                                component="input"
+                                type="text"
+                                placeholder={member8Mobile}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรสาร</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member8Fax"
+                                component="input"
+                                type="text"
+                                placeholder={member8Fax}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">อีเมล์</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member8Email"
+                                component="input"
+                                type="email"
+                                placeholder={member8Email}
+                                disabled
+                              />
                             </div>
                           </div>
                         </Col>
                         <Col xs="4">
                           <div className="form__form-group">
-                            <span className="form__form-group-label">
-                              3.เอกสารชี้แจงรายละเอียดของเชื้อ/แบบฟอร์มข้อตกลงการใช้ตัวอย่างชีวภาพ
-                            </span>
+                            <span className="form__form-group-label">ลำดับที่ 9 ชื่อผู้ร่วมโครงการวิจัย</span>
                             <div className="form__form-group-field">
                               <Field
-                                name="file3name"
-                                component={renderFileInputField}
-                                value={file3name}
-                                onChange={this.handleChangeFile3}
+                                name="member9ProjectHead"
+                                placeholder={member9ProjectHeadName}
+                                component={renderSelectField}
+                                onChange={(event, value) => this.handleChangeMemberProjectHeader(9, value)}
+                                options={memberCommittees}
                               />
-                              <Button size="sm" className="icon" color="success" disabled={file3name !== '' ? !true : true} onClick={() => this.handleFileDownloadId(3)}><p><DownloadIcon /> ดาวน์โหลด</p></Button>
+                            </div>
+                            <span className="form__form-group-label">คณะ/หน่วยงาน</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member9FacultyName"
+                                component="input"
+                                type="text"
+                                placeholder={member9FacultyName}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรศัพท์ที่ทำงาน</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member9WorkPhone"
+                                component="input"
+                                type="text"
+                                placeholder={member9WorkPhone}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรศัพท์มือถือ</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member9Mobile"
+                                component="input"
+                                type="text"
+                                placeholder={member9Mobile}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรสาร</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member9Fax"
+                                component="input"
+                                type="text"
+                                placeholder={member9Fax}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">อีเมล์</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member9Email"
+                                component="input"
+                                type="email"
+                                placeholder={member9Email}
+                                disabled
+                              />
                             </div>
                           </div>
                         </Col>
                       </Row>
                       <Row>
-                        <Col xs="12">
+                        <Col xs="4">
                           <div className="form__form-group">
-                            <ButtonToolbar>
-                              <Button color="success" type="submit" disabled={!buttonSaveEnable}>{buttonSaveStatus}</Button>
-                              <Button color="success" onClick={this.handlePrintReport}>พิมพ์</Button>
-                            </ButtonToolbar>
+                            <span className="form__form-group-label">ลำดับที่ 10 ชื่อผู้ร่วมโครงการวิจัย</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member10ProjectHead"
+                                placeholder={member10ProjectHeadName}
+                                component={renderSelectField}
+                                onChange={(event, value) => this.handleChangeMemberProjectHeader(10, value)}
+                                options={memberCommittees}
+                              />
+                            </div>
+                            <span className="form__form-group-label">คณะ/หน่วยงาน</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member10FacultyName"
+                                component="input"
+                                type="text"
+                                placeholder={member10FacultyName}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรศัพท์ที่ทำงาน</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member10WorkPhone"
+                                component="input"
+                                type="text"
+                                placeholder={member10WorkPhone}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรศัพท์มือถือ</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member10Mobile"
+                                component="input"
+                                type="text"
+                                placeholder={member10Mobile}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรสาร</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member10Fax"
+                                component="input"
+                                type="text"
+                                placeholder={member10Fax}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">อีเมล์</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member10Email"
+                                component="input"
+                                type="email"
+                                placeholder={member10Email}
+                                disabled
+                              />
+                            </div>
                           </div>
-                          <div style={{ height: '30px' }}>.</div>
                         </Col>
                       </Row>
-                    </TabPane>
-                    <TabPane tabId="2">
-                      <div className="form__form-group">
-                        <span className="form__form-group-label">ประเภทตามวิธีการ</span>
-                        <div className="form__form-group-field">
-                          <Field
-                            name="accordingTypeMethod"
-                            component={renderSelectField}
-                            value={accordingTypeMethod}
-                            placeholder={accordingTypeMethodName}
-                            onChange={this.handleChangeAccordingTypeMethod}
-                            options={[
-                              { value: '1', label: 'โครงการวิจัยที่ใช้เทคโนโลยีชีวภาพสมัยใหม่หรือพันธวิศวกรรม (GMOs)' },
-                              { value: '2', label: 'โครงการวิจัยที่ใช้จุลินทรีย์ก่อโรค (infactious agent)' },
-                              { value: '3', label: 'โครงการวิจัยที่ใช้แมลงและสัตว์ที่เป็นพาหะ (arthropod vector)' },
-                              { value: '4', label: 'โครงการวิจัยที่ใช้พิษจากสัตว์' },
-                              { value: '5', label: 'โครงการวิจัยอื่นๆ' },
-                            ]}
-                          />
-                        </div>
-                      </div>
-                      <div className="form__form-group">
-                        <span className="form__form-group-label">โครงการวิธีวิจัยอื่นๆ</span>
-                        <div className="form__form-group-field">
-                          <input
-                            name="projectOther"
-                            component="input"
-                            type="text"
-                            maxLength={200}
-                            value={projectOther}
-                            onChange={this.handleChange}
-                            disabled={accordingTypeMethod !== '5'}
-                          />
-                        </div>
-                      </div>
-                      <div className="form__form-group">
-                        <span className="form__form-group-label">ประเภทโครงการวิจัยตามวิธีการ</span>
-                        <div className="form__form-group-field">
-                          <Field
-                            name="projectAccordingTypeMethod"
-                            component={renderSelectField}
-                            value={projectAccordingTypeMethod}
-                            placeholder={projectAccordingTypeMethodName}
-                            onChange={this.handleChangeProjectAccordingTypeMethod}
-                            options={[
-                              { value: '1', label: 'ด้านเกษตรและอาหาร' },
-                              { value: '2', label: 'ด้านทรัพยากรธรรมชาติและสิ่งแวดล้อม' },
-                              { value: '3', label: 'ด้านการแพทย์และสาธารณสุข' },
-                              { value: '4', label: 'ด้านการพัฒนาอุตสาหกรรม' },
-                              { value: '5', label: 'ด้านอื่นๆ (โปรดระบุ)' },
-                            ]}
-                          />
-                        </div>
-                      </div>
-                      <div className="form__form-group">
-                        <span className="form__form-group-label">ด้านอื่นๆ</span>
-                        <div className="form__form-group-field">
-                          <input
-                            name="projectAccordingOther"
-                            type="text"
-                            maxLength={200}
-                            value={projectAccordingOther}
-                            onChange={this.handleChange}
-                            disabled={projectAccordingTypeMethod !== '5'}
-                          />
-                        </div>
-                      </div>
-                      <div style={{ height: '200px', color: '#fff' }}>.</div>
                     </TabPane>
                     <TabPane tabId="3">
                       <Row>

@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button, ButtonToolbar, Modal } from 'reactstrap';
+import {
+  Button, ButtonToolbar, Modal, Row, Col,
+} from 'reactstrap';
 import { Link } from 'react-router-dom';
 import Config from 'react-global-configuration';
 import Axios from 'axios';
@@ -46,29 +48,81 @@ class ModalComponent extends PureComponent {
     this.toggle = this.toggle.bind(this);
   }
 
-  downloadAllReport = () => {
+  printReportAgendaDraft = () => {
     const {
       docId, meetingOfRound, meetingOfYear,
     } = this.props;
     Axios
-      .get(`PublicDocMenuReport/GetAllReportMeeting/${docId}/${meetingOfRound}/${meetingOfYear}`)
+      .get(`PublicDocMenuC/PrintReportAgendaDraft/${docId}/${meetingOfRound}/${meetingOfYear}`)
       .then((resp) => {
         if (resp.data === null) {
           this.show('warning', 'แจ้งให้ทราบ', 'ไม่พบไฟล์รายงาน!');
         } else {
-          const url = resp.data.filebase1464;
+          const url = resp.data.filebase64;
           const a = document.createElement('a');
           a.href = url;
-          a.download = resp.data.filename14;
+          a.download = resp.data.filename;
           a.click();
         }
       });
   }
 
-  downloadCloseMeeting = () => {
+  printReportAgendaReal = () => {
     Axios
-      .post('PublicDocMenuC/CloseMeeting', this.props)
-      .then(() => {
+      .post('PublicDocMenuC/PrintReportAgendaReal', this.props)
+      .then((resp) => {
+        if (resp.data === null) {
+          this.show('warning', 'แจ้งให้ทราบ', 'ไม่พบไฟล์รายงาน!');
+        } else {
+          const url = resp.data.filebase64;
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = resp.data.filename;
+          a.click();
+        }
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      })
+      .catch((error) => {
+        if (error.response) {
+          this.show('danger', 'Error', error.message);
+        }
+      });
+  }
+
+  printReportMeetingDraft = () => {
+    const {
+      docId, meetingOfRound, meetingOfYear,
+    } = this.props;
+    Axios
+      .get(`PublicDocMenuC/PrintReportMeetingDraft/${docId}/${meetingOfRound}/${meetingOfYear}`)
+      .then((resp) => {
+        if (resp.data === null) {
+          this.show('warning', 'แจ้งให้ทราบ', 'ไม่พบไฟล์รายงาน!');
+        } else {
+          const url = resp.data.filebase64;
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = resp.data.filename;
+          a.click();
+        }
+      });
+  }
+
+  printReportMeetingReal = () => {
+    Axios
+      .post('PublicDocMenuC/PrintReportMeetingReal', this.props)
+      .then((resp) => {
+        if (resp.data === null) {
+          this.show('warning', 'แจ้งให้ทราบ', 'ไม่พบไฟล์รายงาน!');
+        } else {
+          const url = resp.data.filebase64;
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = resp.data.filename;
+          a.click();
+        }
         setTimeout(() => {
           window.location.reload();
         }, 1000);
@@ -127,11 +181,30 @@ class ModalComponent extends PureComponent {
             <h4 className="text-modal  modal__title">{title}</h4>
           </div>
           <div className="modal__body">
-            กรุณาเลือกทำรายการโดยหมายเลขทำรายการของท่านคือ {nl2br(docId)} ปี {nl2br(meetingOfYear)} ครั้งที่ {nl2br(meetingOfRound)}
+            <p>กรุณาเลือกทำรายการโดยหมายเลขทำรายการของท่านคือ {nl2br(docId)} ปี {nl2br(meetingOfYear)} ครั้งที่ {nl2br(meetingOfRound)}</p>
+            <br />
+            <Col>
+              <Row>
+                <h4>พิมพ์วาระการประชุม</h4>
+              </Row>
+              <br />
+              <Row>
+                <Button color="success" disabled={isClosed} onClick={() => this.printReportAgendaDraft()}>พิมพ์ร่าง</Button>{' '}
+                <Button color="danger" onClick={() => this.printReportAgendaReal()}>พิมพ์จริง</Button>{' '}
+              </Row>
+            </Col>
+            <Col>
+              <Row>
+                <h4>พิมพ์รายงานการประชุม</h4>
+              </Row>
+              <br />
+              <Row>
+                <Button color="success" disabled={isClosed} onClick={() => this.printReportMeetingDraft()}>พิมพ์ร่าง</Button>{' '}
+                <Button color="danger" onClick={() => this.printReportMeetingReal()}>พิมพ์จริง</Button>{' '}
+              </Row>
+            </Col>
           </div>
           <ButtonToolbar className="modal__footer">
-            <Button color="success" disabled={isClosed} onClick={() => this.downloadCloseMeeting()}>พิมพ์ร่าง</Button>{' '}
-            <Button color="success" onClick={() => this.downloadAllReport()}>พิมพ์จริง</Button>{' '}
             <Button className="modal_cancel" onClick={this.toggle}>Cancel</Button>{' '}
           </ButtonToolbar>
         </Modal>

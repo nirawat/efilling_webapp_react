@@ -27,6 +27,9 @@ class PagesForm extends PureComponent {
       listProjectNumber: [],
       listSafetyType: [],
       listApprovalType: [],
+      listYearOfProject: [],
+      roundOfMeeting: '',
+      yearOfMeeting: '',
       assignerCode: eFillingSys.registerId,
       assignerName: eFillingSys.fullName,
       positionName: eFillingSys.positionName,
@@ -62,11 +65,15 @@ class PagesForm extends PureComponent {
       listProjectNumber: [],
       listSafetyType: [],
       listApprovalType: [],
+      listYearOfProject: [],
+      defaultYear: '',
+      yearOfMeeting: '',
     });
     let initialAssigner = [];
     let initialProjectNumber = [];
     let initialSafetyType = [];
     let initialApprovalType = [];
+    let initialYear = [];
     Axios
       .get(`PublicDocMenuC/MenuC2InterfaceDataEdit/${urlParams.get('id')}/${eFillingSys.registerId}/${eFillingSys.fullName}`)
       .then((resp) => {
@@ -97,11 +104,18 @@ class PagesForm extends PureComponent {
             return ee;
           });
         }
+        initialYear = resp.data.listYearOfProject.map((e) => {
+          initialYear = [];
+          return e;
+        });
         this.setState({
           listAssigner: initialAssigner,
           listProjectNumber: initialProjectNumber,
           listSafetyType: initialSafetyType,
           listApprovalType: initialApprovalType,
+          listYearOfProject: initialYear,
+          roundOfMeeting: resp.data.defaultround,
+          yearOfMeeting: resp.data.defaultyear,
           docId: resp.data.editdata.docid,
           assignerName: resp.data.default_assigner_name,
           assignerSeq: resp.data.default_assigner_seq,
@@ -235,7 +249,7 @@ class PagesForm extends PureComponent {
         title={title}
         message={message}
       />,
-      duration: 5,
+      duration: 15,
       closable: true,
       style: { top: 0, left: 'calc(100vw - 100%)' },
       className: 'right-up ltr-support',
@@ -260,6 +274,7 @@ class PagesForm extends PureComponent {
   render() {
     const {
       listAssigner, listProjectNumber,
+      listYearOfProject, roundOfMeeting, yearOfMeeting,
       assignerCode, assignerName, positionName,
       projectNumber, projectHeadName, facultyName,
       projectNameThai, projectNameEng, safetyType, safetyTypeName,
@@ -386,6 +401,31 @@ class PagesForm extends PureComponent {
                     component="input"
                     type="text"
                     placeholder={projectNameEng}
+                    disabled
+                  />
+                </div>
+              </div>
+              <div className="form__form-group">
+                <span className="form__form-group-label">
+                  ครั้งที่ประชุม
+                </span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="roundOfMeeting"
+                    component="input"
+                    type="number"
+                    value={roundOfMeeting}
+                    onChange={this.handleChange}
+                    placeholder={roundOfMeeting}
+                    disabled
+                  />
+                  <span className="form__form-group-label">/</span>
+                  <Field
+                    name="yearOfMeeting"
+                    component={renderSelectField}
+                    value={yearOfMeeting}
+                    placeholder={yearOfMeeting}
+                    options={listYearOfProject}
                     disabled
                   />
                 </div>

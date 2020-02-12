@@ -325,7 +325,6 @@ class PagesForm extends PureComponent {
                     removeSelected={false}
                     className="react-select"
                     classNamePrefix="react-select"
-                    isDisabled={!buttonSaveEnable}
                   />
                 </div>
               </div>
@@ -343,7 +342,6 @@ class PagesForm extends PureComponent {
                     removeSelected={false}
                     className="react-select"
                     classNamePrefix="react-select"
-                    isDisabled={!buttonSaveEnable}
                   />
                 </div>
               </div>

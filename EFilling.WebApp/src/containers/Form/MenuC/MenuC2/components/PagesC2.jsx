@@ -4,7 +4,6 @@ import {
 } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form';
 import { withTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 import Config from 'react-global-configuration';
 import Axios from 'axios';
 import NotificationSystem from 'rc-notification';
@@ -19,10 +18,6 @@ const eFillingSys = JSON.parse(localStorage.getItem('efilling_system'));
 let notificationRU = null;
 
 class PagesForm extends PureComponent {
-  static propTypes = {
-    reset: PropTypes.func.isRequired,
-  };
-
   constructor() {
     super();
     this.state = {
@@ -31,6 +26,9 @@ class PagesForm extends PureComponent {
       listProjectNumber: [],
       listSafetyType: [],
       listApprovalType: [],
+      listYearOfProject: [],
+      roundOfMeeting: '',
+      yearOfMeeting: '',
       assignerCode: eFillingSys.registerId,
       assignerName: eFillingSys.fullName,
       positionName: eFillingSys.positionName,
@@ -64,11 +62,15 @@ class PagesForm extends PureComponent {
       listProjectNumber: [],
       listSafetyType: [],
       listApprovalType: [],
+      listYearOfProject: [],
+      defaultYear: '',
+      yearOfMeeting: '',
     });
     let initialAssigner = [];
     let initialProjectNumber = [];
     let initialSafetyType = [];
     let initialApprovalType = [];
+    let initialYear = [];
     Axios
       .get(`PublicDocMenuC/MenuC2InterfaceData/${eFillingSys.registerId}/${eFillingSys.fullName}`)
       .then((resp) => {
@@ -99,11 +101,18 @@ class PagesForm extends PureComponent {
             return ee;
           });
         }
+        initialYear = resp.data.listYearOfProject.map((e) => {
+          initialYear = [];
+          return e;
+        });
         this.setState({
           listAssigner: initialAssigner,
           listProjectNumber: initialProjectNumber,
           listSafetyType: initialSafetyType,
           listApprovalType: initialApprovalType,
+          listYearOfProject: initialYear,
+          roundOfMeeting: resp.data.defaultround,
+          yearOfMeeting: resp.data.defaultyear,
           assignerName: resp.data.default_assigner_name,
           assignerSeq: resp.data.default_assigner_seq,
           permissionInsert: resp.data.userPermission.insert,
@@ -159,23 +168,6 @@ class PagesForm extends PureComponent {
           this.show('danger', 'Error', error.message);
         }
       });
-  }
-
-  handleReset = () => {
-    const { reset } = this.props;
-    this.setState({
-      positionSeq: '',
-      projectNumber: '',
-      projectHeadName: '',
-      facultyName: '',
-      projectNameThai: '',
-      projectNameEng: '',
-      safetyType: '',
-      commentApproval: '',
-      commentConsider: '',
-      acceptType: '',
-    });
-    reset();
   }
 
   handleChangeAcceptType = (e) => {
@@ -262,6 +254,7 @@ class PagesForm extends PureComponent {
   render() {
     const {
       listAssigner, listProjectNumber,
+      listYearOfProject, roundOfMeeting, yearOfMeeting,
       assignerCode, assignerName, positionName,
       projectNumber, projectHeadName, facultyName,
       projectNameThai, projectNameEng, safetyType,
@@ -389,6 +382,31 @@ class PagesForm extends PureComponent {
                     component="input"
                     type="text"
                     placeholder={projectNameEng}
+                    disabled
+                  />
+                </div>
+              </div>
+              <div className="form__form-group">
+                <span className="form__form-group-label">
+                  ครั้งที่ประชุม
+                </span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="roundOfMeeting"
+                    component="input"
+                    type="number"
+                    value={roundOfMeeting}
+                    onChange={this.handleChange}
+                    placeholder={roundOfMeeting}
+                    disabled
+                  />
+                  <span className="form__form-group-label">/</span>
+                  <Field
+                    name="yearOfMeeting"
+                    component={renderSelectField}
+                    value={yearOfMeeting}
+                    placeholder={yearOfMeeting}
+                    options={listYearOfProject}
                     disabled
                   />
                 </div>
