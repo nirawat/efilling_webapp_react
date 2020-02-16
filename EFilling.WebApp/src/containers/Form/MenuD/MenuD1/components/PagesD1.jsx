@@ -352,12 +352,12 @@ class PagesForm extends PureComponent {
                   ชื่อโครงการภาษาไทย
                 </span>
                 <div className="form__form-group-field">
-                  <Field
+                  <input
                     name="projectNameThai"
                     component="input"
                     type="text"
-                    placeholder={projectNameThai}
-                    disabled
+                    value={projectNameThai}
+                    onChange={this.handleChange}
                   />
                 </div>
               </div>
@@ -366,12 +366,12 @@ class PagesForm extends PureComponent {
                   ชื่อโครงการภาษาอังกฤษ
                 </span>
                 <div className="form__form-group-field">
-                  <Field
+                  <input
                     name="projectNameEng"
                     component="input"
                     type="text"
-                    placeholder={projectNameEng}
-                    disabled
+                    value={projectNameEng}
+                    onChange={this.handleChange}
                   />
                 </div>
               </div>

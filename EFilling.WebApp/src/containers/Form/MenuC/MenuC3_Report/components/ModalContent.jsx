@@ -189,8 +189,8 @@ class ModalComponent extends PureComponent {
               </Row>
               <br />
               <Row>
-                <Button color="success" disabled={isClosed} onClick={() => this.printReportAgendaDraft()}>พิมพ์ร่าง</Button>{' '}
-                <Button color="danger" onClick={() => this.printReportAgendaReal()}>พิมพ์จริง</Button>{' '}
+                <Button color="success" onClick={() => this.printReportAgendaDraft()}>พิมพ์ร่าง</Button>{' '}
+                <Button color="danger" disabled={isClosed} onClick={() => this.printReportAgendaReal()}>พิมพ์จริง</Button>{' '}
               </Row>
             </Col>
             <Col>
@@ -199,8 +199,8 @@ class ModalComponent extends PureComponent {
               </Row>
               <br />
               <Row>
-                <Button color="success" disabled={isClosed} onClick={() => this.printReportMeetingDraft()}>พิมพ์ร่าง</Button>{' '}
-                <Button color="danger" onClick={() => this.printReportMeetingReal()}>พิมพ์จริง</Button>{' '}
+                <Button color="success" onClick={() => this.printReportMeetingDraft()}>พิมพ์ร่าง</Button>{' '}
+                <Button color="danger" disabled={isClosed} onClick={() => this.printReportMeetingReal()}>พิมพ์จริง</Button>{' '}
               </Row>
             </Col>
           </div>

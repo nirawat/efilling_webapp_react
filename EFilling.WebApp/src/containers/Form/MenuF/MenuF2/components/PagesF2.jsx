@@ -264,7 +264,7 @@ class PagesForm extends PureComponent {
                         { value: 'G002', label: 'กรรมการ' },
                         { value: 'G003', label: 'กรรมการฝ่ายบริหาร/ประธาน/รองประธาน/เลขา/ผ.ช' },
                         { value: 'G004', label: 'เจ้าหน้าที่บริหาร' },
-                        { value: 'G005', label: 'อาจารย์ที่ปรึกษา' },
+                        { value: 'G005', label: 'ที่ปรึกษา' },
                         { value: 'G007', label: 'ผู้ดูแลระบบ' },
                       ]}
                       value={userGroup}

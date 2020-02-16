@@ -4,7 +4,6 @@ import {
 } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form';
 import { withTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 import Config from 'react-global-configuration';
 import Axios from 'axios';
 import NotificationSystem from 'rc-notification';
@@ -22,13 +21,17 @@ let listApprovalList = null;
 
 const listApprovalAll = [
   { value: '1', label: 'รับรองงานวิจัย' },
-  { value: '3', label: 'รับรองงานวิจัย โดยให้ปรับแก้ไข (ตามมติคณะกรรมการ)' },
+  { value: '2', label: 'รับรองงานวิจัย หลังจากปรับแก้ไข' },
+  { value: '3', label: 'เข้าข่ายงานวิจัย' },
   { value: '4', label: 'ยังไม่รับรอง' },
+  { value: '5', label: 'ช่องว่าง' },
 ];
 const listApproval5 = [
+  { value: '1', label: 'รับรองงานวิจัย' },
   { value: '2', label: 'รับรองงานวิจัย หลังจากปรับแก้ไข' },
-  { value: '3', label: 'รับรองงานวิจัย โดยให้ปรับแก้ไข (ตามมติคณะกรรมการ)' },
+  { value: '3', label: 'เข้าข่ายงานวิจัย' },
   { value: '4', label: 'ยังไม่รับรอง' },
+  { value: '5', label: 'ช่องว่าง' },
 ];
 const listApproval8 = [
   { value: '1', label: 'รับรองห้องปฏิบัติการ' },
@@ -36,10 +39,6 @@ const listApproval8 = [
 ];
 
 class PagesForm extends PureComponent {
-  static propTypes = {
-    reset: PropTypes.func.isRequired,
-  };
-
   constructor() {
     super();
     this.state = {
@@ -57,6 +56,7 @@ class PagesForm extends PureComponent {
       agenda4Conclusion: '',
       agenda4ConclusionName: '',
       agenda4Suggestion: '',
+      safetyType: '',
       tab4Group1Seq1Input1: '',
       tab4Group1Seq1Input2: '',
       tab4Group1Seq1Input3: '',
@@ -174,37 +174,6 @@ class PagesForm extends PureComponent {
         });
         return e;
       });
-  }
-
-  handleReset = () => {
-    const { reset } = this.props;
-    this.setState({
-      modalIsOpen: true,
-      messageNotes: '',
-      meetingId: '',
-      meetingName: '',
-      agenda4term: '',
-      agenda4ProjectNumber: '',
-      agenda4ProjectName1: '',
-      agenda4ProjectName2: '',
-      project1Label: 'ชื่อโครงการภาษาไทย',
-      project2Label: 'ชื่อโครงการภาษาอังกฤษ',
-      agenda4Conclusion: '',
-      agenda4ConclusionName: '',
-      agenda4Suggestion: '',
-      tab4Group1Seq1Input1: '',
-      tab4Group1Seq1Input2: '',
-      tab4Group1Seq1Input3: '',
-      tab4Group1Seq2Input1: '',
-      tab4Group1Seq2Input2: '',
-      tab4Group1Seq2Input3: '',
-      tab4Group1Seq3Input1: '',
-      tab4Group1Seq3Input2: '',
-      tab4Group1Seq3Input3: '',
-      file1name: '',
-      file1base64: '',
-    });
-    reset();
   }
 
   show = (color, title, message) => {
@@ -348,12 +317,16 @@ class PagesForm extends PureComponent {
     };
   }
 
+  handleChangeSafetyType = (e) => {
+    this.setState({ safetyType: e.value });
+  }
+
   render() {
     const {
       listMeetingId, meetingName,
       listProjectNumberTab4, agenda4term, agenda4ProjectNumber,
       agenda4ProjectName1, agenda4ProjectName2,
-      agenda4Suggestion, agenda4Conclusion,
+      agenda4Suggestion, agenda4Conclusion, safetyType,
       project1Label, project2Label, file1name,
       buttonSaveEnable, buttonSaveStatus,
       tab4Group1Seq1Input1, tab4Group1Seq1Input2, tab4Group1Seq1Input3,
@@ -424,26 +397,24 @@ class PagesForm extends PureComponent {
               <div className="form__form-group">
                 <span className="form__form-group-label">{project1Label}</span>
                 <div className="form__form-group-field">
-                  <Field
+                  <input
                     name="agenda4ProjectName1"
                     component="input"
                     type="text"
-                    placeholder={agenda4ProjectName1}
-                    maxLength={200}
-                    disabled
+                    value={agenda4ProjectName1}
+                    onChange={this.handleChange}
                   />
                 </div>
               </div>
               <div className="form__form-group">
                 <span className="form__form-group-label">{project2Label}</span>
                 <div className="form__form-group-field">
-                  <Field
+                  <input
                     name="agenda4ProjectName2"
                     component="input"
                     type="text"
-                    placeholder={agenda4ProjectName2}
-                    maxLength={200}
-                    disabled
+                    value={agenda4ProjectName2}
+                    onChange={this.handleChange}
                   />
                 </div>
               </div>
@@ -560,6 +531,23 @@ class PagesForm extends PureComponent {
               </div>
               <div className="card__title">
                 <h5 className="bold-text">มติที่ประชุม</h5>
+              </div>
+              <div className="form__form-group">
+                <span className="form__form-group-label">ประเภทความปลอดภัย</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="safetyType"
+                    component={renderSelectField}
+                    onChange={this.handleChangeSafetyType}
+                    value={safetyType}
+                    options={[
+                      { value: '1', label: 'ประเภทที่ 1' },
+                      { value: '2', label: 'ประเภทที่ 2' },
+                      { value: '3', label: 'ประเภทที่ 3' },
+                      { value: '4', label: 'ประเภทที่ 4' },
+                    ]}
+                  />
+                </div>
               </div>
               <div className="form__form-group">
                 <span className="form__form-group-label">มติการรับรอง</span>

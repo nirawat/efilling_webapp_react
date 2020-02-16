@@ -37,18 +37,18 @@ export default class TopbarProfile extends PureComponent {
         <Collapse isOpen={collapse} className="topbar__menu-wrap">
           <div className="topbar__menu">
             <TopbarMenuLink
-              title="ข้อมูลผู้ใช้ระบบ"
+              title="บัญชีผู้ใช้ระบบ"
               icon="user"
               path="/account/profile"
               onClick={this.toggle}
             />
-            <div className="topbar__menu-divider" />
             <TopbarMenuLink
-              title="บัญชีผู้ใช้"
+              title="เปลี่ยนรหัสผ่าน"
               icon="cog"
-              path="/account/profile"
+              path="/account/resetPass"
               onClick={this.toggle}
             />
+            <div className="topbar__menu-divider" />
             <TopbarMenuLink
               title="ออกจากระบบ"
               icon="exit"

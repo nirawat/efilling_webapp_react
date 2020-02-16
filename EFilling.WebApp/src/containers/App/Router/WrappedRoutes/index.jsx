@@ -5,6 +5,8 @@ import Home from '../../../Form/Home/index';
 import Home1 from '../../../Form/Home1/index';
 import BookingDashboard from '../../../Dashboards/Booking/index';
 import Account from './Account';
+import PagesProfile from '../../../Account/Profile/index';
+import PagesResetPass from '../../../Account/ResetPass/index';
 
 import MenuA1 from '../../../Form/MenuA/MenuA1/index';
 import MenuA1Edit from '../../../Form/MenuA/MenuA1_Edit/index';
@@ -62,6 +64,8 @@ export default () => (
       <Route path="/forms/home1" component={Home1} />
       <Route path="/dashboard_booking" component={BookingDashboard} />
       <Route path="/account" component={Account} />
+      <Route path="/account/profile/pageProfile" component={PagesProfile} />
+      <Route path="/account/resetPass/pagesResetPass" component={PagesResetPass} />
       <Route path="/forms/menuA/menuA1" component={MenuA1} />
       <Route path="/forms/menuA/menuA1_Edit" component={MenuA1Edit} />
       <Route path="/forms/menuA/menuA2" component={MenuA2} />

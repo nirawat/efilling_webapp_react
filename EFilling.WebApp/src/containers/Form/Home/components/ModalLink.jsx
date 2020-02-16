@@ -3,14 +3,26 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, ButtonToolbar, Modal } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import Config from 'react-global-configuration';
 import classNames from 'classnames';
-import nl2br from 'react-newline-to-break';
+import Axios from 'axios';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
 import { RTLProps } from '../../../../shared/prop-types/ReducerProps';
+
+Axios.defaults.baseURL = Config.get('axiosBaseUrl');
+Axios.defaults.headers.common.Authorization = Config.get('axiosToken');
+Axios.defaults.headers.common['Content-Type'] = Config.get('axiosContentType');
+
+let counter = 0;
 
 class ModalComponent extends PureComponent {
   static propTypes = {
     title: PropTypes.string,
-    message: PropTypes.string,
+    userid: PropTypes.string,
+    projectnumber: PropTypes.string,
     color: PropTypes.string.isRequired,
     colored: PropTypes.bool,
     header: PropTypes.bool,
@@ -20,7 +32,8 @@ class ModalComponent extends PureComponent {
 
   static defaultProps = {
     title: '',
-    message: '',
+    userid: '',
+    projectnumber: '',
     colored: false,
     header: false,
   };
@@ -29,20 +42,64 @@ class ModalComponent extends PureComponent {
     super();
     this.state = {
       modal: false,
+      data: [],
     };
 
     this.toggle = this.toggle.bind(this);
   }
 
+  handleClickEditData = (docId) => {
+    window.open(`/forms/menuC/menuC2_Edit?id=${docId}`, '_blank');
+  }
+
+  handleResultNote() {
+    const { userid, projectnumber } = this.props;
+    this.setState({
+      data: [],
+    });
+    let initialComment = [];
+    const rows = [];
+    Axios
+      .get(`PublicDocMenuHome/GetResultNoteHome1/${projectnumber}/${userid}`)
+      .then((resp) => {
+        if (resp.data != null) {
+          initialComment = resp.data.map((e) => {
+            initialComment = [];
+            return e;
+          });
+        }
+        for (let i = 0; i < initialComment.length; i += 1) {
+          counter += 1;
+          rows.push({
+            id: counter,
+            docid: initialComment[i].docid,
+            xseq: initialComment[i].xseq,
+            xdate: initialComment[i].xdate,
+            xassignName: initialComment[i].xassignName,
+            xriskName: initialComment[i].xriskName,
+            xapprovalName: initialComment[i].xapprovalName,
+            seq: initialComment[i].seq,
+            date: initialComment[i].date,
+            assignName: initialComment[i].assignName,
+            riskName: initialComment[i].riskName,
+            approvalName: initialComment[i].approvalName,
+            commentDetail: initialComment[i].commentDetail,
+          });
+        }
+        this.setState({ data: rows });
+      });
+  }
+
   toggle() {
     this.setState(prevState => ({ modal: !prevState.modal }));
+    this.handleResultNote();
   }
 
   render() {
     const {
-      color, btn, title, message, colored, header, rtl,
+      color, btn, title, colored, header, rtl,
     } = this.props;
-    const { modal } = this.state;
+    const { modal, data } = this.state;
     let Icon;
 
     switch (color) {
@@ -81,7 +138,39 @@ class ModalComponent extends PureComponent {
             <h4 className="text-modal  modal__title">{title}</h4>
           </div>
           <div className="modal__body">
-            {nl2br(message)}
+            <div className="material-table__wrap">
+              <Table className="material-table">
+                <TableBody>
+                  {data
+                    .map((d) => {
+                      const xxx = '';
+                      return (
+                        <TableRow
+                          className="material-table__row"
+                          tabIndex={-1}
+                          key={d.id}
+                        >
+                          <TableCell className="material-table__cell material-table__cell-left" style={{ verticalAlign: 'top' }}>
+                            <h5>{d.xdate}</h5>
+                            <h5>{d.xassignName} </h5>
+                            <h5>{d.xriskName}</h5>
+                            <h5>{d.xapprovalName}</h5>
+                            <h5>{d.xcommentDetail}</h5>
+                            <Button size="sm" color="success" onClick={() => this.handleClickEditData(d.docid)}>รายละเอียด</Button>
+                          </TableCell>
+                          <TableCell className="material-table__cell material-table__cell-left" style={{ verticalAlign: 'top' }}>
+                            <h5>{d.date}</h5>
+                            <h5>{d.assignName} </h5>
+                            <h5>{d.riskName}</h5>
+                            <h5>{d.approvalName}</h5>
+                            <h5>{d.commentDetail}{xxx}</h5>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </div>
           </div>
           <ButtonToolbar className="modal__footer">
             <Button className="modal_cancel" onClick={this.toggle}>Cancel</Button>{' '}

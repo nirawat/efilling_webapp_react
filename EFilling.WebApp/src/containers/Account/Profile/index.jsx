@@ -1,21 +1,26 @@
 import React from 'react';
 import { Col, Container, Row } from 'reactstrap';
-import ProfileMain from './components/ProfileMain';
-import ProfileTasks from './components/ProfileTasks';
+import { withTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
+import Pages from './components/PagesProfile';
 
-const Calendar = () => (
+const PageForms = ({ t }) => (
   <Container>
-    <div className="profile">
-      <Row>
-        <Col md={12} lg={12} xl={4}>
-          <Row>
-            <ProfileMain />
-            <ProfileTasks />
-          </Row>
-        </Col>
-      </Row>
-    </div>
+    <Row>
+      <Col md={12}>
+        <h3 className="page-title">{t()}บัญขีผู้ใช้ระบ</h3>
+        <h3 className="page-subhead subhead">ข้อมูลประวัติสมาชิก
+        </h3>
+      </Col>
+    </Row>
+    <Row>
+      <Pages />
+    </Row>
   </Container>
 );
 
-export default Calendar;
+PageForms.propTypes = {
+  t: PropTypes.func.isRequired,
+};
+
+export default withTranslation('common')(PageForms);

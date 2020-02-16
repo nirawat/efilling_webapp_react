@@ -285,10 +285,11 @@ class RegisterActive extends PureComponent {
                     { value: '1', label: 'นักวิจัย/นิสิต' },
                     { value: '2', label: 'กรรมการผู้พิจารณา' },
                     { value: '3', label: 'เจ้าหน้าที่บริหาร' },
-                    { value: '4', label: 'ประธานกรรมการผู้พิจารณา' },
-                    { value: '5', label: 'รองประธานกรรมการผู้พิจารณา' },
-                    { value: '6', label: 'เลขานุการกรรมการผู้พิจารณา' },
-                    { value: '7', label: 'ผู้ช่วยเลขานุการกรรมการผู้พิจารณา' },
+                    { value: '4', label: 'ที่ปรึกษา' },
+                    { value: '5', label: 'ประธานกรรมการผู้พิจารณา' },
+                    { value: '6', label: 'รองประธานกรรมการผู้พิจารณา' },
+                    { value: '7', label: 'เลขานุการกรรมการผู้พิจารณา' },
+                    { value: '8', label: 'ผู้ช่วยเลขานุการกรรมการผู้พิจารณา' },
                   ]}
                   value={character}
                   onChange={this.handleChangeCharacter}

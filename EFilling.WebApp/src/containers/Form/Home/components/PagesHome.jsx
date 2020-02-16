@@ -63,6 +63,7 @@ class PagesForm extends PureComponent {
 
     this.state = {
       userId: eFillingSys.registerId,
+      userGroup: 1,
       listYear: [],
       listProjectHead: [],
       listAcceptType: [],
@@ -85,7 +86,6 @@ class PagesForm extends PureComponent {
       page: 0,
       rowsPerPage: 4,
       modalIsOpen: true,
-      messageNotes: '',
       permissionPrint: false,
     };
   }
@@ -145,21 +145,11 @@ class PagesForm extends PureComponent {
     this.setState({ risk: e.value });
   }
 
-  handleClickResultNote = (projectNumber, value) => {
+  handleClickResultNote = (value) => {
     if (value !== '' && value !== null) {
       this.setState({
         modalIsOpen: true,
-        messageNotes: '',
       });
-      Axios
-        .get(`PublicDocMenuHome/GetResultNoteHome1/${projectNumber}`)
-        .then((resp) => {
-          this.setState({
-            modalIsOpen: true,
-            messageNotes: resp.data.resultNote,
-          });
-          return projectNumber;
-        });
     }
   }
 
@@ -293,6 +283,7 @@ class PagesForm extends PureComponent {
           acronyms: 'all',
           risk: 'all',
           data: rows,
+          userGroup: resp.data.usergroup,
           permissionPrint: resp.data.userPermission.print,
         });
       });
@@ -417,11 +408,11 @@ class PagesForm extends PureComponent {
 
   render() {
     const {
-      year, projectHead, acceptType, faculty,
-      acronyms, risk,
+      userGroup, year, projectHead, acceptType, faculty,
+      acronyms, risk, userId,
       listYear, listProjectHead, listAcceptType,
       listFaculty, listAcronyms, listRisk,
-      modalIsOpen, messageNotes,
+      modalIsOpen,
     } = this.state;
 
     const {
@@ -536,6 +527,7 @@ class PagesForm extends PureComponent {
             <div className="material-table__wrap">
               <Table className="material-table">
                 <MatTableHead
+                  userGroup={userGroup}
                   order={order}
                   orderBy={orderBy}
                   onRequestSort={this.handleRequestSort}
@@ -546,114 +538,183 @@ class PagesForm extends PureComponent {
                     .sort(getSorting(order, orderBy))
                     .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
                     .map((d) => {
-                      const xxx = '';
-                      return (
-                        <TableRow
-                          className="material-table__row"
-                          tabIndex={-1}
-                          key={d.id}
-                        >
-                          <TableCell
-                            className="material-table__cell material-table__cell-left"
-                            component="th"
-                            scope="row"
-                            placeholder={xxx}
-                          >
-                            {d.id}
-                          </TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left">{d.projectNumber}</TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left">{d.projectHeadName}</TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditProjectRequest(d.projectRequestId, d.projectNumber)}>
-                            <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.projectNameThai}</span>
-                          </TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left">{d.projectNameEng}</TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left">{d.acronyms}</TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left">{d.risk_type}</TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left">{d.deliveryOnlineDate}</TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('b1', d.projectNumber, d.reviewRequestDate)}>
-                            <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.reviewRequestDate}</span>
-                          </TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left">{d.resultDocReview}</TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('c1', d.projectNumber, d.committeeAssignDate)}>
-                            <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.committeeAssignDate}</span>
-                          </TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickResultNote(d.projectNumber, d.committeeNameArray)}>
-                            <ModalLink
-                              isOpen={modalIsOpen}
-                              header="success"
-                              color="success"
-                              title="ผลการพิจารณา"
-                              btn={nl2br(d.committeeNameArray)}
-                              message={messageNotes}
-                            />
-                          </TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('c2', d.projectNumber, d.committeeCommentDate)}>
-                            <span style={{ color: '#34a8eb' }}>{nl2br(d.committeeCommentDate)}</span>
-                          </TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left">
-                            <Dropdown>
-                              <Dropdown.Toggle title={d.meetingDate !== '' ? d.meetingDate : 'การประชุม'} style={{ color: '#34a8eb', border: 0, backgroundColor: 'transparent' }} />
-                              <Dropdown.MenuWrapper>
-                                <Dropdown.Menu>
-                                  <MenuItem
-                                    eventKey={1}
-                                    onSelect={() => { this.handleClickEditDataC3All('c3', d.projectNumber); }}
-                                  >บันทึกการประชุม
-                                  </MenuItem>
-                                  <MenuItem divider />
-                                  <MenuItem
-                                    eventKey={2}
-                                    onSelect={() => { this.handleClickEditDataC3All('c3_1', d.projectNumber); }}
-                                  >ระเบียบวาระที่ 1
-                                  </MenuItem>
-                                  <MenuItem
-                                    eventKey={3}
-                                    onSelect={() => { this.handleClickEditDataC3All('c3_2', d.projectNumber); }}
-                                  >ระเบียบวาระที่ 2
-                                  </MenuItem>
-                                  <MenuItem
-                                    eventKey={4}
-                                    onSelect={() => { this.handleClickEditDataC3All('c3_3', d.projectNumber); }}
-                                  >ระเบียบวาระที่ 3
-                                  </MenuItem>
-                                  <MenuItem
-                                    eventKey={5}
-                                    onSelect={() => { this.handleClickEditDataC3All('c3_4', d.projectNumber); }}
-                                  >ระเบียบวาระที่ 4
-                                  </MenuItem>
-                                  <MenuItem
-                                    eventKey={6}
-                                    onSelect={() => { this.handleClickEditDataC3All('c3_5', d.projectNumber); }}
-                                  >ระเบียบวาระที่ 5
-                                  </MenuItem>
-                                </Dropdown.Menu>
-                              </Dropdown.MenuWrapper>
-                            </Dropdown>
-                          </TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left">{d.meetingApprovalDate}</TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left">{d.considerResult}</TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left">{d.alertDate}</TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a4', d.projectNumber, d.requestEditMeetingDate)}>
-                            <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.requestEditMeetingDate}</span>
-                          </TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a5', d.projectNumber, d.requestEditDate)}>
-                            <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.requestEditDate}</span>
-                          </TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a3', d.projectNumber, d.reportStatusDate)}>
-                            <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.reportStatusDate}</span>
-                          </TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left">{d.certificateExpireDate}</TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a6', d.projectNumber, d.requestRenewDate)}>
-                            <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.requestRenewDate}</span>
-                          </TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a7', d.projectNumber, d.closeProjectDate)}>
-                            <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.closeProjectDate}</span>
-                          </TableCell>
-                          <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('d1', d.projectNumber, d.printCertificateDate)}>
-                            <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.printCertificateDate}</span>
-                          </TableCell>
-                        </TableRow>
-                      );
+                      switch (userGroup) {
+                        case 1:
+                          return (
+                            <TableRow
+                              className="material-table__row"
+                              tabIndex={-1}
+                              key={d.id}
+                            >
+                              <TableCell
+                                className="material-table__cell material-table__cell-left"
+                                component="th"
+                                scope="row"
+                              >
+                                {d.id}
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.projectNumber}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.projectHeadName}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditProjectRequest(d.projectRequestId, d.projectNumber)}>
+                                <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.projectNameThai}</span>
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.projectNameEng}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.acronyms}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.risk_type}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.deliveryOnlineDate}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('b1', d.projectNumber, d.reviewRequestDate)}>
+                                <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.reviewRequestDate}</span>
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.resultDocReview}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('c1', d.projectNumber, d.committeeAssignDate)}>
+                                <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.committeeAssignDate}</span>
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickResultNote(d.committeeNameArray)}>
+                                <ModalLink
+                                  isOpen={modalIsOpen}
+                                  header="success"
+                                  color="success"
+                                  title="ผลการพิจารณา"
+                                  btn={nl2br(d.committeeNameArray)}
+                                  userid={userId}
+                                  projectnumber={(d.projectNumber)}
+                                />
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">
+                                <span style={{ color: '#4d4d4d' }}>{nl2br(d.committeeCommentDate)}</span>
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">
+                                <Dropdown>
+                                  <Dropdown.Toggle title={d.meetingDate !== '' ? d.meetingDate : 'การประชุม'} style={{ color: '#34a8eb', border: 0, backgroundColor: 'transparent' }} />
+                                  <Dropdown.MenuWrapper>
+                                    <Dropdown.Menu>
+                                      <MenuItem
+                                        eventKey={1}
+                                        onSelect={() => { this.handleClickEditDataC3All('c3', d.projectNumber); }}
+                                      >บันทึกการประชุม
+                                      </MenuItem>
+                                      <MenuItem divider />
+                                      <MenuItem
+                                        eventKey={2}
+                                        onSelect={() => { this.handleClickEditDataC3All('c3_1', d.projectNumber); }}
+                                      >ระเบียบวาระที่ 1
+                                      </MenuItem>
+                                      <MenuItem
+                                        eventKey={3}
+                                        onSelect={() => { this.handleClickEditDataC3All('c3_2', d.projectNumber); }}
+                                      >ระเบียบวาระที่ 2
+                                      </MenuItem>
+                                      <MenuItem
+                                        eventKey={4}
+                                        onSelect={() => { this.handleClickEditDataC3All('c3_3', d.projectNumber); }}
+                                      >ระเบียบวาระที่ 3
+                                      </MenuItem>
+                                      <MenuItem
+                                        eventKey={5}
+                                        onSelect={() => { this.handleClickEditDataC3All('c3_4', d.projectNumber); }}
+                                      >ระเบียบวาระที่ 4
+                                      </MenuItem>
+                                      <MenuItem
+                                        eventKey={6}
+                                        onSelect={() => { this.handleClickEditDataC3All('c3_5', d.projectNumber); }}
+                                      >ระเบียบวาระที่ 5
+                                      </MenuItem>
+                                    </Dropdown.Menu>
+                                  </Dropdown.MenuWrapper>
+                                </Dropdown>
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.meetingApprovalDate}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.considerResult}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.alertDate}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a4', d.projectNumber, d.requestEditMeetingDate)}>
+                                <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.requestEditMeetingDate}</span>
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a5', d.projectNumber, d.requestEditDate)}>
+                                <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.requestEditDate}</span>
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a3', d.projectNumber, d.reportStatusDate)}>
+                                <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.reportStatusDate}</span>
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.certificateExpireDate}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a6', d.projectNumber, d.requestRenewDate)}>
+                                <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.requestRenewDate}</span>
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a7', d.projectNumber, d.closeProjectDate)}>
+                                <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.closeProjectDate}</span>
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('d1', d.projectNumber, d.printCertificateDate)}>
+                                <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.printCertificateDate}</span>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        case 2:
+                          return (
+                            <TableRow
+                              className="material-table__row"
+                              tabIndex={-1}
+                              key={d.id}
+                            >
+                              <TableCell
+                                className="material-table__cell material-table__cell-left"
+                                component="th"
+                                scope="row"
+                              >
+                                {d.id}
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.projectNumber}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.projectHeadName}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditProjectRequest(d.projectRequestId, d.projectNumber)}>
+                                <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.projectNameThai}</span>
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.projectNameEng}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.acronyms}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.risk_type}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.deliveryOnlineDate}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('b1', d.projectNumber, d.reviewRequestDate)}>
+                                <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.reviewRequestDate}</span>
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.resultDocReview}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.meetingApprovalDate}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.considerResult}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.alertDate}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a4', d.projectNumber, d.requestEditMeetingDate)}>
+                                <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.requestEditMeetingDate}</span>
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a5', d.projectNumber, d.requestEditDate)}>
+                                <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.requestEditDate}</span>
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a3', d.projectNumber, d.reportStatusDate)}>
+                                <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.reportStatusDate}</span>
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left">{d.certificateExpireDate}</TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a6', d.projectNumber, d.requestRenewDate)}>
+                                <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.requestRenewDate}</span>
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('a7', d.projectNumber, d.closeProjectDate)}>
+                                <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.closeProjectDate}</span>
+                              </TableCell>
+                              <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickEditData('d1', d.projectNumber, d.printCertificateDate)}>
+                                <span className="form__form-group-label" style={{ color: '#34a8eb' }}>{d.printCertificateDate}</span>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        default:
+                          return (
+                            <TableRow
+                              className="material-table__row"
+                              tabIndex={-1}
+                              key={d.id}
+                            >
+                              <TableCell
+                                className="material-table__cell material-table__cell-left"
+                                component="th"
+                                scope="row"
+                              >
+                                {d.id}
+                              </TableCell>
+                            </TableRow>
+                          );
+                      }
                     })}
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 49 * emptyRows }}>

@@ -232,7 +232,8 @@ class PagesForm extends PureComponent {
           a.click();
         }
         setTimeout(() => {
-          window.location.reload();
+          const { projectKeyNumber } = this.state;
+          window.location.replace(`/forms/menuB/menuB1_Edit?id=${projectKeyNumber}`);
         }, 1000);
       })
       .catch((error) => {
@@ -280,6 +281,15 @@ class PagesForm extends PureComponent {
           a.click();
         }
       });
+  }
+
+  handleChangeAcronyms = (e) => {
+    const { projectKeyNumber } = this.state;
+    const runNumber = `${projectKeyNumber.slice(0, 7)}-${e.value}`;
+    this.setState({
+      acronyms: e.value,
+      projectKeyNumber: runNumber,
+    });
   }
 
   render() {
@@ -358,10 +368,16 @@ class PagesForm extends PureComponent {
                 <div className="form__form-group-field">
                   <Field
                     name="acronyms"
-                    component="input"
-                    type="text"
+                    component={renderSelectField}
                     placeholder={acronyms}
-                    disabled
+                    value={acronyms}
+                    onChange={this.handleChangeAcronyms}
+                    options={[
+                      { value: 'GM', label: 'GM' },
+                      { value: 'MI', label: 'MI' },
+                      { value: 'AV', label: 'AV' },
+                      { value: 'OT', label: 'OT' },
+                    ]}
                   />
                 </div>
               </div>

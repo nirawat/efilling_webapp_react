@@ -6,22 +6,21 @@ import {
 import Config from 'react-global-configuration';
 import Axios from 'axios';
 import NotificationSystem from 'rc-notification';
-import { BasicNotification } from '../../../../../shared/components/Notification';
-import renderSelectField from '../../../../../shared/components/form/Select';
+import { BasicNotification } from '../../../../shared/components/Notification';
+import renderSelectField from '../../../../shared/components/form/Select';
 
 Axios.defaults.baseURL = Config.get('axiosBaseUrl');
 Axios.defaults.headers.common.Authorization = Config.get('axiosToken');
 Axios.defaults.headers.common['Content-Type'] = Config.get('axiosContentType');
 
 const eFillingSys = JSON.parse(localStorage.getItem('efilling_system'));
-const urlParams = new URLSearchParams(window.location.search);
 let notificationRU = null;
 
-class PagesF1Edit extends PureComponent {
+class PagesPrpfile extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      registerId: urlParams.get('RegisterId'),
+      registerId: eFillingSys.registerId,
       email: '',
       firstName: '',
       fullName: '',
@@ -34,12 +33,9 @@ class PagesF1Edit extends PureComponent {
       fax: '',
       education: '',
       educationName: '',
-      character: '',
-      characterName: '',
       note1: '',
       note2: '',
       note3: '',
-      isActive: false,
       permissionEdit: false,
     };
 
@@ -47,7 +43,6 @@ class PagesF1Edit extends PureComponent {
     this.handleChangePosition = this.handleChangePosition.bind(this);
     this.handleChangeFaculty = this.handleChangeFaculty.bind(this);
     this.handleChangeEducation = this.handleChangeEducation.bind(this);
-    this.handleChangeCharacter = this.handleChangeCharacter.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -62,6 +57,7 @@ class PagesF1Edit extends PureComponent {
 
   loadInterfaceData = () => {
     this.setState({
+      registerId: eFillingSys.registerId,
       email: '',
       firstName: '',
       fullName: '',
@@ -74,42 +70,36 @@ class PagesF1Edit extends PureComponent {
       fax: '',
       education: '',
       educationName: '',
-      character: '',
-      characterName: '',
       note1: '',
       note2: '',
       note3: '',
-      isActive: false,
       buttonSaveEnable: false,
       buttonSaveStatus: 'บันทึก',
     });
     Axios
-      .get(`PublicDocMenuF/MenuF1EditInterfaceData/${eFillingSys.registerId}/${urlParams.get('RegisterId')}`)
+      .get(`PublicDocMenuF/MenuAccountInterfaceData/${eFillingSys.registerId}`)
       .then((resp) => {
         if (resp.data.userPermission !== null && !resp.data.userPermission.view) {
           window.location = '/efilling/forms/errors/permission';
         }
-        if (resp.data.userData != null) {
+        if (resp.data.account != null) {
           this.setState({
-            email: resp.data.userData.email,
-            firstName: resp.data.userData.firstname,
-            fullName: resp.data.userData.fullname,
-            position: resp.data.userData.position,
-            positionName: resp.data.userData.positionname,
-            facultyName: resp.data.userData.facultyname,
-            faculty: resp.data.userData.faculty,
-            workPhone: resp.data.userData.workphone,
-            mobile: resp.data.userData.mobile,
-            fax: resp.data.userData.fax,
-            education: resp.data.userData.education,
-            educationName: resp.data.userData.educationname,
-            character: resp.data.userData.character,
-            characterName: resp.data.userData.charactername,
-            note1: resp.data.userData.note1,
-            note2: resp.data.userData.note2,
-            note3: resp.data.userData.note3,
-            isActive: resp.data.userData.isactive,
-            buttonSaveEnable: resp.data.userData.editenable,
+            email: resp.data.account.email,
+            firstName: resp.data.account.firstname,
+            fullName: resp.data.account.fullname,
+            position: resp.data.account.position,
+            positionName: resp.data.account.positionname,
+            facultyName: resp.data.account.facultyname,
+            faculty: resp.data.account.faculty,
+            education: resp.data.account.education,
+            educationName: resp.data.account.educationname,
+            workPhone: resp.data.account.workphone,
+            mobile: resp.data.account.mobile,
+            fax: resp.data.account.fax,
+            note1: resp.data.account.note1,
+            note2: resp.data.account.note2,
+            note3: resp.data.account.note3,
+            buttonSaveEnable: resp.data.account.editenable,
           });
         }
       });
@@ -131,10 +121,6 @@ class PagesF1Edit extends PureComponent {
     this.setState({ education: education.value });
   }
 
-  handleChangeCharacter = (character) => {
-    this.setState({ character: character.value });
-  }
-
   handleSubmit = (e) => {
     this.show('warning', 'แจ้งให้ทราบ', 'กรุณารอสักครู่ระบบกำลังบันทึกข้อมูล...');
     this.setState({
@@ -142,7 +128,7 @@ class PagesF1Edit extends PureComponent {
       buttonSaveEnable: false,
     });
     Axios
-      .post('/PublicDocMenuF/UpdateUserRegister', this.state)
+      .post('/PublicDocMenuF/UpdateUserAccount', this.state)
       .then(() => {
         this.show('success', 'แจ้งให้ทราบ', `บันทึกข้อมูลเสร็จสิ้น
         !`);
@@ -157,7 +143,7 @@ class PagesF1Edit extends PureComponent {
         });
         if (error.response) {
           if (error.response.status === 400) {
-            this.show('danger', 'ข้อผิดผลาด!', 'กรุณาตรวจสอบข้อมูลการลงทะเบียนของท่าน');
+            this.show('danger', 'ข้อผิดผลาด!', 'กรุณาตรวจสอบข้อมูลของท่าน');
           } else {
             this.show('danger', 'Error', error.message);
           }
@@ -188,8 +174,7 @@ class PagesF1Edit extends PureComponent {
       fullName, position, positionName, email,
       workPhone, mobile, fax,
       faculty, facultyName, education, educationName,
-      character, characterName,
-      note1, note2, note3, isActive,
+      note1, note2, note3,
     } = this.state;
     return (
       <Col sm={12} md={12}>
@@ -249,40 +234,6 @@ class PagesF1Edit extends PureComponent {
                     </div>
                   </div>
                   <div className="form__form-group">
-                    <span className="form__form-group-label">คณะ/หน่วยงาน</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="faculty"
-                        component={renderSelectField}
-                        options={[
-                          { value: '1', label: 'คณะเกษตรศาสตร์ฯ' },
-                          { value: '2', label: 'คณะเภสัชศาสตร์' },
-                          { value: '3', label: 'คณะวิทยาศาสตร์การแพทย์' },
-                        ]}
-                        value={faculty}
-                        placeholder={facultyName}
-                        onChange={this.handleChangeFaculty}
-                      />
-                    </div>
-                  </div>
-                  <div className="form__form-group">
-                    <span className="form__form-group-label">ตำแหน่งวิชาการ</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="position"
-                        component={renderSelectField}
-                        options={[
-                          { value: '1', label: 'นักวิชาการ' },
-                          { value: '2', label: 'อาจารย์' },
-                          { value: '3', label: 'ที่ปรึกษาโครงการ' },
-                        ]}
-                        value={position}
-                        placeholder={positionName}
-                        onChange={this.handleChangePosition}
-                      />
-                    </div>
-                  </div>
-                  <div className="form__form-group">
                     <span className="form__form-group-label">เบอร์โทรที่ทำงาน</span>
                     <div className="form__form-group-field">
                       <input
@@ -321,8 +272,45 @@ class PagesF1Edit extends PureComponent {
                       />
                     </div>
                   </div>
+                  <div className="form__form-group">
+                    <Button color="success" type="submit">บันทึก</Button>
+                  </div>
                 </Col>
                 <Col xs="6">
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">คณะ/หน่วยงาน</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="faculty"
+                        component={renderSelectField}
+                        options={[
+                          { value: '1', label: 'คณะเกษตรศาสตร์ฯ' },
+                          { value: '2', label: 'คณะเภสัชศาสตร์' },
+                          { value: '3', label: 'คณะวิทยาศาสตร์การแพทย์' },
+                        ]}
+                        value={faculty}
+                        placeholder={facultyName}
+                        onChange={this.handleChangeFaculty}
+                      />
+                    </div>
+                  </div>
+                  <div className="form__form-group">
+                    <span className="form__form-group-label">ตำแหน่งวิชาการ</span>
+                    <div className="form__form-group-field">
+                      <Field
+                        name="position"
+                        component={renderSelectField}
+                        options={[
+                          { value: '1', label: 'นักวิชาการ' },
+                          { value: '2', label: 'อาจารย์' },
+                          { value: '3', label: 'ที่ปรึกษาโครงการ' },
+                        ]}
+                        value={position}
+                        placeholder={positionName}
+                        onChange={this.handleChangePosition}
+                      />
+                    </div>
+                  </div>
                   <div className="form__form-group">
                     <span className="form__form-group-label">ระดับการศึกษา</span>
                     <div className="form__form-group-field">
@@ -338,28 +326,6 @@ class PagesF1Edit extends PureComponent {
                         value={education}
                         placeholder={educationName}
                         onChange={this.handleChangeEducation}
-                      />
-                    </div>
-                  </div>
-                  <div className="form__form-group">
-                    <span className="form__form-group-label">ฐานและบทบาท</span>
-                    <div className="form__form-group-field">
-                      <Field
-                        name="character"
-                        component={renderSelectField}
-                        options={[
-                          { value: '1', label: 'นักวิจัย/นิสิต' },
-                          { value: '2', label: 'กรรมการผู้พิจารณา' },
-                          { value: '3', label: 'เจ้าหน้าที่บริหาร' },
-                          { value: '4', label: 'ที่ปรึกษา' },
-                          { value: '5', label: 'ประธานกรรมการผู้พิจารณา' },
-                          { value: '6', label: 'รองประธานกรรมการผู้พิจารณา' },
-                          { value: '7', label: 'เลขานุการกรรมการผู้พิจารณา' },
-                          { value: '8', label: 'ผู้ช่วยเลขานุการกรรมการผู้พิจารณา' },
-                        ]}
-                        value={character}
-                        placeholder={characterName}
-                        onChange={this.handleChangeCharacter}
                       />
                     </div>
                   </div>
@@ -404,25 +370,6 @@ class PagesF1Edit extends PureComponent {
                       />
                     </div>
                   </div>
-                  <div className="form__form-group">
-                    <span className="form__form-group-label">สถานะ</span>
-                    <div className="form__form-group-field">
-                      <input
-                        name="isActive"
-                        component="input"
-                        type="checkbox"
-                        checked={isActive}
-                        onChange={(event, value) => this.setState({ isActive: value })}
-                        style={{ width: '20px' }}
-                      />
-                      <span className="checkbox-btn__label form__form-group-label" style={{ color: '#FF0000' }}>
-                        ยินยอมให้สามารถเข้าใช้งานในระบบ
-                      </span>
-                    </div>
-                  </div>
-                  <div className="form__form-group">
-                    <Button color="success" type="submit">บันทึก</Button>
-                  </div>
                 </Col>
               </Row>
             </form>
@@ -434,5 +381,5 @@ class PagesF1Edit extends PureComponent {
 }
 
 export default reduxForm({
-  form: 'pages_f1_edit', // a unique identifier for this form
-})(PagesF1Edit);
+  form: 'pages_profile', // a unique identifier for this form
+})(PagesPrpfile);

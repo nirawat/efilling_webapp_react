@@ -177,7 +177,7 @@ class PagesForm extends PureComponent {
 
   handleChangeAcronyms = (e) => {
     const { yearOfMeeting } = this.state;
-    const runNumber = `${yearOfMeeting.toString().substring(2)}-${e.value}-XXX`;
+    const runNumber = `${yearOfMeeting.toString().substring(2)}-XXX-${e.value}`;
     this.setState({
       acronyms: e.value,
       projectKeyNumber: runNumber,

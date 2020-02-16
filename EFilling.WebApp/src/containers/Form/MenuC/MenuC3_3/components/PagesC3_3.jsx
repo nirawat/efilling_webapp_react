@@ -44,6 +44,7 @@ class PagesForm extends PureComponent {
       agenda3Conclusion: '',
       agenda3ConclusionName: '',
       agenda3Suggestion: '',
+      safetyType: '',
       tab3Group1Seq1Input1: '',
       tab3Group1Seq1Input2: '',
       tab3Group1Seq1Input3: '',
@@ -242,6 +243,10 @@ class PagesForm extends PureComponent {
     });
   }
 
+  handleChangeSafetyType = (e) => {
+    this.setState({ safetyType: e.value });
+  }
+
   historyReport() {
     this.setState({
       data: [],
@@ -286,7 +291,7 @@ class PagesForm extends PureComponent {
       listMeetingId, meetingName, project1Label, project2Label,
       listProjectNumberTab3, agenda3ProjectNumber,
       agenda3ProjectNameThai, agenda3ProjectNameEng, agenda3ProjectCount,
-      agenda3Suggestion, agenda3Conclusion,
+      agenda3Suggestion, agenda3Conclusion, safetyType,
       buttonSaveEnable, buttonSaveStatus,
       tab3Group1Seq1Input1, tab3Group1Seq1Input2, tab3Group1Seq1Input3,
       tab3Group1Seq2Input1, tab3Group1Seq2Input2, tab3Group1Seq2Input3,
@@ -350,24 +355,24 @@ class PagesForm extends PureComponent {
               <div className="form__form-group">
                 <span className="form__form-group-label">{project1Label}</span>
                 <div className="form__form-group-field">
-                  <Field
+                  <input
                     name="agenda3ProjectNameThai"
                     component="input"
                     type="text"
-                    placeholder={agenda3ProjectNameThai}
-                    disabled
+                    value={agenda3ProjectNameThai}
+                    onChange={this.handleChange}
                   />
                 </div>
               </div>
               <div className="form__form-group">
                 <span className="form__form-group-label">{project2Label}</span>
                 <div className="form__form-group-field">
-                  <Field
+                  <input
                     name="agenda3ProjectNameEng"
                     component="input"
                     type="text"
-                    placeholder={agenda3ProjectNameEng}
-                    disabled
+                    value={agenda3ProjectNameEng}
+                    onChange={this.handleChange}
                   />
                 </div>
               </div>
@@ -486,6 +491,23 @@ class PagesForm extends PureComponent {
                 <h5 className="bold-text">มติที่ประชุม</h5>
               </div>
               <div className="form__form-group">
+                <span className="form__form-group-label">ประเภทความปลอดภัย</span>
+                <div className="form__form-group-field">
+                  <Field
+                    name="safetyType"
+                    component={renderSelectField}
+                    onChange={this.handleChangeSafetyType}
+                    value={safetyType}
+                    options={[
+                      { value: '1', label: 'ประเภทที่ 1' },
+                      { value: '2', label: 'ประเภทที่ 2' },
+                      { value: '3', label: 'ประเภทที่ 3' },
+                      { value: '4', label: 'ประเภทที่ 4' },
+                    ]}
+                  />
+                </div>
+              </div>
+              <div className="form__form-group">
                 <span className="form__form-group-label">มติการรับรอง</span>
                 <div className="form__form-group-field">
                   <Field
@@ -494,9 +516,11 @@ class PagesForm extends PureComponent {
                     value={agenda3Conclusion}
                     onChange={this.getTab3Conclusion}
                     options={[
+                      { value: '1', label: 'รับรองงานวิจัย' },
                       { value: '2', label: 'รับรองงานวิจัย หลังจากปรับแก้ไข' },
-                      { value: '3', label: 'รับรองงานวิจัย โดยให้ปรับแก้ไข (ตามมติคณะกรรมการ)' },
+                      { value: '3', label: 'เข้าข่ายงานวิจัย' },
                       { value: '4', label: 'ยังไม่รับรอง' },
+                      { value: '5', label: 'ช่องว่าง' },
                     ]}
                   />
                 </div>

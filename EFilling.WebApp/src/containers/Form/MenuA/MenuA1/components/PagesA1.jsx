@@ -34,9 +34,11 @@ class PagesForm extends PureComponent {
       activeTab: '1',
       projectCommittees: [],
       memberCommittees: [],
+      listConsultant: [],
       defaultUserName: '',
       docNumber: '',
       projectType: '',
+      projectConsultant: '',
       projectHead: '',
       facultyName: '',
       workPhone: '',
@@ -147,6 +149,18 @@ class PagesForm extends PureComponent {
       member10Mobile: '',
       member10Fax: '',
       member10Email: '',
+      member11ProjectHead: '',
+      member11FacultyName: '',
+      member11WorkPhone: '',
+      member11Mobile: '',
+      member11Fax: '',
+      member11Email: '',
+      member12ProjectHead: '',
+      member12FacultyName: '',
+      member12WorkPhone: '',
+      member12Mobile: '',
+      member12Fax: '',
+      member12Email: '',
       labOtherName: '',
       labOtherNameDisable: true,
       permissionInsert: false,
@@ -161,6 +175,7 @@ class PagesForm extends PureComponent {
     this.handleChangeProjectAccordingTypeMethod = this.handleChangeProjectAccordingTypeMethod.bind(this);
     this.handleChangeProjectHeader = this.handleChangeProjectHeader.bind(this);
     this.handleChangeMemberProjectHeader = this.handleChangeMemberProjectHeader.bind(this);
+    this.handleChangeConsultant = this.handleChangeConsultant.bind(this);
     this.handleChangeFile1 = this.handleChangeFile1.bind(this);
     this.handleChangeFile2 = this.handleChangeFile2.bind(this);
     this.handleChangeFile3 = this.handleChangeFile3.bind(this);
@@ -173,6 +188,7 @@ class PagesForm extends PureComponent {
     NotificationSystem.newInstance({ style: { top: 65 } }, (n) => { notificationRU = n; });
     let initialCommittees = [];
     let initialMembers = [];
+    let initialConsultant = [];
     Axios
       .get(`PublicDocMenuA/MenuA1InterfaceData/${eFillingSys.registerId}/${eFillingSys.fullName}`)
       .then((resp) => {
@@ -187,9 +203,14 @@ class PagesForm extends PureComponent {
           initialMembers = [];
           return e;
         });
+        initialConsultant = resp.data.listConsultant.map((e) => {
+          initialConsultant = [];
+          return e;
+        });
         this.setState({
           projectCommittees: initialCommittees,
           memberCommittees: initialMembers,
+          listConsultant: initialConsultant,
           defaultUserName: resp.data.defaultusername,
           projectHead: resp.data.defaultuserid,
           facultyName: resp.data.facultyname,
@@ -338,6 +359,8 @@ class PagesForm extends PureComponent {
       buttonSaveStatus: 'กำลังบันทึก...',
       buttonSaveEnable: false,
     });
+    // eslint-disable-next-line
+    console.log(this.state);
     Axios
       .post('/PublicDocMenuA/AddDocMenuA1', this.state)
       .then((resp) => {
@@ -507,6 +530,26 @@ class PagesForm extends PureComponent {
               member10Email: resp.data.email,
             });
             break;
+          case 11:
+            this.setState({
+              member11ProjectHead: e.value,
+              member11FacultyName: resp.data.facultyname,
+              member11WorkPhone: resp.data.workphone,
+              member11Mobile: resp.data.mobile,
+              member11Fax: resp.data.fax,
+              member11Email: resp.data.email,
+            });
+            break;
+          case 12:
+            this.setState({
+              member12ProjectHead: e.value,
+              member12FacultyName: resp.data.facultyname,
+              member12WorkPhone: resp.data.workphone,
+              member12Mobile: resp.data.mobile,
+              member12Fax: resp.data.fax,
+              member12Email: resp.data.email,
+            });
+            break;
           default:
             return null;
         }
@@ -514,10 +557,14 @@ class PagesForm extends PureComponent {
       });
   }
 
+  handleChangeConsultant = (e) => {
+    this.setState({ projectConsultant: e.value });
+  }
+
   render() {
     const {
-      activeTab, projectCommittees,
-      projectType, projectHead, facultyName, workPhone,
+      activeTab, projectCommittees, listConsultant,
+      projectType, projectConsultant, projectHead, facultyName, workPhone,
       mobile, fax, email, projectNameThai, projectNameEng,
       budget, laboratoryUsed, defaultUserName,
       file1name, file2name, file3name, file4name, file5name,
@@ -535,6 +582,8 @@ class PagesForm extends PureComponent {
       member8ProjectHead, member8FacultyName, member8WorkPhone, member8Mobile, member8Fax, member8Email,
       member9ProjectHead, member9FacultyName, member9WorkPhone, member9Mobile, member9Fax, member9Email,
       member10ProjectHead, member10FacultyName, member10WorkPhone, member10Mobile, member10Fax, member10Email,
+      member11ProjectHead, member11FacultyName, member11WorkPhone, member11Mobile, member11Fax, member11Email,
+      member12ProjectHead, member12FacultyName, member12WorkPhone, member12Mobile, member12Fax, member12Email,
       buttonSaveEnable, buttonSaveStatus,
     } = this.state;
 
@@ -628,6 +677,20 @@ class PagesForm extends PureComponent {
                                 maxLength={200}
                                 value={projectNameEng}
                                 onChange={this.handleChange}
+                              />
+                            </div>
+                          </div>
+                          <div className="form__form-group">
+                            <span className="form__form-group-label">
+                              ที่ปรึกษาโครงการวิจัย
+                            </span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="projectConsultant"
+                                component={renderSelectField}
+                                value={projectConsultant}
+                                onChange={this.handleChangeConsultant}
+                                options={listConsultant}
                               />
                             </div>
                           </div>
@@ -792,6 +855,17 @@ class PagesForm extends PureComponent {
                                 type="email"
                                 maxLength={200}
                                 placeholder={email}
+                                disabled
+                              />
+                            </div>
+                          </div>
+                          <div className="form__form-group">
+                            <span className="form__form-group-label">-</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="blank"
+                                component="input"
+                                type="text"
                                 disabled
                               />
                             </div>
@@ -1575,6 +1649,134 @@ class PagesForm extends PureComponent {
                                 component="input"
                                 type="email"
                                 placeholder={member10Email}
+                                disabled
+                              />
+                            </div>
+                          </div>
+                        </Col>
+                        <Col xs="4">
+                          <div className="form__form-group">
+                            <span className="form__form-group-label">ลำดับที่ 11 ชื่อผู้ร่วมโครงการวิจัย</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member11ProjectHead"
+                                component={renderSelectField}
+                                value={member11ProjectHead}
+                                onChange={(event, value) => this.handleChangeMemberProjectHeader(11, value)}
+                                options={memberCommittees}
+                              />
+                            </div>
+                            <span className="form__form-group-label">คณะ/หน่วยงาน</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member11FacultyName"
+                                component="input"
+                                type="text"
+                                placeholder={member11FacultyName}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรศัพท์ที่ทำงาน</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member11WorkPhone"
+                                component="input"
+                                type="text"
+                                placeholder={member11WorkPhone}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรศัพท์มือถือ</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member11Mobile"
+                                component="input"
+                                type="text"
+                                placeholder={member11Mobile}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรสาร</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member11Fax"
+                                component="input"
+                                type="text"
+                                placeholder={member11Fax}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">อีเมล์</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member11Email"
+                                component="input"
+                                type="email"
+                                placeholder={member11Email}
+                                disabled
+                              />
+                            </div>
+                          </div>
+                        </Col>
+                        <Col xs="4">
+                          <div className="form__form-group">
+                            <span className="form__form-group-label">ลำดับที่ 12 ชื่อผู้ร่วมโครงการวิจัย</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member12ProjectHead"
+                                component={renderSelectField}
+                                value={member12ProjectHead}
+                                onChange={(event, value) => this.handleChangeMemberProjectHeader(12, value)}
+                                options={memberCommittees}
+                              />
+                            </div>
+                            <span className="form__form-group-label">คณะ/หน่วยงาน</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member12FacultyName"
+                                component="input"
+                                type="text"
+                                placeholder={member12FacultyName}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรศัพท์ที่ทำงาน</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member12WorkPhone"
+                                component="input"
+                                type="text"
+                                placeholder={member12WorkPhone}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรศัพท์มือถือ</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member12Mobile"
+                                component="input"
+                                type="text"
+                                placeholder={member12Mobile}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">โทรสาร</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member12Fax"
+                                component="input"
+                                type="text"
+                                placeholder={member12Fax}
+                                disabled
+                              />
+                            </div>
+                            <span className="form__form-group-label">อีเมล์</span>
+                            <div className="form__form-group-field">
+                              <Field
+                                name="member12Email"
+                                component="input"
+                                type="email"
+                                placeholder={member12Email}
                                 disabled
                               />
                             </div>
