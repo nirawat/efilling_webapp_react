@@ -13,8 +13,8 @@ import renderCheckBoxField from '../../../../shared/components/form/CheckBox';
 import { BasicNotification } from '../../../../shared/components/Notification';
 
 Config.set({
-  axiosBaseUrl: 'https://localhost:5001/api',
-  // axiosBaseUrl: 'http://119.59.115.77:7001/api',
+  // axiosBaseUrl: 'https://localhost:5001/api',
+  axiosBaseUrl: 'http://119.59.115.77:7001/api',
   axiosToken: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJUSCBEZXZlbG9wZXIuY29tIiwibmFtZSI6IkFkbWluaXN0cmF0b3IiLCJpYXQiOjE1MTYyMzkwMjJ9.kXiEpmOgP1cn7Se1BaKJkFKyfkAtp4hQq-JHraUvd-E',
   axiosContentType: 'application/json;charset=utf-8',
 });

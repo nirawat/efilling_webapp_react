@@ -21,6 +21,15 @@ const rows = [
     id: 'meetingdate', disablePadding: false, label: 'วันที่ประชุม',
   },
   {
+    id: 'meetingstart', disablePadding: false, label: 'เริ่ม',
+  },
+  {
+    id: 'meetingclose', disablePadding: false, label: 'สิ้นสุด',
+  },
+  {
+    id: 'meetinglocation', disablePadding: false, label: 'สถานที่',
+  },
+  {
     id: 'printAction', disablePadding: false, label: 'พิมพ์รายงาน',
   },
 ];

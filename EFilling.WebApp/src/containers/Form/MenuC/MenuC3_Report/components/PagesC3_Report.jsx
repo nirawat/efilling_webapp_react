@@ -6,7 +6,7 @@ import { Field, reduxForm } from 'redux-form';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import Config from 'react-global-configuration';
-import DownloadIcon from 'mdi-react/DownloadIcon';
+import PrinterIcon from 'mdi-react/PrinterIcon';
 import Axios from 'axios';
 import NotificationSystem from 'rc-notification';
 import Table from '@material-ui/core/Table';
@@ -184,8 +184,10 @@ class PagesForm extends PureComponent {
             meetingdate: tbRows[i].meetingdate,
             meetingrecordname: tbRows[i].meetingrecordname,
             meetinglocation: tbRows[i].meetinglocation,
+            meetingstart: tbRows[i].meetingstart,
+            meetingclose: tbRows[i].meetingclose,
             isclosed: tbRows[i].isclosed,
-            printAction: <DownloadIcon />,
+            printAction: <PrinterIcon />,
           });
         }
         this.setState({
@@ -223,8 +225,10 @@ class PagesForm extends PureComponent {
             meetingdate: tbRows[i].meetingdate,
             meetingrecordname: tbRows[i].meetingrecordname,
             meetinglocation: tbRows[i].meetinglocation,
+            meetingstart: tbRows[i].meetingstart,
+            meetingclose: tbRows[i].meetingclose,
             isclosed: tbRows[i].isclosed,
-            printAction: <DownloadIcon />,
+            printAction: <PrinterIcon />,
           });
         }
         this.setState({
@@ -304,6 +308,9 @@ class PagesForm extends PureComponent {
                           <TableCell className="material-table__cell material-table__cell-left">{d.yearofmeeting}</TableCell>
                           <TableCell className="material-table__cell material-table__cell-left">{d.meetinground}</TableCell>
                           <TableCell className="material-table__cell material-table__cell-left">{d.meetingdate}</TableCell>
+                          <TableCell className="material-table__cell material-table__cell-left">{d.meetingstart}</TableCell>
+                          <TableCell className="material-table__cell material-table__cell-left">{d.meetingclose}</TableCell>
+                          <TableCell className="material-table__cell material-table__cell-left">{d.meetinglocation}</TableCell>
                           <TableCell className="material-table__cell material-table__cell-left" onClick={() => this.handleClickResultNote(d.printAction)}>
                             <ModalContent
                               isOpen={modalIsOpen}
